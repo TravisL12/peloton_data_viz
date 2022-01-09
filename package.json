@@ -1,0 +1,30 @@
+{
+  "name": "webpack_trial",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Travis Lawrence <travis@instabase.com>",
+  "bin": {
+    "trav_boilerplate": "src/bin.js"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "NODE_ENV=development yarn webpack serve --config config/webpack.dev.js",
+    "build": "NODE_ENV=development yarn webpack --config config/webpack.common.js"
+  },
+  "devDependencies": {
+    "child_process": "^1.0.2",
+    "css-loader": "^6.5.1",
+    "html-webpack-plugin": "^5.5.0",
+    "postcss-loader": "^6.2.1",
+    "sass": "^1.46.0",
+    "sass-loader": "^12.4.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.2",
+    "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "d3": "^7.3.0"
+  }
+}
