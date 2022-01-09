@@ -40,22 +40,48 @@ const keys = {
   "Workout Timestamp": "workout_date",
 };
 
+const getUniq = (data) => {
+  return [...new Set(data)];
+};
+
 class PelotonData {
   constructor() {
+    this.data = {};
     this.fileInput = document.getElementById("data-upload");
-    this.data = this.fileInput.addEventListener("change", (event) => {
+    this.fileInput.addEventListener("change", (event) => {
       const reader = new FileReader();
-      reader.onload = () => this.parseData(reader);
+      reader.onload = () => this.buildData(reader);
       reader.readAsBinaryString(event.currentTarget.files[0]);
     });
   }
 
-  parseData = (reader) => {
+  parseData() {
+    if (this.data.raw) {
+      ["instructor", "fitness_discipline"].forEach((key) => {
+        this.parseItemCount(key);
+      });
+      console.log(this.data);
+    }
+  }
+
+  parseItemCount(key) {
+    const data = this.data.raw.map((d) => d[key]).filter((x) => x);
+    const count = data.reduce((acc, name) => {
+      if (!acc[name]) {
+        acc[name] = 0;
+      }
+      acc[name] += 1;
+      return acc;
+    }, {});
+    this.data[`${key}-count`] = count;
+  }
+
+  buildData = (reader) => {
     const dataLines = reader.result.split("\n");
     const header = dataLines[0].split(",");
     const lines = dataLines.slice(1);
 
-    this.data = lines.map((line) => {
+    this.data.raw = lines.map((line) => {
       const splitLine = line.split(",");
       return header.reduce((acc, h, idx) => {
         if (!h || !keys[h]) return acc;
@@ -65,7 +91,7 @@ class PelotonData {
       }, {});
     });
 
-    console.log(this.data);
+    this.parseData();
   };
 }
 
