@@ -26,7 +26,11 @@ import "./styles/styles.scss";
         }, {});
       });
       pelotonData.parseData(data);
-      buildChart(pelotonData.data.count.instructor);
+      buildChart(pelotonData.data.count.instructor, "Instructor");
+      buildChart(
+        pelotonData.data.count.fitness_discipline,
+        "Ride Type (fitness discipline)"
+      );
     };
   });
 })();

@@ -8,15 +8,20 @@ const margin = { top: 10, bottom: 120, left: 30, right: 10 };
 const width = mainWidth - margin.left - margin.right;
 const height = mainHeight - margin.top - margin.bottom;
 
-export function buildChart(dataObject) {
+export function buildChart(dataObject, title) {
   const data = Object.entries(dataObject).map(([name, count]) => ({
     name,
     count,
   }));
 
+  data.sort((a, b) => d3.descending(a.count, b.count));
+
   const graphContainer = document.getElementById("graph");
+  const innerContainer = document.createElement("div");
+  innerContainer.innerHTML = `<h3>${title}</h3>`;
+
   const svg = d3
-    .select(graphContainer)
+    .select(innerContainer)
     .append("svg")
     .attr("width", mainWidth)
     .attr("height", mainHeight)
@@ -67,4 +72,6 @@ export function buildChart(dataObject) {
 
       return g;
     });
+
+  graphContainer.appendChild(innerContainer);
 }
