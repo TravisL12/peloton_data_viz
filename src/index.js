@@ -26,7 +26,7 @@ import "./styles/styles.scss";
         }, {});
       });
       pelotonData.parseData(data);
-      buildChart(pelotonData.data);
+      buildChart(pelotonData.data.count.instructor);
     };
   });
 })();
