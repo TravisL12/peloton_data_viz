@@ -2,13 +2,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Boilerplate</title>
+    <title>Peloton Stats!</title>
   </head>
   <body>
-    <div id="root"></div>
-    <div>
-      <label>Peloton data upload</label>
-      <input id="data-upload" type="file" name="data-csv" accept=".csv" />
+    <div class="container">
+      <div class="header">Peloton</div>
+
+      <div class="sidebar">
+        <ul>
+          <li>1</li>
+          <li>2</li>
+          <li>3</li>
+        </ul>
+      </div>
+
+      <div class="main">
+        <div>
+          <label>Peloton data upload</label>
+          <input id="data-upload" type="file" name="data-csv" accept=".csv" />
+        </div>
+        <div id="graph"></div>
+      </div>
     </div>
   </body>
 </html>
