@@ -10,7 +10,11 @@ import "./styles/styles.scss";
 
   fileInput.addEventListener("change", (event) => {
     const reader = new FileReader();
-    reader.readAsBinaryString(event.currentTarget.files[0]);
+    const file = event.currentTarget.files[0];
+
+    document.getElementById("file-name").textContent = file.name;
+
+    reader.readAsBinaryString(file);
     reader.onload = () => {
       const dataLines = reader.result.split("\n");
       const header = dataLines[0].split(",");

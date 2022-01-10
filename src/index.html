@@ -2,6 +2,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" type="image/png" href="src/favicon.png" />
     <title>Peloton Stats!</title>
   </head>
   <body>
@@ -9,18 +10,14 @@
       <div class="header">Peloton</div>
 
       <div class="sidebar">
-        <ul>
-          <li>1</li>
-          <li>2</li>
-          <li>3</li>
-        </ul>
+        <div>
+          <input id="data-upload" type="file" name="data-csv" accept=".csv" />
+          <label for="data-upload">Upload Peloton data</label>
+          <div id="file-name"></div>
+        </div>
       </div>
 
       <div class="main">
-        <div>
-          <label>Peloton data upload</label>
-          <input id="data-upload" type="file" name="data-csv" accept=".csv" />
-        </div>
         <div id="graph"></div>
       </div>
     </div>
