@@ -1,4 +1,4 @@
-import { buildChart } from "./scripts/barChart";
+import { graphLinks } from "./scripts/graphLinks";
 import PelotonData from "./scripts/PelotonData";
 import { keys } from "./scripts/utils";
 
@@ -7,12 +7,13 @@ import "./styles/styles.scss";
 (function () {
   const pelotonData = new PelotonData();
   const fileInput = document.getElementById("data-upload");
+  const fileInputName = document.getElementById("file-name");
 
   fileInput.addEventListener("change", (event) => {
     const reader = new FileReader();
     const file = event.currentTarget.files[0];
 
-    document.getElementById("file-name").textContent = file.name;
+    fileInputName.textContent = file.name;
 
     reader.readAsBinaryString(file);
     reader.onload = () => {
@@ -30,11 +31,7 @@ import "./styles/styles.scss";
         }, {});
       });
       pelotonData.parseData(data);
-      buildChart(pelotonData.data.count.instructor, "Instructor");
-      buildChart(
-        pelotonData.data.count.fitness_discipline,
-        "Ride Type (fitness discipline)"
-      );
+      graphLinks(pelotonData.data);
     };
   });
 })();

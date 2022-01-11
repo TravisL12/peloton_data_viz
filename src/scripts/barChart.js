@@ -8,7 +8,7 @@ const margin = { top: 10, bottom: 120, left: 30, right: 10 };
 const width = mainWidth - margin.left - margin.right;
 const height = mainHeight - margin.top - margin.bottom;
 
-export function buildChart(dataObject, title) {
+export function buildBarChart(dataObject, title) {
   const data = Object.entries(dataObject).map(([name, count]) => ({
     name,
     count,
