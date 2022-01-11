@@ -1,5 +1,6 @@
 import { buildBarChart } from "./barChart";
 import { graphContainer, graphLinksEl } from "./elementSelectors";
+import { buildLineChart } from "./lineChart";
 
 export const barChartNames = [
   { key: "instructor", title: "Instructor" },
@@ -20,6 +21,17 @@ export function graphLinks(pelotonData) {
     item.addEventListener("click", () => {
       graphContainer.innerHTML = "";
       buildBarChart(pelotonData.count[key], title);
+    });
+    graphLinksEl.appendChild(item);
+  });
+
+  lineChartNames.forEach(({ key, title }) => {
+    const item = document.createElement("li");
+    item.textContent = title;
+    item.addEventListener("click", () => {
+      graphContainer.innerHTML = "";
+      const data = pelotonData.raw.map((d, i) => ({ x: i, y: +d[key] }));
+      buildLineChart([data], title);
     });
     graphLinksEl.appendChild(item);
   });
