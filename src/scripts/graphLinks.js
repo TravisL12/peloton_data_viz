@@ -1,21 +1,26 @@
 import { buildBarChart } from "./barChart";
+import { graphContainer, graphLinksEl } from "./elementSelectors";
 
-const chartNames = [
+export const barChartNames = [
   { key: "instructor", title: "Instructor" },
   { key: "fitness_discipline", title: "Workout type" },
+  { key: "length_minutes", title: "Length" },
+];
+
+export const lineChartNames = [
+  { key: "total_output", title: "Output" },
+  { key: "distance_miles", title: "Distance (mi.)" },
+  { key: "calories", title: "Calories" },
 ];
 
 export function graphLinks(pelotonData) {
-  const fileInputName = document.getElementById("file-name");
-  const graphContainer = document.getElementById("graph");
-
-  chartNames.forEach(({ key, title }) => {
+  barChartNames.forEach(({ key, title }) => {
     const item = document.createElement("li");
     item.textContent = title;
     item.addEventListener("click", () => {
       graphContainer.innerHTML = "";
       buildBarChart(pelotonData.count[key], title);
     });
-    fileInputName.appendChild(item);
+    graphLinksEl.appendChild(item);
   });
 }

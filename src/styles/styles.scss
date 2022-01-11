@@ -69,3 +69,19 @@ li {
   grid-column: 2 / 3;
   padding: 10px;
 }
+
+#graph-links {
+  margin-top: 20px;
+  border: 1px solid;
+  border-bottom: none;
+
+  li {
+    padding: 5px;
+    border-bottom: 1px solid;
+    cursor: pointer;
+
+    &:hover {
+      background: pink;
+    }
+  }
+}

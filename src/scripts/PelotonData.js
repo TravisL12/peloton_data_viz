@@ -1,12 +1,18 @@
+import { barChartNames } from "./graphLinks";
+
+const parseCount = barChartNames.map(({ key }) => key);
+
 class PelotonData {
   constructor() {
     this.data = { count: {} };
   }
 
+  parseHighlights() {}
+
   parseData(data) {
     this.data.raw = data;
     if (this.data.raw) {
-      ["instructor", "fitness_discipline", "length_minutes"].forEach((key) => {
+      parseCount.forEach((key) => {
         this.parseItemCount(key);
       });
     }

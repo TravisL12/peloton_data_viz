@@ -1,7 +1,6 @@
 import * as d3 from "d3";
-
-const mainWidth = 700;
-const mainHeight = 300;
+import { graphContainer } from "./elementSelectors";
+import { mainHeight, mainWidth } from "./chartConstants";
 
 const margin = { top: 10, bottom: 120, left: 30, right: 10 };
 
@@ -16,7 +15,6 @@ export function buildBarChart(dataObject, title) {
 
   data.sort((a, b) => d3.descending(a.count, b.count));
 
-  const graphContainer = document.getElementById("graph");
   const innerContainer = document.createElement("div");
   innerContainer.innerHTML = `<h3>${title}</h3>`;
 
