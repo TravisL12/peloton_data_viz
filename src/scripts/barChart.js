@@ -20,6 +20,7 @@ export function buildBarChart(dataObject, title) {
   let svg;
 
   if (document.getElementsByClassName("barchart-svg").length) {
+    document.querySelector("h3").textContent = title;
     svg = d3.select(".barchart-svg");
   } else {
     const innerContainer = document.createElement("div");

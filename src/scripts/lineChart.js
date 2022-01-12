@@ -13,6 +13,7 @@ export function buildLineChart(data, title) {
   let svg;
 
   if (document.getElementsByClassName("line-svg").length) {
+    document.querySelector("h3").textContent = title;
     svg = d3.select(".line-svg");
   } else {
     const innerContainer = document.createElement("div");
