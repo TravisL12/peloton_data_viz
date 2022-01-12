@@ -19,7 +19,6 @@ export function graphLinks(pelotonData) {
     const item = document.createElement("li");
     item.textContent = title;
     item.addEventListener("click", () => {
-      graphContainer.innerHTML = "";
       buildBarChart(pelotonData.count[key], title);
     });
     graphLinksEl.appendChild(item);

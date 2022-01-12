@@ -8,33 +8,33 @@ const width = mainWidth - margin.left - margin.right;
 const height = mainHeight - margin.top - margin.bottom;
 
 export function buildLineChart(data, title) {
-  const innerContainer = document.createElement("div");
-  innerContainer.innerHTML = `<h3>${title}</h3>`;
-
   const xScale = d3.scaleLinear().range([0, width]);
   const yScale = d3.scaleLinear().rangeRound([height, 0]);
   let svg;
 
-  if (document.getElementsByClassName("main-svg").length) {
-    svg = d3.select(".main-svg");
+  if (document.getElementsByClassName("line-svg").length) {
+    svg = d3.select(".line-svg");
   } else {
-    svg = d3.select(innerContainer).append("svg").attr("class", "main-svg");
-
-    const main = svg
+    const innerContainer = document.createElement("div");
+    innerContainer.innerHTML = `<h3>${title}</h3>`;
+    svg = d3
+      .select(innerContainer)
+      .append("svg")
+      .attr("class", "line-svg")
       .attr("width", mainWidth)
       .attr("height", mainHeight)
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    main.append("g").attr("class", "lines");
+    svg.append("g").attr("class", "lines");
 
-    main
+    svg
       .append("g")
       .attr("class", "x-axis")
       .attr("transform", `translate(0, ${height})`);
 
     // create y-axis
-    main.append("g").attr("class", "y-axis");
+    svg.append("g").attr("class", "y-axis");
     graphContainer.appendChild(innerContainer);
   }
 
@@ -54,26 +54,44 @@ export function buildLineChart(data, title) {
   svg
     .selectAll(".lines")
     .selectAll(".line")
-    .data([data], (d) => d[0]) // <---- wrap data in array!!!!
-    .join((enter) => {
-      const g = enter.append("g").attr("class", "line");
+    .data([data]) // <---- wrap data in array!!!!
+    .join(
+      (enter) => {
+        const g = enter.append("g").attr("class", "line");
 
-      g.append("path")
-        .attr("fill", "none")
-        .attr("stroke-width", 2)
-        .attr("stroke", "red")
-        .attr(
-          "d",
-          d3
-            .line()
-            .x((d) => {
-              return xScale(d.x);
-            })
-            .y((d) => {
-              return yScale(d.y);
-            })
-        );
+        g.append("path")
+          .attr("fill", "none")
+          .attr("stroke-width", 2)
+          .attr("stroke", "red")
+          .attr(
+            "d",
+            d3
+              .line()
+              .x((d) => {
+                return xScale(d.x);
+              })
+              .y((d) => {
+                return yScale(d.y);
+              })
+          );
 
-      return g;
-    });
+        return g;
+      },
+      (update) => {
+        update
+          .select("path")
+          .transition()
+          .attr(
+            "d",
+            d3
+              .line()
+              .x((d) => {
+                return xScale(d.x);
+              })
+              .y((d) => {
+                return yScale(d.y);
+              })
+          );
+      }
+    );
 }

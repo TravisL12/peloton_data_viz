@@ -15,31 +15,38 @@ export function buildBarChart(dataObject, title) {
 
   data.sort((a, b) => d3.descending(a.count, b.count));
 
-  const innerContainer = document.createElement("div");
-  innerContainer.innerHTML = `<h3>${title}</h3>`;
-
-  const svg = d3
-    .select(innerContainer)
-    .append("svg")
-    .attr("width", mainWidth)
-    .attr("height", mainHeight)
-    .append("g")
-    .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-  svg.append("g").attr("class", "bars");
-
-  const xAxis = svg
-    .append("g")
-    .attr("class", "x-axis")
-    .attr("transform", `translate(0, ${height})`);
-
-  const yAxis = svg.append("g").attr("class", "y-axis");
-
   const xScale = d3.scaleBand().range([0, width]).padding(0.3);
   const yScale = d3.scaleLinear().range([height, 0]);
+  let svg;
+
+  if (document.getElementsByClassName("barchart-svg").length) {
+    svg = d3.select(".barchart-svg");
+  } else {
+    const innerContainer = document.createElement("div");
+    innerContainer.innerHTML = `<h3>${title}</h3>`;
+
+    svg = d3
+      .select(innerContainer)
+      .append("svg")
+      .attr("class", "barchart-svg")
+      .attr("width", mainWidth)
+      .attr("height", mainHeight)
+      .append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    svg.append("g").attr("class", "bars");
+
+    svg
+      .append("g")
+      .attr("class", "x-axis")
+      .attr("transform", `translate(0, ${height})`);
+
+    svg.append("g").attr("class", "y-axis");
+    graphContainer.appendChild(innerContainer);
+  }
 
   xScale.domain(data.map(({ name }) => name));
-  xAxis
+  d3.select(".x-axis")
     .call(d3.axisBottom(xScale))
     .selectAll("text")
     .text((d) => {
@@ -49,12 +56,12 @@ export function buildBarChart(dataObject, title) {
     .attr("transform", "rotate(-70) translate(-10,-10)");
 
   yScale.domain([0, d3.max(data.map(({ count }) => count)) * 1.1]);
-  yAxis.transition().call(d3.axisLeft(yScale));
+  d3.select(".y-axis").transition().call(d3.axisLeft(yScale));
 
   svg
     .selectAll(".bars")
     .selectAll(".bar")
-    .data(data)
+    .data(data, (d) => d.name)
     .join((enter) => {
       const g = enter.append("g").attr("class", "bar");
 
@@ -69,6 +76,4 @@ export function buildBarChart(dataObject, title) {
 
       return g;
     });
-
-  graphContainer.appendChild(innerContainer);
 }
