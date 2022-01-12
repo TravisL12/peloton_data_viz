@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import { mainHeight, mainWidth } from "./chartConstants";
 import { graphContainer } from "./elementSelectors";
 
-const margin = { top: 10, bottom: 120, left: 30, right: 10 };
+const margin = { top: 10, bottom: 50, left: 50, right: 10 };
 
 const width = mainWidth - margin.left - margin.right;
 const height = mainHeight - margin.top - margin.bottom;
@@ -13,24 +13,30 @@ export function buildLineChart(data, title) {
 
   const xScale = d3.scaleLinear().range([0, width]);
   const yScale = d3.scaleLinear().rangeRound([height, 0]);
+  let svg;
 
-  const svg = d3
-    .select(innerContainer)
-    .attr("width", mainWidth)
-    .attr("height", mainHeight)
-    .append("g")
-    .attr("class", "main")
-    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+  if (document.getElementsByClassName("main-svg").length) {
+    svg = d3.select(".main-svg");
+  } else {
+    svg = d3.select(innerContainer).append("svg").attr("class", "main-svg");
 
-  svg.append("g").attr("class", "lines");
+    const main = svg
+      .attr("width", mainWidth)
+      .attr("height", mainHeight)
+      .append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  svg
-    .append("g")
-    .attr("class", "x-axis")
-    .attr("transform", `translate(0, ${height})`);
+    main.append("g").attr("class", "lines");
 
-  // create y-axis
-  svg.append("g").attr("class", "y-axis");
+    main
+      .append("g")
+      .attr("class", "x-axis")
+      .attr("transform", `translate(0, ${height})`);
+
+    // create y-axis
+    main.append("g").attr("class", "y-axis");
+    graphContainer.appendChild(innerContainer);
+  }
 
   // update x-axis
   xScale.domain([
@@ -39,49 +45,35 @@ export function buildLineChart(data, title) {
       return d.x;
     }),
   ]);
-  svg.select(".x-axis").call(d3.axisBottom(xScale));
+  d3.select(".x-axis").call(d3.axisBottom(xScale));
 
   // update y-axis
-  yScale.domain(d3.extent(data.map(([_, d]) => d).flat(), (d) => d.y));
-  svg.select(".y-axis").transition().call(d3.axisLeft(yScale));
+  yScale.domain(d3.extent(data, (d) => d.y));
+  d3.select(".y-axis").transition().call(d3.axisLeft(yScale));
 
   svg
     .selectAll(".lines")
     .selectAll(".line")
-    .data(data, (d) => d[0]) // <---- wrap data in array!!!!
-    .join(
-      (enter) => {
-        const line = enter.append("g").attr("class", "line");
+    .data([data], (d) => d[0]) // <---- wrap data in array!!!!
+    .join((enter) => {
+      const g = enter.append("g").attr("class", "line");
 
-        return line
-          .append("path")
-          .attr("fill", "none")
-          .attr("stroke-width", 2)
-          .attr("stroke", "red")
-          .attr("d", (dPath) => {
-            return d3
-              .line()
-              .x((d) => xScale(d.x))
-              .y((d) => {
-                return yScale(d.y);
-              })(dPath);
-          });
-      },
-      (update) => {
-        update
-          .select("path")
-          .transition()
-          .attr("fill", "none")
-          .attr("stroke-width", 2)
-          .attr("stroke", "red")
-          .attr("d", (dPath) => {
-            return d3
-              .line()
-              .x((d) => xScale(d.x))
-              .y((d) => yScale(d.y))(dPath[1]);
-          });
-      }
-    );
+      g.append("path")
+        .attr("fill", "none")
+        .attr("stroke-width", 2)
+        .attr("stroke", "red")
+        .attr(
+          "d",
+          d3
+            .line()
+            .x((d) => {
+              return xScale(d.x);
+            })
+            .y((d) => {
+              return yScale(d.y);
+            })
+        );
 
-  graphContainer.appendChild(innerContainer);
+      return g;
+    });
 }

@@ -24,7 +24,6 @@ export function buildBarChart(dataObject, title) {
     .attr("width", mainWidth)
     .attr("height", mainHeight)
     .append("g")
-    .attr("class", "main")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
   svg.append("g").attr("class", "bars");

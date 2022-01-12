@@ -29,9 +29,10 @@ export function graphLinks(pelotonData) {
     const item = document.createElement("li");
     item.textContent = title;
     item.addEventListener("click", () => {
-      graphContainer.innerHTML = "";
-      const data = pelotonData.raw.map((d, i) => ({ x: i, y: +d[key] }));
-      buildLineChart([data], title);
+      const data = pelotonData.raw
+        .map((d, i) => ({ x: i, y: +d[key] }))
+        .filter(({ x, y }) => x && y);
+      buildLineChart(data, title);
     });
     graphLinksEl.appendChild(item);
   });
