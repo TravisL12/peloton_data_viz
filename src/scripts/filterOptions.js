@@ -7,10 +7,26 @@ export const filterOptions = (sets) => {
   filterTypes.forEach((filter) => {
     const el = document.createElement("div");
     el.className = "filter-option";
-    const options = sets[filter].map((option) => `<li>${option}</li>`).join("");
+    const options = sets[filter]
+      .sort((a, b) => b - a)
+      .map(
+        (option) => `
+      <li>
+        <input type="checkbox" id='option-${option}' />
+        <label for='option-${option}'>${option}</label>
+      </li>
+    `
+      )
+      .join("");
     el.innerHTML = `
       <h3>${attributes[filter].title}</h3>
-      <ul class="filters-list">${options}</ul>
+      <div>
+        <button>All</button>
+        <button>None</button>
+      </div>
+      <ul class="filters-list">
+        ${options}
+      </ul>
     `;
     filtersEl.append(el);
   });
