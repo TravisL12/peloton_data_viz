@@ -49,6 +49,18 @@ export const attributes = Object.keys(keys).reduce((acc, title) => {
   return acc;
 }, {});
 
+export const barChartNames = [
+  attributes.instructor,
+  attributes.fitness_discipline,
+  attributes.length_minutes,
+];
+
+export const lineChartNames = [
+  attributes.total_output,
+  attributes.distance_miles,
+  attributes.calories,
+];
+
 // not sure I need this
 export const getUniq = (data) => {
   return [...new Set(data)];

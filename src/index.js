@@ -32,8 +32,6 @@ import "./styles/styles.scss";
       });
       pelotonData.parseData(data);
       console.log(pelotonData.data);
-
-      filterOptions(pelotonData.data.sets);
       graphLinks(pelotonData.data);
     };
   });

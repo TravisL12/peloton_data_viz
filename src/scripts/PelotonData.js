@@ -1,7 +1,6 @@
-import { barChartNames } from "./graphLinks";
-import { getUniq } from "./utils";
+import { getUniq, barChartNames } from "./utils";
 
-const parseCount = barChartNames.map(({ key }) => key);
+const mapCountKeys = barChartNames.map(({ key }) => key);
 
 class PelotonData {
   constructor() {
@@ -11,7 +10,7 @@ class PelotonData {
   parseData(data) {
     this.data.raw = data;
     if (this.data.raw) {
-      parseCount.forEach((key) => {
+      mapCountKeys.forEach((key) => {
         this.parseItemCount(key);
       });
     }

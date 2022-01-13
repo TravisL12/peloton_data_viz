@@ -21,13 +21,32 @@ export const filterOptions = (sets) => {
     el.innerHTML = `
       <h3>${attributes[filter].title}</h3>
       <div>
-        <button>All</button>
-        <button>None</button>
+        <button id="${filter}-all-btn">All</button>
+        <button id="${filter}-none-btn">None</button>
       </div>
-      <ul class="filters-list">
-        ${options}
-      </ul>
+      <form id="${filter}-form">
+        <ul class="filters-list">
+          ${options}
+        </ul>
+      </form>
     `;
     filtersEl.append(el);
+    document
+      .getElementById(`${filter}-form`)
+      .addEventListener("change", (event) => {
+        console.log("hey", event);
+      });
+
+    document
+      .getElementById(`${filter}-all-btn`)
+      .addEventListener("click", (event) => {
+        console.log("hey", event);
+      });
+
+    document
+      .getElementById(`${filter}-none-btn`)
+      .addEventListener("click", (event) => {
+        console.log("hey", event);
+      });
   });
 };

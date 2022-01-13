@@ -1,20 +1,11 @@
 import { buildBarChart } from "./barChart";
+import { filterOptions } from "./filterOptions";
 import { buildLineChart } from "./lineChart";
-import { attributes } from "./utils";
-
-export const barChartNames = [
-  attributes.instructor,
-  attributes.fitness_discipline,
-  attributes.length_minutes,
-];
-
-export const lineChartNames = [
-  attributes.total_output,
-  attributes.distance_miles,
-  attributes.calories,
-];
+import { barChartNames, lineChartNames } from "./utils";
 
 export function graphLinks(pelotonData) {
+  filterOptions(pelotonData.sets);
+
   const graphEl = document.createElement("ul");
   graphEl.id = "graph-links";
   const main = document.querySelector(".main");
