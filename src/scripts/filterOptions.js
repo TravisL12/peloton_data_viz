@@ -12,7 +12,7 @@ export const filterOptions = (sets) => {
       .map(
         (option) => `
       <li>
-        <input type="checkbox" id='option-${option}' />
+        <input type="checkbox" checked id='option-${option}' />
         <label for='option-${option}'>${option}</label>
       </li>
     `

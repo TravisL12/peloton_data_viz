@@ -1,3 +1,3 @@
-export const mainWidth = 700;
-export const mainHeight = 300;
+export const mainWidth = 1200;
+export const mainHeight = 400;
 export const GROUP_SELECTOR = "g-collection";
