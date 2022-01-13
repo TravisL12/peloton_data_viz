@@ -1,5 +1,5 @@
 import { buildBarChart } from "./barChart";
-import { graphContainer, graphLinksEl } from "./elementSelectors";
+import { graphLinksEl } from "./elementSelectors";
 import { buildLineChart } from "./lineChart";
 
 export const barChartNames = [
@@ -29,8 +29,9 @@ export function graphLinks(pelotonData) {
     item.textContent = title;
     item.addEventListener("click", () => {
       const data = pelotonData.raw
-        .map((d, i) => ({ x: i, y: +d[key] }))
-        .filter(({ x, y }) => x && y);
+        .filter((d) => +d[key])
+        .map((d, i) => ({ x: i, y: +d[key] }));
+      console.log(data);
       buildLineChart(data, title);
     });
     graphLinksEl.appendChild(item);

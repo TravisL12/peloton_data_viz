@@ -7,6 +7,8 @@ const margin = { top: 10, bottom: 120, left: 30, right: 10 };
 const width = mainWidth - margin.left - margin.right;
 const height = mainHeight - margin.top - margin.bottom;
 
+const SVG_SELECTOR = "barchart-svg";
+
 export function buildBarChart(dataObject, title) {
   const data = Object.entries(dataObject).map(([name, count]) => ({
     name,
@@ -19,17 +21,17 @@ export function buildBarChart(dataObject, title) {
   const yScale = d3.scaleLinear().range([height, 0]);
   let svg;
 
-  if (document.getElementsByClassName("barchart-svg").length) {
-    document.querySelector("h3").textContent = title;
-    svg = d3.select(".barchart-svg");
+  if (document.getElementsByClassName(SVG_SELECTOR).length) {
+    document.querySelector(`.${SVG_SELECTOR} h3`).textContent = title;
+    svg = d3.select(`.${SVG_SELECTOR}`);
   } else {
     const innerContainer = document.createElement("div");
+    innerContainer.className = SVG_SELECTOR;
     innerContainer.innerHTML = `<h3>${title}</h3>`;
 
     svg = d3
       .select(innerContainer)
       .append("svg")
-      .attr("class", "barchart-svg")
       .attr("width", mainWidth)
       .attr("height", mainHeight)
       .append("g")
@@ -47,7 +49,7 @@ export function buildBarChart(dataObject, title) {
   }
 
   xScale.domain(data.map(({ name }) => name));
-  d3.select(".x-axis")
+  d3.select(`.${SVG_SELECTOR} .x-axis`)
     .call(d3.axisBottom(xScale))
     .selectAll("text")
     .text((d) => {
@@ -57,7 +59,7 @@ export function buildBarChart(dataObject, title) {
     .attr("transform", "rotate(-70) translate(-10,-10)");
 
   yScale.domain([0, d3.max(data.map(({ count }) => count)) * 1.1]);
-  d3.select(".y-axis").transition().call(d3.axisLeft(yScale));
+  d3.select(`.${SVG_SELECTOR} .y-axis`).transition().call(d3.axisLeft(yScale));
 
   svg
     .selectAll(".bars")

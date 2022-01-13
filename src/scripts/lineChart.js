@@ -7,21 +7,23 @@ const margin = { top: 10, bottom: 50, left: 50, right: 10 };
 const width = mainWidth - margin.left - margin.right;
 const height = mainHeight - margin.top - margin.bottom;
 
+const SVG_SELECTOR = "line-svg";
+
 export function buildLineChart(data, title) {
   const xScale = d3.scaleLinear().range([0, width]);
   const yScale = d3.scaleLinear().rangeRound([height, 0]);
   let svg;
 
-  if (document.getElementsByClassName("line-svg").length) {
-    document.querySelector("h3").textContent = title;
-    svg = d3.select(".line-svg");
+  if (document.getElementsByClassName(SVG_SELECTOR).length) {
+    document.querySelector(`.${SVG_SELECTOR} h3`).textContent = title;
+    svg = d3.select(`.${SVG_SELECTOR}`);
   } else {
     const innerContainer = document.createElement("div");
+    innerContainer.className = SVG_SELECTOR;
     innerContainer.innerHTML = `<h3>${title}</h3>`;
     svg = d3
       .select(innerContainer)
       .append("svg")
-      .attr("class", "line-svg")
       .attr("width", mainWidth)
       .attr("height", mainHeight)
       .append("g")
@@ -46,11 +48,11 @@ export function buildLineChart(data, title) {
       return d.x;
     }),
   ]);
-  d3.select(".x-axis").call(d3.axisBottom(xScale));
+  d3.select(`.${SVG_SELECTOR} .x-axis`).call(d3.axisBottom(xScale));
 
   // update y-axis
   yScale.domain(d3.extent(data, (d) => d.y));
-  d3.select(".y-axis").transition().call(d3.axisLeft(yScale));
+  d3.select(`.${SVG_SELECTOR} .y-axis`).transition().call(d3.axisLeft(yScale));
 
   svg
     .selectAll(".lines")
