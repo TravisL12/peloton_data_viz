@@ -1,45 +1,18 @@
 import * as d3 from "d3";
-import { mainHeight, mainWidth } from "./chartConstants";
-import { graphContainer } from "./elementSelectors";
+import { GROUP_SELECTOR, mainHeight, mainWidth } from "./chartConstants";
+import { getSvg } from "./utils";
 
 const margin = { top: 10, bottom: 50, left: 50, right: 10 };
-
-const width = mainWidth - margin.left - margin.right;
-const height = mainHeight - margin.top - margin.bottom;
-
 const SVG_SELECTOR = "line-svg";
 
 export function buildLineChart(data, title) {
+  const { svg, width, height } = getSvg({
+    selector: SVG_SELECTOR,
+    margin,
+    title,
+  });
   const xScale = d3.scaleLinear().range([0, width]);
   const yScale = d3.scaleLinear().rangeRound([height, 0]);
-  let svg;
-
-  if (document.getElementsByClassName(SVG_SELECTOR).length) {
-    document.querySelector(`.${SVG_SELECTOR} h3`).textContent = title;
-    svg = d3.select(`.${SVG_SELECTOR}`);
-  } else {
-    const innerContainer = document.createElement("div");
-    innerContainer.className = SVG_SELECTOR;
-    innerContainer.innerHTML = `<h3>${title}</h3>`;
-    svg = d3
-      .select(innerContainer)
-      .append("svg")
-      .attr("width", mainWidth)
-      .attr("height", mainHeight)
-      .append("g")
-      .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-    svg.append("g").attr("class", "lines");
-
-    svg
-      .append("g")
-      .attr("class", "x-axis")
-      .attr("transform", `translate(0, ${height})`);
-
-    // create y-axis
-    svg.append("g").attr("class", "y-axis");
-    graphContainer.appendChild(innerContainer);
-  }
 
   // update x-axis
   xScale.domain([
@@ -55,7 +28,7 @@ export function buildLineChart(data, title) {
   d3.select(`.${SVG_SELECTOR} .y-axis`).transition().call(d3.axisLeft(yScale));
 
   svg
-    .selectAll(".lines")
+    .selectAll(`.${SVG_SELECTOR} .${GROUP_SELECTOR}`)
     .selectAll(".line")
     .data([data]) // <---- wrap data in array!!!!
     .join(
@@ -66,8 +39,7 @@ export function buildLineChart(data, title) {
           .attr("fill", "none")
           .attr("stroke-width", 2)
           .attr("stroke", "red")
-          .attr(
-            "d",
+          .attr("d", (dPath) =>
             d3
               .line()
               .x((d) => {
@@ -75,7 +47,7 @@ export function buildLineChart(data, title) {
               })
               .y((d) => {
                 return yScale(d.y);
-              })
+              })(dPath)
           );
 
         return g;
@@ -84,8 +56,7 @@ export function buildLineChart(data, title) {
         update
           .select("path")
           .transition()
-          .attr(
-            "d",
+          .attr("d", (dPath) =>
             d3
               .line()
               .x((d) => {
@@ -93,7 +64,7 @@ export function buildLineChart(data, title) {
               })
               .y((d) => {
                 return yScale(d.y);
-              })
+              })(dPath)
           );
       }
     );
