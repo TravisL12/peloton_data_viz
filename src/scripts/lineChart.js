@@ -15,22 +15,17 @@ export function buildLineChart(data, title) {
   const yScale = d3.scaleLinear().rangeRound([height, 0]);
 
   // update x-axis
-  xScale.domain([
-    0,
-    d3.max(data, (d) => {
-      return d.x;
-    }),
-  ]);
+  xScale.domain([0, d3.max(data, (d) => d3.max(d[1], (d) => d.x))]);
   d3.select(`.${SVG_SELECTOR} .x-axis`).call(d3.axisBottom(xScale));
 
   // update y-axis
-  yScale.domain(d3.extent(data, (d) => d.y));
+  yScale.domain(d3.extent(data.map(([_, d]) => d).flat(), (d) => d.y));
   d3.select(`.${SVG_SELECTOR} .y-axis`).transition().call(d3.axisLeft(yScale));
 
   svg
     .selectAll(`.${SVG_SELECTOR} .${GROUP_SELECTOR}`)
     .selectAll(".line")
-    .data([data]) // <---- wrap data in array!!!!
+    .data(data, (d) => d[0]) // <---- wrap data in array!!!!
     .join(
       (enter) => {
         const g = enter.append("g").attr("class", "line");
@@ -47,7 +42,7 @@ export function buildLineChart(data, title) {
               })
               .y((d) => {
                 return yScale(d.y);
-              })(dPath)
+              })(dPath[1])
           );
 
         return g;
@@ -64,7 +59,7 @@ export function buildLineChart(data, title) {
               })
               .y((d) => {
                 return yScale(d.y);
-              })(dPath)
+              })(dPath[1])
           );
       }
     );

@@ -31,8 +31,8 @@ export function graphLinks(pelotonData) {
       const data = pelotonData.raw
         .filter((d) => +d[key])
         .map((d, i) => ({ x: i, y: +d[key] }));
-      console.log(data);
-      buildLineChart(data, title);
+
+      buildLineChart([["one", data]], title); // change "one" to key for multi-line graph
     });
     graphLinksEl.appendChild(item);
   });
