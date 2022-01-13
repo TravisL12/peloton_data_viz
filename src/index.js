@@ -1,4 +1,5 @@
 import { fileInput, fileInputName } from "./scripts/elementSelectors";
+import { filterOptions } from "./scripts/filterOptions";
 import { graphLinks } from "./scripts/graphLinks";
 import PelotonData from "./scripts/PelotonData";
 import { keys } from "./scripts/utils";
@@ -12,7 +13,7 @@ import "./styles/styles.scss";
     const reader = new FileReader();
     const file = event.currentTarget.files[0];
 
-    fileInputName.textContent = file.name;
+    // fileInputName.textContent = file.name;
 
     reader.readAsBinaryString(file);
     reader.onload = () => {
@@ -30,7 +31,9 @@ import "./styles/styles.scss";
         }, {});
       });
       pelotonData.parseData(data);
-      pelotonData.parseHighlights();
+      console.log(pelotonData.data);
+
+      filterOptions(pelotonData.data.sets);
       graphLinks(pelotonData.data);
     };
   });

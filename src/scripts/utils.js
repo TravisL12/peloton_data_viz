@@ -43,6 +43,12 @@ export const keys = {
   "Workout Timestamp": "workout_date",
 };
 
+export const attributes = Object.keys(keys).reduce((acc, title) => {
+  const key = keys[title];
+  acc[key] = { key, title };
+  return acc;
+}, {});
+
 // not sure I need this
 export const getUniq = (data) => {
   return [...new Set(data)];

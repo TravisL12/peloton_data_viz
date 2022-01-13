@@ -1,27 +1,32 @@
 import { buildBarChart } from "./barChart";
-import { graphLinksEl } from "./elementSelectors";
 import { buildLineChart } from "./lineChart";
+import { attributes } from "./utils";
 
 export const barChartNames = [
-  { key: "instructor", title: "Instructor" },
-  { key: "fitness_discipline", title: "Workout type" },
-  { key: "length_minutes", title: "Length" },
+  attributes.instructor,
+  attributes.fitness_discipline,
+  attributes.length_minutes,
 ];
 
 export const lineChartNames = [
-  { key: "total_output", title: "Output" },
-  { key: "distance_miles", title: "Distance (mi.)" },
-  { key: "calories", title: "Calories" },
+  attributes.total_output,
+  attributes.distance_miles,
+  attributes.calories,
 ];
 
 export function graphLinks(pelotonData) {
+  const graphEl = document.createElement("ul");
+  graphEl.id = "graph-links";
+  const main = document.querySelector(".main");
+  main.insertBefore(graphEl, main.firstChild);
+
   barChartNames.forEach(({ key, title }) => {
     const item = document.createElement("li");
     item.textContent = title;
     item.addEventListener("click", () => {
       buildBarChart(pelotonData.count[key], title);
     });
-    graphLinksEl.appendChild(item);
+    graphEl.appendChild(item);
   });
 
   lineChartNames.forEach(({ key, title }) => {
@@ -34,6 +39,6 @@ export function graphLinks(pelotonData) {
 
       buildLineChart([["one", data]], title); // change "one" to key for multi-line graph
     });
-    graphLinksEl.appendChild(item);
+    graphEl.appendChild(item);
   });
 }

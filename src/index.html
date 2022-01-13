@@ -7,15 +7,17 @@
   </head>
   <body>
     <div class="container">
-      <div class="header">Peloton</div>
-
-      <div class="sidebar">
-        <div>
+      <div class="header">
+        <span>Peloton</span>
+        <div style="display: flex">
           <input id="data-upload" type="file" name="data-csv" accept=".csv" />
           <label for="data-upload">Upload Peloton data</label>
           <div id="file-name"></div>
         </div>
-        <ul id="graph-links"></ul>
+      </div>
+
+      <div class="sidebar">
+        <div id="filters"></div>
       </div>
 
       <div class="main">
