@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { GROUP_SELECTOR, mainHeight, mainWidth } from "./chartConstants";
+import { GROUP_SELECTOR } from "./chartConstants";
 import { getSvg } from "./utils";
 
 const margin = { top: 10, bottom: 50, left: 50, right: 10 };
@@ -25,7 +25,7 @@ export function buildLineChart(data, title) {
   svg
     .selectAll(`.${SVG_SELECTOR} .${GROUP_SELECTOR}`)
     .selectAll(".line")
-    .data(data, (d) => d[0]) // <---- wrap data in array!!!!
+    .data(data, (d) => d[0])
     .join(
       (enter) => {
         const g = enter.append("g").attr("class", "line");

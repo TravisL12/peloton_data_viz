@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { getSvg } from "./utils";
-import { GROUP_SELECTOR, mainHeight, mainWidth } from "./chartConstants";
+import { GROUP_SELECTOR } from "./chartConstants";
 
 const margin = { top: 10, bottom: 120, left: 30, right: 10 };
 const SVG_SELECTOR = "barchart-svg";
@@ -38,18 +38,24 @@ export function buildBarChart(dataObject, title) {
     .selectAll(`.${SVG_SELECTOR} .${GROUP_SELECTOR}`)
     .selectAll(".bar")
     .data(data, (d) => d.name)
-    .join((enter) => {
-      const g = enter.append("g").attr("class", "bar");
+    .join(
+      (enter) => {
+        const g = enter.append("g").attr("class", "bar");
 
-      g.append("rect")
-        .attr("x", (d) => xScale(d.name))
-        .attr("y", (d) => yScale(d.count))
-        .attr("height", (d) => height - yScale(d.count))
-        .attr("width", xScale.bandwidth())
-        .attr("stroke-width", 1)
-        .attr("stroke", "black")
-        .attr("fill", "pink");
+        g.append("rect")
+          .attr("x", (d) => xScale(d.name))
+          .attr("y", (d) => yScale(d.count))
+          .attr("height", (d) => height - yScale(d.count))
+          .attr("width", xScale.bandwidth())
+          .attr("stroke-width", 1)
+          .attr("stroke", "black")
+          .attr("fill", "pink");
 
-      return g;
-    });
+        return g;
+      },
+      (update) => update,
+      (exit) => {
+        exit.transition().duration(100).style("opacity", 0).remove();
+      }
+    );
 }
