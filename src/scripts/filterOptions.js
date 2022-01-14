@@ -10,6 +10,12 @@ export const filterOptions = (data) => {
   const sets = pelotonData.parseAttributeSets(parsedData);
   const filtersEl = document.getElementById("filters");
   const filterTypes = Object.keys(sets);
+  const filterValues = Object.values(sets)
+    .flat()
+    .reduce((acc, set) => {
+      acc[set] = true;
+      return acc;
+    }, {});
 
   generateGraphs(parsedData); // initialize graphs
 
@@ -45,15 +51,10 @@ export const filterOptions = (data) => {
     document
       .getElementById(`${filter}-form`)
       .addEventListener("change", (event) => {
-        const values = [
-          ...event.currentTarget.querySelectorAll("input"),
-        ].reduce((acc, c) => {
-          acc[c.value] = c.checked;
-          return acc;
-        }, {});
-
+        filterValues[event.target.value] = event.target.checked;
+        console.log(filterValues);
         const filteredData = data.filter((d) => {
-          return values[d[filter]];
+          return filterValues[d[filter]];
         });
 
         const parsed = pelotonData.parseData(filteredData);
