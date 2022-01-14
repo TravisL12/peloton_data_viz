@@ -52,9 +52,8 @@ export const filterOptions = (data) => {
       .getElementById(`${filter}-form`)
       .addEventListener("change", (event) => {
         filterValues[event.target.value] = event.target.checked;
-        console.log(filterValues);
         const filteredData = data.filter((d) => {
-          return filterValues[d[filter]];
+          return filterTypes.every((type) => filterValues[d[type]]);
         });
 
         const parsed = pelotonData.parseData(filteredData);
