@@ -107,11 +107,14 @@ button {
 #graph-links {
   display: flex;
   border-right: none;
+  position: sticky;
+  top: 0;
 
   li {
     padding: 5px;
     border: 1px solid;
     cursor: pointer;
+    background: white;
 
     & + li {
       border-left: none;

@@ -1,6 +1,11 @@
 import { barChartNames, lineChartNames } from "./utils";
 
-export const graphLinks = () => {
+const scrollOptions = {
+  behavior: "smooth",
+  block: "start",
+};
+
+export function graphLinks() {
   const graphEl = document.createElement("ul");
   graphEl.id = "graph-links";
   const main = document.querySelector(".main");
@@ -10,7 +15,7 @@ export const graphLinks = () => {
     const item = document.createElement("li");
     item.textContent = title;
     item.addEventListener("click", () => {
-      document.getElementById(`${key}-id`)?.scrollIntoView();
+      document.getElementById(`${key}-id`)?.scrollIntoView(scrollOptions);
     });
     graphEl.appendChild(item);
   });
@@ -19,8 +24,8 @@ export const graphLinks = () => {
     const item = document.createElement("li");
     item.textContent = title;
     item.addEventListener("click", () => {
-      document.getElementById(`${key}-id`)?.scrollIntoView();
+      document.getElementById(`${key}-id`)?.scrollIntoView(scrollOptions);
     });
     graphEl.appendChild(item);
   });
-};
+}

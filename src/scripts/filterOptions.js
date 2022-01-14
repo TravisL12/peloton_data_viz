@@ -1,13 +1,16 @@
 import { generateGraphs } from "./generateGraphs";
 import { attributes } from "./utils";
 import PelotonData from "./PelotonData";
+import { graphLinks } from "./graphLinks";
 
 // SCENIC RIDES HAVE NO INSTRUCTOR!
 
-export const filterOptions = (data) => {
+export const filterOptions = (rawData) => {
+  graphLinks();
   const pelotonData = new PelotonData();
-  const parsedData = pelotonData.parseData(data);
+  const parsedData = pelotonData.parseData(rawData);
   const sets = pelotonData.parseAttributeSets(parsedData);
+
   const filtersEl = document.getElementById("filters");
   const filterTypes = Object.keys(sets);
   const filterValues = Object.values(sets)
@@ -18,7 +21,7 @@ export const filterOptions = (data) => {
     }, {});
 
   const submitOptions = () => {
-    const filteredData = data.filter((d) => {
+    const filteredData = rawData.filter((d) => {
       return filterTypes.every((type) => filterValues[d[type]]);
     });
 
@@ -42,7 +45,7 @@ export const filterOptions = (data) => {
     submitOptions();
   };
 
-  generateGraphs(parsedData); // initialize graphs
+  submitOptions();
 
   filterTypes.forEach((filter) => {
     const el = document.createElement("div");
@@ -52,8 +55,8 @@ export const filterOptions = (data) => {
       .map(
         (option) => `
       <li>
-        <input type="checkbox" value="${option}" checked id='option-${option}' />
-        <label for='option-${option}'>${option}</label>
+        <input type="checkbox" value="${option}" checked id="option-${option}" />
+        <label for="option-${option}">${option}</label>
       </li>
     `
       )

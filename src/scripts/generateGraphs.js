@@ -3,11 +3,6 @@ import { buildLineChart } from "./lineChart";
 import { barChartNames, lineChartNames } from "./utils";
 
 export function generateGraphs(pelotonData) {
-  const graphEl = document.createElement("ul");
-  graphEl.id = "graph-links";
-  const main = document.querySelector(".main");
-  main.insertBefore(graphEl, main.firstChild);
-
   barChartNames.forEach(({ key }) => {
     buildBarChart(pelotonData.count[key], key);
   });

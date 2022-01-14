@@ -1,6 +1,5 @@
 import { fileInput } from "./scripts/elementSelectors";
 import { filterOptions } from "./scripts/filterOptions";
-import { graphLinks } from "./scripts/graphLinks";
 import { keys } from "./scripts/utils";
 
 import "./styles/styles.scss";
@@ -26,7 +25,6 @@ import "./styles/styles.scss";
         }, {});
       });
 
-      graphLinks();
       filterOptions(data);
     };
   });
