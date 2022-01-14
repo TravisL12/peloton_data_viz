@@ -17,6 +17,31 @@ export const filterOptions = (data) => {
       return acc;
     }, {});
 
+  const submitOptions = () => {
+    const filteredData = data.filter((d) => {
+      return filterTypes.every((type) => filterValues[d[type]]);
+    });
+
+    const parsed = pelotonData.parseData(filteredData);
+    generateGraphs(parsed);
+  };
+
+  const updateOptions = (event) => {
+    filterValues[event.target.value] = event.target.checked;
+    submitOptions();
+  };
+
+  const toggleAll = (filter, isChecked = false) => {
+    sets[filter].forEach((attr) => {
+      filterValues[attr] = isChecked;
+      const optionEl = document.getElementById(`option-${attr}`);
+      if (optionEl) {
+        optionEl.checked = isChecked;
+      }
+    });
+    submitOptions();
+  };
+
   generateGraphs(parsedData); // initialize graphs
 
   filterTypes.forEach((filter) => {
@@ -33,6 +58,7 @@ export const filterOptions = (data) => {
     `
       )
       .join("");
+
     el.innerHTML = `
       <h3>${attributes[filter].title}</h3>
       <div>
@@ -50,28 +76,20 @@ export const filterOptions = (data) => {
     // Check/Uncheck
     document
       .getElementById(`${filter}-form`)
-      .addEventListener("change", (event) => {
-        filterValues[event.target.value] = event.target.checked;
-        const filteredData = data.filter((d) => {
-          return filterTypes.every((type) => filterValues[d[type]]);
-        });
-
-        const parsed = pelotonData.parseData(filteredData);
-        generateGraphs(parsed); // update graphs
-      });
+      .addEventListener("change", updateOptions);
 
     // All One
     document
       .getElementById(`${filter}-all-btn`)
-      .addEventListener("click", (event) => {
-        console.log("hey", event);
+      .addEventListener("click", () => {
+        toggleAll(filter, true);
       });
 
     // All Off
     document
       .getElementById(`${filter}-none-btn`)
-      .addEventListener("click", (event) => {
-        console.log("hey", event);
+      .addEventListener("click", () => {
+        toggleAll(filter);
       });
   });
 };

@@ -1,6 +1,6 @@
 import { barChartNames, lineChartNames } from "./utils";
 
-export function graphLinks() {
+export const graphLinks = () => {
   const graphEl = document.createElement("ul");
   graphEl.id = "graph-links";
   const main = document.querySelector(".main");
@@ -23,4 +23,4 @@ export function graphLinks() {
     });
     graphEl.appendChild(item);
   });
-}
+};
