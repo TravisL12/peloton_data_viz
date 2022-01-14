@@ -1,8 +1,17 @@
+import { generateGraphs } from "./generateGraphs";
 import { attributes } from "./utils";
+import PelotonData from "./PelotonData";
 
-export const filterOptions = (sets) => {
+// SCENIC RIDES HAVE NO INSTRUCTOR!
+
+export const filterOptions = (data) => {
+  const pelotonData = new PelotonData();
+  const parsedData = pelotonData.parseData(data);
+  const sets = pelotonData.parseAttributeSets(parsedData);
   const filtersEl = document.getElementById("filters");
   const filterTypes = Object.keys(sets);
+
+  generateGraphs(parsedData); // initialize graphs
 
   filterTypes.forEach((filter) => {
     const el = document.createElement("div");
@@ -12,7 +21,7 @@ export const filterOptions = (sets) => {
       .map(
         (option) => `
       <li>
-        <input type="checkbox" checked id='option-${option}' />
+        <input type="checkbox" value="${option}" checked id='option-${option}' />
         <label for='option-${option}'>${option}</label>
       </li>
     `
@@ -31,18 +40,34 @@ export const filterOptions = (sets) => {
       </form>
     `;
     filtersEl.append(el);
+
+    // Check/Uncheck
     document
       .getElementById(`${filter}-form`)
       .addEventListener("change", (event) => {
-        console.log("hey", event);
+        const values = [
+          ...event.currentTarget.querySelectorAll("input"),
+        ].reduce((acc, c) => {
+          acc[c.value] = c.checked;
+          return acc;
+        }, {});
+
+        const filteredData = data.filter((d) => {
+          return values[d[filter]];
+        });
+
+        const parsed = pelotonData.parseData(filteredData);
+        generateGraphs(parsed); // update graphs
       });
 
+    // All One
     document
       .getElementById(`${filter}-all-btn`)
       .addEventListener("click", (event) => {
         console.log("hey", event);
       });
 
+    // All Off
     document
       .getElementById(`${filter}-none-btn`)
       .addEventListener("click", (event) => {

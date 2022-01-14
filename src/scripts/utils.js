@@ -66,17 +66,18 @@ export const getUniq = (data) => {
   return [...new Set(data)];
 };
 
-export const getSvg = ({ selector, margin, title }) => {
+export const getSvg = ({ selector, margin, key, title }) => {
   let svg;
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
 
-  if (document.getElementsByClassName(selector).length) {
-    document.querySelector(`.${selector} h3`).textContent = title;
-    svg = d3.select(`.${selector}`);
+  if (document.getElementById(`${key}-id`)) {
+    document.querySelector(`#${key}-id h3`).textContent = title;
+    svg = d3.select(`#${key}-id .main-group`);
   } else {
     const innerContainer = document.createElement("div");
     innerContainer.className = selector;
+    innerContainer.id = `${key}-id`;
     innerContainer.innerHTML = `<h3>${title}</h3>`;
     svg = d3
       .select(innerContainer)
@@ -84,6 +85,7 @@ export const getSvg = ({ selector, margin, title }) => {
       .attr("width", mainWidth)
       .attr("height", mainHeight)
       .append("g")
+      .attr("class", "main-group")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     svg.append("g").attr("class", GROUP_SELECTOR);
@@ -97,5 +99,6 @@ export const getSvg = ({ selector, margin, title }) => {
     svg.append("g").attr("class", "y-axis");
     graphContainer.appendChild(innerContainer);
   }
+
   return { svg, width, height };
 };

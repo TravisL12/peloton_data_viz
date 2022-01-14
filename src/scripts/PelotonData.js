@@ -14,8 +14,7 @@ class PelotonData {
         this.parseItemCount(key);
       });
     }
-    this.parseHighlights();
-    this.parseAttributeSets();
+    return this.data;
   }
 
   // have some fun stats picked out here for landing page
@@ -34,6 +33,7 @@ class PelotonData {
       acc[key] = getUniq(mappedValues);
       return acc;
     }, {});
+    return this.data.sets;
   }
 
   parseItemCount(key) {
