@@ -24,7 +24,7 @@ export function buildBarChart(dataObject, key) {
   const yScale = d3.scaleLinear().range([height, 0]);
 
   xScale.domain(data.map(({ name }) => name));
-  d3.select(`#${key}-id .x-axis`)
+  d3.select(`.${SVG_SELECTOR} .x-axis`)
     .call(d3.axisBottom(xScale))
     .selectAll("text")
     .text((d) => {
@@ -34,10 +34,10 @@ export function buildBarChart(dataObject, key) {
     .attr("transform", "rotate(-70) translate(-10,-10)");
 
   yScale.domain([0, d3.max(data.map(({ count }) => count)) * 1.1]);
-  d3.select(`#${key}-id .y-axis`).transition().call(d3.axisLeft(yScale));
+  d3.select(`.${SVG_SELECTOR} .y-axis`).transition().call(d3.axisLeft(yScale));
 
   svg
-    .selectAll(`#${key}-id .${GROUP_SELECTOR}`)
+    .selectAll(`.${SVG_SELECTOR} .${GROUP_SELECTOR}`)
     .selectAll(".bar")
     .data(data, (d) => d.name)
     .join(

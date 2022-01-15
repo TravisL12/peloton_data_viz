@@ -50,15 +50,15 @@ export const attributes = Object.keys(keys).reduce((acc, title) => {
 }, {});
 
 export const barChartNames = [
-  attributes.instructor,
-  attributes.fitness_discipline,
-  attributes.length_minutes,
+  { ...attributes.instructor, type: "bar" },
+  { ...attributes.fitness_discipline, type: "bar" },
+  { ...attributes.length_minutes, type: "bar" },
 ];
 
 export const lineChartNames = [
-  attributes.total_output,
-  attributes.distance_miles,
-  attributes.calories,
+  { ...attributes.total_output, type: "line" },
+  { ...attributes.distance_miles, type: "line" },
+  { ...attributes.calories, type: "line" },
 ];
 
 // not sure I need this
@@ -71,9 +71,9 @@ export const getSvg = ({ selector, margin, key, title }) => {
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
 
-  if (document.getElementById(`${key}-id`)) {
-    document.querySelector(`#${key}-id h3`).textContent = title;
-    svg = d3.select(`#${key}-id .main-group`);
+  if (document.querySelector(`.${selector}`)) {
+    document.querySelector(`.${selector} h3`).textContent = title;
+    svg = d3.select(`.${selector} .main-group`);
   } else {
     const innerContainer = document.createElement("div");
     innerContainer.className = selector;

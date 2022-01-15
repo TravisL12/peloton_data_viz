@@ -1,13 +1,12 @@
-import { generateGraphs } from "./generateGraphs";
-import { attributes } from "./utils";
+import { attributes, barChartNames, lineChartNames } from "./utils";
 import PelotonData from "./PelotonData";
-import { graphLinks } from "./graphLinks";
+import { buildBarChart } from "./barChart";
+import { buildLineChart } from "./lineChart";
 
 // SCENIC RIDES HAVE NO INSTRUCTOR!
 
 export class FilterOptions {
   constructor(rawData) {
-    graphLinks();
     this.pelotonData = new PelotonData();
     this.rawData = rawData;
     const parsedData = this.pelotonData.parseData(rawData);
@@ -21,7 +20,7 @@ export class FilterOptions {
         acc[set] = true;
         return acc;
       }, {});
-    this.submitOptions();
+    this.graphLinks(parsedData);
     this.init();
   }
 
@@ -31,7 +30,15 @@ export class FilterOptions {
     });
 
     const parsed = this.pelotonData.parseData(filteredData);
-    generateGraphs(parsed);
+    const { key, type } = this.currentGraph;
+    if (type === "bar") {
+      buildBarChart(parsed.count[key], key);
+    } else if (type === "line") {
+      const data = parsed.raw
+        .filter((d) => +d[key])
+        .map((d, i) => ({ x: i, y: +d[key] }));
+      buildLineChart([["one", data]], key); // change "one" to key for multi-line graph
+    }
   }
 
   updateOptions(event) {
@@ -99,6 +106,33 @@ export class FilterOptions {
         .addEventListener("click", () => {
           this.toggleAll(filter);
         });
+    });
+  }
+
+  graphLinks() {
+    const graphEl = document.createElement("ul");
+    graphEl.id = "graph-links";
+    const main = document.querySelector(".main");
+    main.insertBefore(graphEl, main.firstChild);
+
+    barChartNames.forEach((chart) => {
+      const item = document.createElement("li");
+      item.textContent = chart.title;
+      item.addEventListener("click", () => {
+        this.currentGraph = chart;
+        this.submitOptions();
+      });
+      graphEl.appendChild(item);
+    });
+
+    lineChartNames.forEach((chart) => {
+      const item = document.createElement("li");
+      item.textContent = chart.title;
+      item.addEventListener("click", () => {
+        this.currentGraph = chart;
+        this.submitOptions();
+      });
+      graphEl.appendChild(item);
     });
   }
 }

@@ -18,14 +18,14 @@ export function buildLineChart(data, key) {
 
   // update x-axis
   xScale.domain([0, d3.max(data, (d) => d3.max(d[1], (d) => d.x))]);
-  d3.select(`#${key}-id .x-axis`).call(d3.axisBottom(xScale));
+  d3.select(`.${SVG_SELECTOR} .x-axis`).call(d3.axisBottom(xScale));
 
   // update y-axis
   yScale.domain(d3.extent(data.map(([_, d]) => d).flat(), (d) => d.y));
-  d3.select(`#${key}-id .y-axis`).transition().call(d3.axisLeft(yScale));
+  d3.select(`.${SVG_SELECTOR} .y-axis`).transition().call(d3.axisLeft(yScale));
 
   svg
-    .selectAll(`#${key}-id .${GROUP_SELECTOR}`)
+    .selectAll(`.${SVG_SELECTOR} .${GROUP_SELECTOR}`)
     .selectAll(".line")
     .data(data, (d) => d[0])
     .join(
