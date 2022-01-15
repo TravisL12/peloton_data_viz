@@ -22,22 +22,32 @@ export class FilterOptions {
       }, {});
     this.graphLinks(parsedData);
     this.init();
+
+    // show one graph on load
+    this.currentGraph = chartNames[0];
+    this.updateGraph();
   }
 
-  submitOptions() {
+  updateGraph() {
     const filteredData = this.rawData.filter((d) => {
       return this.filterTypes.every((type) => this.filterValues[d[type]]);
     });
 
     const parsed = this.pelotonData.parseData(filteredData);
-    const { key, type } = this.currentGraph;
+    const { type } = this.currentGraph;
     if (type === "bar") {
+      const { key } = this.currentGraph;
       buildBarChart(parsed.count[key], key);
     } else if (type === "line") {
-      const data = parsed.raw
-        .filter((d) => +d[key])
-        .map((d, i) => ({ x: i, y: +d[key] }));
-      buildLineChart([["one", data]], key); // change "one" to key for multi-line graph
+      const { keys } = this.currentGraph;
+      const data = keys.map((key) => {
+        const d = parsed.raw
+          .filter((d) => +d[key])
+          .map((d, i) => ({ x: i, y: +d[key] }));
+        return [key, d];
+      });
+      console.log(data);
+      buildLineChart(data, this.currentGraph.key);
     }
   }
 
@@ -49,7 +59,7 @@ export class FilterOptions {
         optionEl.checked = isChecked;
       }
     });
-    this.submitOptions();
+    this.updateGraph();
   }
 
   init() {
@@ -87,7 +97,7 @@ export class FilterOptions {
         .getElementById(`${filter}-form`)
         .addEventListener("change", (event) => {
           this.filterValues[event.target.value] = event.target.checked;
-          this.submitOptions();
+          this.updateGraph();
         });
 
       // All One
@@ -115,10 +125,17 @@ export class FilterOptions {
 
     chartNames.forEach((chart) => {
       const item = document.createElement("li");
+      item.classList = "options-item";
       item.textContent = chart.title;
-      item.addEventListener("click", () => {
+      item.addEventListener("click", (event) => {
+        // highlight selected graph
+        [...document.getElementsByClassName("options-item")].forEach((li) => {
+          li.classList.remove("selected");
+        });
+        event.target.classList.add("selected");
+
         this.currentGraph = chart;
-        this.submitOptions();
+        this.updateGraph();
       });
       graphEl.appendChild(item);
     });

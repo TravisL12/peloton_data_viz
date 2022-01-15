@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { GROUP_SELECTOR } from "./chartConstants";
-import { attributes, getSvg } from "./utils";
+import { attributes, colors, getSvg } from "./utils";
 
 const margin = { top: 10, bottom: 50, left: 50, right: 10 };
 const SVG_SELECTOR = "line-svg";
@@ -35,7 +35,7 @@ export function buildLineChart(data, key) {
         g.append("path")
           .attr("fill", "none")
           .attr("stroke-width", 2)
-          .attr("stroke", "red")
+          .attr("stroke", (d) => colors[d[0]])
           .attr("d", (dPath) =>
             d3
               .line()

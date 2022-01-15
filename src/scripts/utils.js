@@ -22,6 +22,15 @@ import { GROUP_SELECTOR, mainHeight, mainWidth } from "./chartConstants";
 // Type: "Beginner"
 // Workout Timestamp: "2020-04-07 16
 
+export const colors = {
+  instructor: "red",
+  fitness_discipline: "blue",
+  length_minutes: "lightblue",
+  total_output: "magenta",
+  distance_miles: "lime",
+  calories: "pink",
+};
+
 export const keys = {
   "Avg. Cadence (RPM)": "cadence_avg",
   "Avg. Heartrate": "heartrate_avg",
@@ -53,9 +62,14 @@ export const chartNames = [
   { ...attributes.instructor, type: "bar" },
   { ...attributes.fitness_discipline, type: "bar" },
   { ...attributes.length_minutes, type: "bar" },
-  { ...attributes.total_output, type: "line" },
-  { ...attributes.distance_miles, type: "line" },
-  { ...attributes.calories, type: "line" },
+
+  { ...attributes.total_output, keys: ["total_output"], type: "line" },
+  {
+    ...attributes.distance_miles,
+    keys: ["distance_miles", "calories", "total_output"],
+    type: "line",
+  },
+  { ...attributes.calories, keys: ["calories"], type: "line" },
 ];
 
 // not sure I need this

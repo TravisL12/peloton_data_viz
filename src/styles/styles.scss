@@ -120,6 +120,7 @@ button {
       border-left: none;
     }
 
+    &.selected,
     &:hover {
       background: pink;
     }

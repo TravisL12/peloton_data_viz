@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { attributes, getSvg } from "./utils";
+import { attributes, colors, getSvg } from "./utils";
 import { GROUP_SELECTOR } from "./chartConstants";
 
 const margin = { top: 10, bottom: 120, left: 30, right: 10 };
@@ -51,7 +51,7 @@ export function buildBarChart(dataObject, key) {
           .attr("width", xScale.bandwidth())
           .attr("stroke-width", 1)
           .attr("stroke", "black")
-          .attr("fill", "pink");
+          .attr("fill", colors[key]);
 
         return g;
       },
