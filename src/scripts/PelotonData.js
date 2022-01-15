@@ -19,6 +19,9 @@ class PelotonData {
 
   // have some fun stats picked out here for landing page
   parseHighlights() {
+    // average distance per instructor
+    // highest output per month
+    // other various rates
     this.data.highlights = [];
   }
 

@@ -134,10 +134,11 @@ export class FilterOptions {
       item.classList = "options-item";
       item.textContent = chart.title;
       item.addEventListener("click", (event) => {
-        // highlight selected graph
+        // un-highlight all links
         [...document.getElementsByClassName("options-item")].forEach((li) => {
           li.classList.remove("selected");
         });
+        // highlight clicked link
         event.target.classList.add("selected");
 
         this.currentGraph = chart;
