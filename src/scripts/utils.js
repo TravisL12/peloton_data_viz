@@ -49,13 +49,10 @@ export const attributes = Object.keys(keys).reduce((acc, title) => {
   return acc;
 }, {});
 
-export const barChartNames = [
+export const chartNames = [
   { ...attributes.instructor, type: "bar" },
   { ...attributes.fitness_discipline, type: "bar" },
   { ...attributes.length_minutes, type: "bar" },
-];
-
-export const lineChartNames = [
   { ...attributes.total_output, type: "line" },
   { ...attributes.distance_miles, type: "line" },
   { ...attributes.calories, type: "line" },

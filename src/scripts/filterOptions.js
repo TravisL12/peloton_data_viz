@@ -1,4 +1,4 @@
-import { attributes, barChartNames, lineChartNames } from "./utils";
+import { attributes, chartNames } from "./utils";
 import PelotonData from "./PelotonData";
 import { buildBarChart } from "./barChart";
 import { buildLineChart } from "./lineChart";
@@ -39,11 +39,6 @@ export class FilterOptions {
         .map((d, i) => ({ x: i, y: +d[key] }));
       buildLineChart([["one", data]], key); // change "one" to key for multi-line graph
     }
-  }
-
-  updateOptions(event) {
-    this.filterValues[event.target.value] = event.target.checked;
-    this.submitOptions();
   }
 
   toggleAll(filter, isChecked = false) {
@@ -90,7 +85,10 @@ export class FilterOptions {
       // Check/Uncheck
       document
         .getElementById(`${filter}-form`)
-        .addEventListener("change", this.updateOptions.bind(this));
+        .addEventListener("change", (event) => {
+          this.filterValues[event.target.value] = event.target.checked;
+          this.submitOptions();
+        });
 
       // All One
       document
@@ -115,17 +113,7 @@ export class FilterOptions {
     const main = document.querySelector(".main");
     main.insertBefore(graphEl, main.firstChild);
 
-    barChartNames.forEach((chart) => {
-      const item = document.createElement("li");
-      item.textContent = chart.title;
-      item.addEventListener("click", () => {
-        this.currentGraph = chart;
-        this.submitOptions();
-      });
-      graphEl.appendChild(item);
-    });
-
-    lineChartNames.forEach((chart) => {
+    chartNames.forEach((chart) => {
       const item = document.createElement("li");
       item.textContent = chart.title;
       item.addEventListener("click", () => {

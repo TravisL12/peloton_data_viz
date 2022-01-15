@@ -1,6 +1,6 @@
-import { getUniq, barChartNames } from "./utils";
+import { getUniq, chartNames } from "./utils";
 
-const mapCountKeys = barChartNames.map(({ key }) => key);
+const mapCountKeys = chartNames.map(({ key }) => key);
 
 class PelotonData {
   constructor() {
