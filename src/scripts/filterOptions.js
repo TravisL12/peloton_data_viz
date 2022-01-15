@@ -1,3 +1,5 @@
+import * as d3 from "d3";
+
 import { attributes, chartNames } from "./utils";
 import PelotonData from "./PelotonData";
 import { buildBarChart } from "./barChart";
@@ -43,10 +45,14 @@ export class FilterOptions {
       const data = keys.map((key) => {
         const d = parsed.raw
           .filter((d) => +d[key])
-          .map((d, i) => ({ x: i, y: +d[key] }));
+          .map((d) => {
+            const date = d3.timeParse("%Y-%m-%d %H:%M")(
+              d.workout_date.slice(0, -6)
+            );
+            return { x: date, y: +d[key] };
+          });
         return [key, d];
       });
-      console.log(data);
       buildLineChart(data, this.currentGraph.key);
     }
   }

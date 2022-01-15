@@ -29,6 +29,19 @@ export const colors = {
   total_output: "magenta",
   distance_miles: "lime",
   calories: "pink",
+
+  cadence_avg: "goldenrod",
+  heartrate_avg: "green",
+  // incline_avg: "goldenrod",
+  // pace_avg: "goldenrod",
+  resistance_avg: "yellow",
+  speed_avg: "orange",
+  watts_avg: "goldenrod",
+  // class_date: "goldenrod",
+  // live_ondemand: "goldenrod",
+  // title: "goldenrod",
+  type: "goldenrod",
+  // workout_date: "goldenrod",
 };
 
 export const keys = {
@@ -63,6 +76,11 @@ export const chartNames = [
   { ...attributes.fitness_discipline, type: "bar" },
   { ...attributes.length_minutes, type: "bar" },
 
+  {
+    ...attributes.speed_avg,
+    keys: ["cadence_avg", "resistance_avg", "speed_avg"],
+    type: "line",
+  },
   { ...attributes.total_output, keys: ["total_output"], type: "line" },
   {
     ...attributes.distance_miles,
@@ -91,6 +109,7 @@ export const getSvg = ({ selector, margin, key, title }) => {
     innerContainer.className = selector;
     innerContainer.id = `${key}-id`;
     innerContainer.innerHTML = `<h3>${title}</h3>`;
+
     svg = d3
       .select(innerContainer)
       .append("svg")

@@ -13,11 +13,13 @@ export function buildLineChart(data, key) {
     key,
     title,
   });
-  const xScale = d3.scaleLinear().range([0, width]);
+  const xScale = d3.scaleTime().range([0, width]);
   const yScale = d3.scaleLinear().rangeRound([height, 0]);
 
   // update x-axis
-  xScale.domain([0, d3.max(data, (d) => d3.max(d[1], (d) => d.x))]);
+  const min = d3.min(data, (d) => d3.min(d[1], (d) => d.x));
+  const max = d3.max(data, (d) => d3.max(d[1], (d) => d.x));
+  xScale.domain([min, max]);
   d3.select(`.${SVG_SELECTOR} .x-axis`).call(d3.axisBottom(xScale));
 
   // update y-axis
