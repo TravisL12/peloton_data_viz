@@ -5,64 +5,68 @@ import { graphLinks } from "./graphLinks";
 
 // SCENIC RIDES HAVE NO INSTRUCTOR!
 
-export const filterOptions = (rawData) => {
-  graphLinks();
-  const pelotonData = new PelotonData();
-  const parsedData = pelotonData.parseData(rawData);
-  const sets = pelotonData.parseAttributeSets(parsedData);
+export class FilterOptions {
+  constructor(rawData) {
+    graphLinks();
+    this.pelotonData = new PelotonData();
+    this.rawData = rawData;
+    const parsedData = this.pelotonData.parseData(rawData);
 
-  const filtersEl = document.getElementById("filters");
-  const filterTypes = Object.keys(sets);
-  const filterValues = Object.values(sets)
-    .flat()
-    .reduce((acc, set) => {
-      acc[set] = true;
-      return acc;
-    }, {});
+    this.sets = this.pelotonData.parseAttributeSets(parsedData);
+    this.filtersEl = document.getElementById("filters");
+    this.filterTypes = Object.keys(this.sets);
+    this.filterValues = Object.values(this.sets)
+      .flat()
+      .reduce((acc, set) => {
+        acc[set] = true;
+        return acc;
+      }, {});
+    this.submitOptions();
+    this.init();
+  }
 
-  const submitOptions = () => {
-    const filteredData = rawData.filter((d) => {
-      return filterTypes.every((type) => filterValues[d[type]]);
+  submitOptions() {
+    const filteredData = this.rawData.filter((d) => {
+      return this.filterTypes.every((type) => this.filterValues[d[type]]);
     });
 
-    const parsed = pelotonData.parseData(filteredData);
+    const parsed = this.pelotonData.parseData(filteredData);
     generateGraphs(parsed);
-  };
+  }
 
-  const updateOptions = (event) => {
-    filterValues[event.target.value] = event.target.checked;
-    submitOptions();
-  };
+  updateOptions(event) {
+    this.filterValues[event.target.value] = event.target.checked;
+    this.submitOptions();
+  }
 
-  const toggleAll = (filter, isChecked = false) => {
-    sets[filter].forEach((attr) => {
-      filterValues[attr] = isChecked;
+  toggleAll(filter, isChecked = false) {
+    this.sets[filter].forEach((attr) => {
+      this.filterValues[attr] = isChecked;
       const optionEl = document.getElementById(`option-${attr}`);
       if (optionEl) {
         optionEl.checked = isChecked;
       }
     });
-    submitOptions();
-  };
+    this.submitOptions();
+  }
 
-  submitOptions();
-
-  filterTypes.forEach((filter) => {
-    const el = document.createElement("div");
-    el.className = "filter-option";
-    const options = sets[filter]
-      .sort((a, b) => b - a)
-      .map(
-        (option) => `
+  init() {
+    this.filterTypes.forEach((filter) => {
+      const el = document.createElement("div");
+      el.className = "filter-option";
+      const options = this.sets[filter]
+        .sort((a, b) => b - a)
+        .map(
+          (option) => `
       <li>
         <input type="checkbox" value="${option}" checked id="option-${option}" />
         <label for="option-${option}">${option}</label>
       </li>
     `
-      )
-      .join("");
+        )
+        .join("");
 
-    el.innerHTML = `
+      el.innerHTML = `
       <h3>${attributes[filter].title}</h3>
       <div>
         <button id="${filter}-all-btn">All</button>
@@ -74,25 +78,27 @@ export const filterOptions = (rawData) => {
         </ul>
       </form>
     `;
-    filtersEl.append(el);
+      this.filtersEl.append(el);
 
-    // Check/Uncheck
-    document
-      .getElementById(`${filter}-form`)
-      .addEventListener("change", updateOptions);
+      // Check/Uncheck
+      document
+        .getElementById(`${filter}-form`)
+        .addEventListener("change", this.updateOptions.bind(this));
 
-    // All One
-    document
-      .getElementById(`${filter}-all-btn`)
-      .addEventListener("click", () => {
-        toggleAll(filter, true);
-      });
+      // All One
+      document
+        .getElementById(`${filter}-all-btn`)
+        .addEventListener("click", () => {
+          this.toggleAll(filter, true);
+          console.log("d");
+        });
 
-    // All Off
-    document
-      .getElementById(`${filter}-none-btn`)
-      .addEventListener("click", () => {
-        toggleAll(filter);
-      });
-  });
-};
+      // All Off
+      document
+        .getElementById(`${filter}-none-btn`)
+        .addEventListener("click", () => {
+          this.toggleAll(filter);
+        });
+    });
+  }
+}
