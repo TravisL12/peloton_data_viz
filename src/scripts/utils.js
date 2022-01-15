@@ -86,6 +86,7 @@ export const getSvg = ({ selector, margin, key, title }) => {
     document.querySelector(`.${selector} h3`).textContent = title;
     svg = d3.select(`.${selector} .main-group`);
   } else {
+    graphContainer.innerHTML = "";
     const innerContainer = document.createElement("div");
     innerContainer.className = selector;
     innerContainer.id = `${key}-id`;
