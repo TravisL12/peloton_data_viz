@@ -9,20 +9,19 @@ import { buildLineChart } from "./lineChart";
 
 export class FilterOptions {
   constructor(rawData) {
-    this.pelotonData = new PelotonData();
-    this.rawData = rawData;
-    const parsedData = this.pelotonData.parseData(rawData);
-
-    this.sets = this.pelotonData.parseAttributeSets(parsedData);
+    this.pelotonData = new PelotonData(rawData);
+    this.pelotonData.parseData(rawData);
+    console.log("original", this.pelotonData.data.original);
+    console.log("highlights", this.pelotonData.highlights);
     this.filtersEl = document.getElementById("filters");
-    this.filterTypes = Object.keys(this.sets);
-    this.filterValues = Object.values(this.sets)
+    this.filterTypes = Object.keys(this.pelotonData.sets);
+    this.filterValues = Object.values(this.pelotonData.sets)
       .flat()
       .reduce((acc, set) => {
         acc[set] = true;
         return acc;
       }, {});
-    this.graphLinks(parsedData);
+    this.graphLinks(this.pelotonData.data.parsed);
     this.init();
 
     // show one graph on load
@@ -31,19 +30,19 @@ export class FilterOptions {
   }
 
   updateGraph() {
-    const filteredData = this.rawData.filter((d) => {
+    const filteredData = this.pelotonData.data.original.filter((d) => {
       return this.filterTypes.every((type) => this.filterValues[d[type]]);
     });
 
-    const parsed = this.pelotonData.parseData(filteredData);
-    const { type } = this.currentGraph;
-    if (type === "bar") {
+    this.pelotonData.parseData(filteredData);
+
+    if (this.currentGraph.type === "bar") {
       const { key } = this.currentGraph;
-      buildBarChart(parsed.count[key], key);
-    } else if (type === "line") {
+      buildBarChart(this.pelotonData.data.count[key], key);
+    } else if (this.currentGraph.type === "line") {
       const { keys } = this.currentGraph;
       const data = keys.map((key) => {
-        const d = parsed.raw
+        const d = this.pelotonData.data.parsed
           .filter((d) => +d[key])
           .map((d) => {
             const date = d3.timeParse("%Y-%m-%d %H:%M")(
@@ -58,7 +57,7 @@ export class FilterOptions {
   }
 
   toggleAll(filter, isChecked = false) {
-    this.sets[filter].forEach((attr) => {
+    this.pelotonData.sets[filter].forEach((attr) => {
       this.filterValues[attr] = isChecked;
       const optionEl = document.getElementById(`option-${attr}`);
       if (optionEl) {
@@ -72,7 +71,7 @@ export class FilterOptions {
     this.filterTypes.forEach((filter) => {
       const el = document.createElement("div");
       el.className = "filter-option";
-      const options = this.sets[filter]
+      const options = this.pelotonData.sets[filter]
         .sort((a, b) => b - a)
         .map(
           (option) => `

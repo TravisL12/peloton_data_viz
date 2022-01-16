@@ -1,43 +1,72 @@
 import { getUniq, chartNames } from "./utils";
 
 const mapCountKeys = chartNames.map(({ key }) => key);
-
 class PelotonData {
-  constructor() {
+  constructor(data) {
     this.data = { count: {} };
+    this.data.original = data;
+    this.parseAttributeSets();
+    this.parseHighlights();
   }
 
   parseData(data) {
-    this.data.raw = data;
-    if (this.data.raw) {
-      mapCountKeys.forEach((key) => {
-        this.parseItemCount(key);
-      });
-    }
-    return this.data;
+    this.data.parsed = data;
+    mapCountKeys.forEach((key) => {
+      this.parseItemCount(key);
+    });
+  }
+
+  outputHighlights(key) {
+    const filterSum = (filteredData, sumKey) =>
+      filteredData.reduce((acc, d) => {
+        return +d[sumKey] ? acc + +d[sumKey] : acc;
+      }, 0);
+
+    return this.sets[key].map((value) => {
+      const filtered = this.data.original.filter((d) => d[key] === value);
+      const totalOutput = filterSum(filtered, "total_output");
+      const totalDistance = filterSum(filtered, "distance_miles");
+      const totalTime = filterSum(filtered, "length_minutes");
+      return {
+        type: value,
+        count: filtered.length,
+        totalOutput,
+        totalDistance: Math.floor(totalDistance),
+        totalTime,
+      };
+    });
   }
 
   // have some fun stats picked out here for landing page
   parseHighlights() {
-    this.data.highlights = [];
+    this.highlights = {};
+    this.highlights.instructors = {
+      type: "instructor",
+      highlights: this.outputHighlights("instructor"),
+    };
+    this.highlights.fitnessDiscipline = {
+      type: "fitness_discipline",
+      highlights: this.outputHighlights("fitness_discipline"),
+    };
   }
 
   parseAttributeSets() {
-    this.data.sets = [
+    this.sets = [
       "instructor",
       "fitness_discipline",
       "length_minutes",
       "type",
     ].reduce((acc, key) => {
-      const mappedValues = this.data.raw.map((d) => d[key]).filter((x) => x);
+      const mappedValues = this.data.original
+        .map((d) => d[key])
+        .filter((x) => x);
       acc[key] = getUniq(mappedValues);
       return acc;
     }, {});
-    return this.data.sets;
   }
 
   parseItemCount(key) {
-    const data = this.data.raw.map((d) => d[key]).filter((x) => x);
+    const data = this.data.parsed.map((d) => d[key]).filter((x) => x);
     const count = data.reduce((acc, name) => {
       if (!acc[name]) {
         acc[name] = 0;
