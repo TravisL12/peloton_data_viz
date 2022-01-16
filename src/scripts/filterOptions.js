@@ -110,7 +110,6 @@ export class FilterOptions {
         .getElementById(`${filter}-all-btn`)
         .addEventListener("click", () => {
           this.toggleAll(filter, true);
-          console.log("d");
         });
 
       // All Off

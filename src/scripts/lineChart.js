@@ -20,7 +20,9 @@ export function buildLineChart(data, key) {
   const min = d3.min(data, (d) => d3.min(d[1], (d) => d.x));
   const max = d3.max(data, (d) => d3.max(d[1], (d) => d.x));
   xScale.domain([min, max]);
-  d3.select(`.${SVG_SELECTOR} .x-axis`).call(d3.axisBottom(xScale));
+  d3.select(`.${SVG_SELECTOR} .x-axis`).call(
+    d3.axisBottom(xScale).tickFormat(d3.timeFormat("%m/%d")).ticks(20)
+  );
 
   // update y-axis
   yScale.domain(d3.extent(data.map(([_, d]) => d).flat(), (d) => d.y));
