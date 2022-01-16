@@ -90,7 +90,6 @@ export const chartNames = [
   { ...attributes.calories, keys: ["calories"], type: "line" },
 ];
 
-// not sure I need this
 export const getUniq = (data) => {
   return [...new Set(data)];
 };
