@@ -4,6 +4,7 @@ import { attributes, chartNames } from "./utils";
 import PelotonData from "./PelotonData";
 import { buildBarChart } from "./barChart";
 import { buildLineChart } from "./lineChart";
+import { BAR_COUNT, LINE_CHART } from "./chartConstants";
 
 // SCENIC RIDES HAVE NO INSTRUCTOR!
 
@@ -11,8 +12,6 @@ export class FilterOptions {
   constructor(rawData) {
     this.pelotonData = new PelotonData(rawData);
     this.pelotonData.parseData(rawData);
-    console.log("original", this.pelotonData.data.original);
-    console.log("highlights", this.pelotonData.highlights);
     this.filtersEl = document.getElementById("filters");
     this.filterTypes = Object.keys(this.pelotonData.sets);
     this.filterValues = Object.values(this.pelotonData.sets)
@@ -36,10 +35,10 @@ export class FilterOptions {
 
     this.pelotonData.parseData(filteredData);
 
-    if (this.currentGraph.type === "bar") {
+    if (this.currentGraph.type === BAR_COUNT) {
       const { key } = this.currentGraph;
       buildBarChart(this.pelotonData.data.count[key], key);
-    } else if (this.currentGraph.type === "line") {
+    } else if (this.currentGraph.type === LINE_CHART) {
       const { keys } = this.currentGraph;
       const data = keys.map((key) => {
         const d = this.pelotonData.data.parsed

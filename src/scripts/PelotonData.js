@@ -24,11 +24,27 @@ class PelotonData {
 
     return this.sets[key].map((value) => {
       const filtered = this.data.original.filter((d) => d[key] === value);
+      const highestOutput = Math.max(
+        ...filtered.map(({ total_output }) =>
+          total_output ? +total_output : 0
+        )
+      );
+      const fitnessDisciplines = getUniq(
+        filtered.map(({ fitness_discipline }) => fitness_discipline)
+      );
+      const rideTime = getUniq(
+        filtered.map(({ length_minutes }) => length_minutes)
+      );
+      const types = getUniq(filtered.map(({ type }) => type));
       const totalOutput = filterSum(filtered, "total_output");
       const totalDistance = filterSum(filtered, "distance_miles");
       const totalTime = filterSum(filtered, "length_minutes");
       return {
         type: value,
+        highestOutput,
+        fitnessDisciplines,
+        rideTime,
+        types,
         count: filtered.length,
         totalOutput,
         totalDistance: Math.floor(totalDistance),

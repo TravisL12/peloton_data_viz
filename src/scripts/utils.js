@@ -1,6 +1,13 @@
 import * as d3 from "d3";
 import { graphContainer } from "./elementSelectors";
-import { GROUP_SELECTOR, mainHeight, mainWidth } from "./chartConstants";
+import {
+  GROUP_SELECTOR,
+  mainHeight,
+  mainWidth,
+  BAR_CHART,
+  BAR_COUNT,
+  LINE_CHART,
+} from "./chartConstants";
 
 // sample data
 // Avg. Cadence (RPM): "79"
@@ -72,22 +79,21 @@ export const attributes = Object.keys(keys).reduce((acc, title) => {
 }, {});
 
 export const chartNames = [
-  { ...attributes.instructor, type: "bar" },
-  { ...attributes.fitness_discipline, type: "bar" },
-  { ...attributes.length_minutes, type: "bar" },
-
+  { ...attributes.instructor, type: BAR_COUNT },
+  { ...attributes.fitness_discipline, type: BAR_COUNT },
+  { ...attributes.length_minutes, type: BAR_COUNT },
+  { ...attributes.total_output, type: BAR_CHART },
   {
     ...attributes.speed_avg,
     keys: ["cadence_avg", "resistance_avg", "speed_avg"],
-    type: "line",
+    type: LINE_CHART,
   },
-  { ...attributes.total_output, keys: ["total_output"], type: "line" },
   {
     ...attributes.distance_miles,
     keys: ["distance_miles", "calories", "total_output"],
-    type: "line",
+    type: LINE_CHART,
   },
-  { ...attributes.calories, keys: ["calories"], type: "line" },
+  { ...attributes.calories, keys: ["calories"], type: LINE_CHART },
 ];
 
 export const getUniq = (data) => {

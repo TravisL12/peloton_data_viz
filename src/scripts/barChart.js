@@ -12,7 +12,7 @@ export function buildBarChart(dataObject, key) {
     count,
   }));
 
-  data.sort((a, b) => d3.descending(a.count, b.count));
+  // data.sort((a, b) => d3.descending(a.count, b.count));
 
   const { svg, width, height } = getSvg({
     selector: SVG_SELECTOR,
@@ -51,7 +51,10 @@ export function buildBarChart(dataObject, key) {
           .attr("width", xScale.bandwidth())
           .attr("stroke-width", 1)
           .attr("stroke", "black")
-          .attr("fill", colors[key]);
+          .attr("fill", (d) => {
+            console.log(d);
+            return colors[key];
+          });
 
         return g;
       },
