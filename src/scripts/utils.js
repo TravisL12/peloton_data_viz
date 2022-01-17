@@ -1,6 +1,13 @@
 import * as d3 from "d3";
 import { graphContainer } from "./elementSelectors";
-import { GROUP_SELECTOR, mainHeight, mainWidth } from "./chartConstants";
+import {
+  GROUP_SELECTOR,
+  mainHeight,
+  mainWidth,
+  BAR_CHART,
+  BAR_COUNT,
+  LINE_CHART,
+} from "./chartConstants";
 
 // sample data
 // Avg. Cadence (RPM): "79"
@@ -21,6 +28,28 @@ import { GROUP_SELECTOR, mainHeight, mainWidth } from "./chartConstants";
 // Total Output: "143"
 // Type: "Beginner"
 // Workout Timestamp: "2020-04-07 16
+
+export const colors = {
+  instructor: "red",
+  fitness_discipline: "blue",
+  length_minutes: "lightblue",
+  total_output: "magenta",
+  distance_miles: "lime",
+  calories: "pink",
+
+  cadence_avg: "goldenrod",
+  heartrate_avg: "green",
+  // incline_avg: "goldenrod",
+  // pace_avg: "goldenrod",
+  resistance_avg: "yellow",
+  speed_avg: "orange",
+  watts_avg: "goldenrod",
+  // class_date: "goldenrod",
+  // live_ondemand: "goldenrod",
+  // title: "goldenrod",
+  type: "goldenrod",
+  // workout_date: "goldenrod",
+};
 
 export const keys = {
   "Avg. Cadence (RPM)": "cadence_avg",
@@ -49,19 +78,24 @@ export const attributes = Object.keys(keys).reduce((acc, title) => {
   return acc;
 }, {});
 
-export const barChartNames = [
-  attributes.instructor,
-  attributes.fitness_discipline,
-  attributes.length_minutes,
+export const chartNames = [
+  { ...attributes.instructor, type: BAR_COUNT },
+  { ...attributes.fitness_discipline, type: BAR_COUNT },
+  { ...attributes.length_minutes, type: BAR_COUNT },
+  { ...attributes.length_minutes, type: BAR_CHART },
+  {
+    ...attributes.speed_avg,
+    keys: ["cadence_avg", "resistance_avg", "speed_avg"],
+    type: LINE_CHART,
+  },
+  {
+    ...attributes.distance_miles,
+    keys: ["distance_miles", "calories", "total_output"],
+    type: LINE_CHART,
+  },
+  { ...attributes.calories, keys: ["calories"], type: LINE_CHART },
 ];
 
-export const lineChartNames = [
-  attributes.total_output,
-  attributes.distance_miles,
-  attributes.calories,
-];
-
-// not sure I need this
 export const getUniq = (data) => {
   return [...new Set(data)];
 };
@@ -71,14 +105,16 @@ export const getSvg = ({ selector, margin, key, title }) => {
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
 
-  if (document.getElementById(`${key}-id`)) {
-    document.querySelector(`#${key}-id h3`).textContent = title;
-    svg = d3.select(`#${key}-id .main-group`);
+  if (document.querySelector(`.${selector}`)) {
+    document.querySelector(`.${selector} h3`).textContent = title;
+    svg = d3.select(`.${selector} .main-group`);
   } else {
+    graphContainer.innerHTML = "";
     const innerContainer = document.createElement("div");
     innerContainer.className = selector;
     innerContainer.id = `${key}-id`;
     innerContainer.innerHTML = `<h3>${title}</h3>`;
+
     svg = d3
       .select(innerContainer)
       .append("svg")
