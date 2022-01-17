@@ -1,5 +1,5 @@
 import { fileInput } from "./scripts/elementSelectors";
-import { FilterOptions } from "./scripts/Options";
+import { FilterOptions } from "./scripts/FilterOptions";
 import { keys } from "./scripts/utils";
 
 import "./styles/styles.scss";
