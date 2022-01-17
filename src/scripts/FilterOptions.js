@@ -13,6 +13,7 @@ export class FilterOptions {
   constructor(rawData) {
     this.pelotonData = new PelotonData(rawData);
     this.pelotonData.parseData(rawData);
+    console.log(this.pelotonData);
     this.filtersEl = document.getElementById("filters");
     this.filterTypes = Object.keys(this.pelotonData.sets);
     this.filterValues = Object.values(this.pelotonData.sets)
@@ -108,7 +109,7 @@ export class FilterOptions {
           this.updateGraph();
         });
 
-      // All One
+      // All On
       document
         .getElementById(`${filter}-all-btn`)
         .addEventListener("click", () => {

@@ -5,7 +5,8 @@ import { GROUP_SELECTOR } from "./chartConstants";
 const margin = { top: 10, bottom: 120, left: 30, right: 10 };
 const SVG_SELECTOR = "barchart-svg";
 
-export function buildBarAllChart(dataObject, key) {
+export function histogramChart(dataObject, key) {
+  // use this with bins to split up data (total output)
   const { title } = attributes[key];
   const data = dataObject.map((d) => {
     const date = d3.timeParse("%Y-%m-%d %H:%M")(d.workout_date.slice(0, -6));

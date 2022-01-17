@@ -1,4 +1,5 @@
 import { getUniq, chartNames } from "./utils";
+import * as d3 from "d3";
 
 const mapCountKeys = chartNames.map(({ key }) => key);
 class PelotonData {
@@ -26,7 +27,12 @@ class PelotonData {
       const filtered = this.data.original.filter((d) => d[key] === value);
       const highestOutput = Math.max(
         ...filtered.map(({ total_output }) =>
-          total_output ? +total_output : 0
+          total_output && !isNaN(total_output) ? +total_output : 0
+        )
+      );
+      const totalOutputBins = d3.bin()(
+        filtered.map(({ total_output }) =>
+          total_output && !isNaN(total_output) ? +total_output : 0
         )
       );
       const fitnessDisciplines = getUniq(
@@ -47,6 +53,7 @@ class PelotonData {
         types,
         count: filtered.length,
         totalOutput,
+        totalOutputBins,
         totalDistance: Math.floor(totalDistance),
         totalTime,
       };
