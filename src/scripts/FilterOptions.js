@@ -22,7 +22,6 @@ export class FilterOptions {
         acc[set] = true;
         return acc;
       }, {});
-    this.graphLinks(this.pelotonData.data.parsed);
     this.init();
 
     // show one graph on load
@@ -72,6 +71,7 @@ export class FilterOptions {
   }
 
   init() {
+    this.graphLinks();
     this.filterTypes.forEach((filter) => {
       const el = document.createElement("div");
       el.className = "filter-option";
