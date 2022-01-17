@@ -82,7 +82,7 @@ export const chartNames = [
   { ...attributes.instructor, type: BAR_COUNT },
   { ...attributes.fitness_discipline, type: BAR_COUNT },
   { ...attributes.length_minutes, type: BAR_COUNT },
-  { ...attributes.total_output, type: BAR_CHART },
+  { ...attributes.length_minutes, type: BAR_CHART },
   {
     ...attributes.speed_avg,
     keys: ["cadence_avg", "resistance_avg", "speed_avg"],
