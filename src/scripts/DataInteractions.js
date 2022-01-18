@@ -9,13 +9,14 @@ import { buildBarAllChart } from "./barAllChart";
 
 // SCENIC RIDES HAVE NO INSTRUCTOR!
 
+const helper = dataHelper();
+
 export class DataInteractions {
   constructor(originalData) {
     this.originalData = originalData;
-    this.helper = dataHelper();
     this.filtersEl = document.getElementById("filters");
-    this.sets = this.helper.parseAttributeSets(originalData);
-    this.highlights = this.helper.parseHighlights(originalData, this.sets);
+    this.sets = helper.parseAttributeSets(originalData);
+    this.highlights = helper.parseHighlights(originalData, this.sets);
     this.filterTypes = Object.keys(this.sets);
     this.filterValues = Object.values(this.sets)
       .flat()
@@ -40,7 +41,7 @@ export class DataInteractions {
     if (this.currentGraph.type === BAR_CHART) {
       buildBarAllChart(this.originalData, key);
     } else if (this.currentGraph.type === BAR_COUNT) {
-      const countData = this.helper.parseItemCount(filteredData, key);
+      const countData = helper.parseItemCount(filteredData, key);
       const data = Object.entries(countData).map(([name, count]) => ({
         name,
         count,
