@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
 import { attributes, chartNames } from "./utils";
-import PelotonData from "./PelotonData";
+import { dataHelper } from "./parseUtilities";
 import { buildBarChart } from "./barChart";
 import { buildLineChart } from "./lineChart";
 import { BAR_COUNT, LINE_CHART, BAR_CHART } from "./chartConstants";
@@ -9,14 +9,15 @@ import { buildBarAllChart } from "./barAllChart";
 
 // SCENIC RIDES HAVE NO INSTRUCTOR!
 
-export class FilterOptions {
-  constructor(rawData) {
-    this.pelotonData = new PelotonData(rawData);
-    this.pelotonData.parseData(rawData);
-    console.log(this.pelotonData);
+export class DataInteractions {
+  constructor(originalData) {
+    this.originalData = originalData;
+    this.helper = dataHelper();
     this.filtersEl = document.getElementById("filters");
-    this.filterTypes = Object.keys(this.pelotonData.sets);
-    this.filterValues = Object.values(this.pelotonData.sets)
+    this.sets = this.helper.parseAttributeSets(originalData);
+    this.highlights = this.helper.parseHighlights(originalData, this.sets);
+    this.filterTypes = Object.keys(this.sets);
+    this.filterValues = Object.values(this.sets)
       .flat()
       .reduce((acc, set) => {
         acc[set] = true;
@@ -30,22 +31,25 @@ export class FilterOptions {
   }
 
   updateGraph() {
-    const filteredData = this.pelotonData.data.original.filter((d) => {
+    const filteredData = this.originalData.filter((d) => {
       return this.filterTypes.every((type) => this.filterValues[d[type]]);
     });
 
-    this.pelotonData.parseData(filteredData);
+    const { key, keys, title } = this.currentGraph;
 
     if (this.currentGraph.type === BAR_CHART) {
-      const { key } = this.currentGraph;
-      buildBarAllChart(this.pelotonData.data.original, key);
+      buildBarAllChart(this.originalData, key);
     } else if (this.currentGraph.type === BAR_COUNT) {
-      const { key } = this.currentGraph;
-      buildBarChart(this.pelotonData.data.count[key], key, true);
+      const countData = this.helper.parseItemCount(filteredData, key);
+      const data = Object.entries(countData).map(([name, count]) => ({
+        name,
+        count,
+      }));
+      data.sort((a, b) => d3.descending(a.count, b.count));
+      buildBarChart(data, key, title);
     } else if (this.currentGraph.type === LINE_CHART) {
-      const { keys } = this.currentGraph;
       const data = keys.map((key) => {
-        const d = this.pelotonData.data.parsed
+        const d = filteredData
           .filter((d) => +d[key])
           .map((d) => {
             const date = d3.timeParse("%Y-%m-%d %H:%M")(
@@ -55,12 +59,12 @@ export class FilterOptions {
           });
         return [key, d];
       });
-      buildLineChart(data, this.currentGraph.key);
+      buildLineChart(data, key, title);
     }
   }
 
   toggleAll(filter, isChecked = false) {
-    this.pelotonData.sets[filter].forEach((attr) => {
+    this.sets[filter].forEach((attr) => {
       this.filterValues[attr] = isChecked;
       const optionEl = document.getElementById(`option-${attr}`);
       if (optionEl) {
@@ -75,7 +79,7 @@ export class FilterOptions {
     this.filterTypes.forEach((filter) => {
       const el = document.createElement("div");
       el.className = "filter-option";
-      const options = this.pelotonData.sets[filter]
+      const options = this.sets[filter]
         .sort((a, b) => b - a)
         .map(
           (option) => `

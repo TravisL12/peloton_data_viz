@@ -5,15 +5,7 @@ import { GROUP_SELECTOR } from "./chartConstants";
 const margin = { top: 10, bottom: 120, left: 30, right: 10 };
 const SVG_SELECTOR = "barchart-svg";
 
-export function buildBarChart(dataObject, key) {
-  const { title } = attributes[key];
-  const data = Object.entries(dataObject).map(([name, count]) => ({
-    name,
-    count,
-  }));
-
-  data.sort((a, b) => d3.descending(a.count, b.count));
-
+export function buildBarChart(data, key, title) {
   const { svg, width, height } = getSvg({
     selector: SVG_SELECTOR,
     margin,

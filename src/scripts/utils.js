@@ -9,26 +9,6 @@ import {
   LINE_CHART,
 } from "./chartConstants";
 
-// sample data
-// Avg. Cadence (RPM): "79"
-// Avg. Heartrate: ""
-// Avg. Incline: ""
-// Avg. Pace (min/mi): ""
-// Avg. Resistance: "41%"
-// Avg. Speed (mph): "16.92"
-// Avg. Watts: "119"
-// Calories Burned: "205"
-// Class Timestamp: "2020-03-18 07:21 (PST)"
-// Distance (mi): "5.63"
-// Fitness Discipline: "Cycling"
-// Instructor Name: "Leanne Hainsby"
-// Length (minutes): "20"
-// Live/On-Demand: "On Demand"
-// Title: "20 min Beginner Ride"
-// Total Output: "143"
-// Type: "Beginner"
-// Workout Timestamp: "2020-04-07 16
-
 export const colors = {
   instructor: "red",
   fitness_discipline: "blue",

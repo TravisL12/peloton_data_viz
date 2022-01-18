@@ -5,8 +5,7 @@ import { attributes, colors, getSvg } from "./utils";
 const margin = { top: 10, bottom: 50, left: 50, right: 10 };
 const SVG_SELECTOR = "line-svg";
 
-export function buildLineChart(data, key) {
-  const { title } = attributes[key];
+export function buildLineChart(data, key, title) {
   const { svg, width, height } = getSvg({
     selector: SVG_SELECTOR,
     margin,

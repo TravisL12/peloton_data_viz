@@ -1,5 +1,5 @@
 import { fileInput } from "./scripts/elementSelectors";
-import { FilterOptions } from "./scripts/FilterOptions";
+import { DataInteractions } from "./scripts/DataInteractions";
 import { keys } from "./scripts/utils";
 
 import "./styles/styles.scss";
@@ -25,7 +25,7 @@ import "./styles/styles.scss";
         }, {});
       });
 
-      new FilterOptions(data);
+      new DataInteractions(data);
     };
   });
 })();
