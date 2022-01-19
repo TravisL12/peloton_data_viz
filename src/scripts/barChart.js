@@ -1,11 +1,11 @@
 import * as d3 from "d3";
-import { allColors, getSvg } from "./utils";
+import { getSvg } from "./utils";
 import { GROUP_SELECTOR } from "./chartConstants";
 
 const margin = { top: 10, bottom: 120, left: 30, right: 10 };
 const SVG_SELECTOR = "barchart-svg";
 
-export function barChart(data, title) {
+export function barChart(data, title, allColors) {
   const { svg, width, height } = getSvg({
     selector: SVG_SELECTOR,
     margin,
@@ -13,8 +13,6 @@ export function barChart(data, title) {
   });
   const xScale = d3.scaleBand().range([0, width]).padding(0.3);
   const yScale = d3.scaleLinear().range([height, 0]);
-  console.log(data);
-  allColors.domain(data.map((d) => d.name));
 
   xScale.domain(data.map(({ name }) => name));
   d3.select(`.${SVG_SELECTOR} .x-axis`)

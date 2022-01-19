@@ -5,7 +5,7 @@ import { lineChart } from "./lineChart";
 import { parseAttributeSets, parseItemCount } from "./parseUtilities";
 import { attributes } from "./utils";
 
-const buildCountChart = (filteredData, currentGraph) => {
+const buildCountChart = (filteredData, currentGraph, colors) => {
   const { key, title } = currentGraph;
   const countData = parseItemCount(filteredData, key);
   const data = Object.entries(countData).map(([name, count]) => ({
@@ -13,10 +13,10 @@ const buildCountChart = (filteredData, currentGraph) => {
     count,
   }));
   data.sort((a, b) => d3.descending(a.count, b.count));
-  barChart(data, title);
+  barChart(data, title, colors);
 };
 
-const buildInstructorOutputChart = (filteredData, currentGraph) => {
+const buildInstructorOutputChart = (filteredData, currentGraph, colors) => {
   const { title } = currentGraph;
   const instructors = parseAttributeSets(filteredData).instructor;
   const data = instructors.map((instructor) => {
@@ -31,10 +31,10 @@ const buildInstructorOutputChart = (filteredData, currentGraph) => {
     return [instructor, d];
   });
 
-  lineChart(data, title);
+  lineChart(data, title, colors);
 };
 
-const buildLineChart = (filteredData, currentGraph) => {
+const buildLineChart = (filteredData, currentGraph, colors) => {
   const { keys, title } = currentGraph;
   const data = keys.map((key) => {
     const d = filteredData
@@ -47,7 +47,7 @@ const buildLineChart = (filteredData, currentGraph) => {
       });
     return [key, d];
   });
-  lineChart(data, title);
+  lineChart(data, title, colors);
 };
 
 export const chartNames = [

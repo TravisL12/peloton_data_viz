@@ -1,14 +1,5 @@
-import * as d3 from "d3";
-
-import { attributes } from "./utils";
-import {
-  parseItemCount,
-  parseAttributeSets,
-  parseHighlights,
-} from "./parseUtilities";
-import { buildBarChart } from "./barChart";
-import { buildLineChart } from "./lineChart";
-import { BAR_COUNT, LINE_CHART } from "./chartConstants";
+import { allColors, attributes } from "./utils";
+import { parseAttributeSets, parseHighlights } from "./parseUtilities";
 import { chartNames } from "./graphFunctions";
 
 // SCENIC RIDES HAVE NO INSTRUCTOR!
@@ -49,6 +40,8 @@ export class DataInteractions {
         return acc;
       }, {});
 
+    allColors.domain(Object.keys(this.filterValues));
+
     graphLinks(this);
     this.init();
   }
@@ -57,7 +50,7 @@ export class DataInteractions {
     const filteredData = this.originalData.filter((d) => {
       return this.filterTypes.every((type) => this.filterValues[d[type]]);
     });
-    this.currentGraph.chartFn(filteredData, this.currentGraph);
+    this.currentGraph.chartFn(filteredData, this.currentGraph, allColors);
   }
 
   toggleAll(filter, isChecked = false) {
