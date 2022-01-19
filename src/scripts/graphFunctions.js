@@ -2,7 +2,6 @@ import * as d3 from "d3";
 import { barChart } from "./barChart";
 import { lineChart } from "./lineChart";
 
-import { BAR_COUNT, LINE_CHART } from "./chartConstants";
 import { parseAttributeSets, parseItemCount } from "./parseUtilities";
 import { attributes } from "./utils";
 
@@ -14,7 +13,7 @@ const buildCountChart = (filteredData, currentGraph) => {
     count,
   }));
   data.sort((a, b) => d3.descending(a.count, b.count));
-  barChart(data, key, title);
+  barChart(data, title);
 };
 
 const buildInstructorOutputChart = (filteredData, currentGraph) => {
@@ -32,11 +31,11 @@ const buildInstructorOutputChart = (filteredData, currentGraph) => {
     return [instructor, d];
   });
 
-  lineChart(data, "instructors", title);
+  lineChart(data, title);
 };
 
 const buildLineChart = (filteredData, currentGraph) => {
-  const { key, keys, title } = currentGraph;
+  const { keys, title } = currentGraph;
   const data = keys.map((key) => {
     const d = filteredData
       .filter((d) => +d[key])
@@ -48,7 +47,7 @@ const buildLineChart = (filteredData, currentGraph) => {
       });
     return [key, d];
   });
-  lineChart(data, key, title);
+  lineChart(data, title);
 };
 
 export const chartNames = [

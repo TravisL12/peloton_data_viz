@@ -1,17 +1,14 @@
 import * as d3 from "d3";
 import { GROUP_SELECTOR } from "./chartConstants";
-import { colors, getSvg } from "./utils";
+import { allColors, getSvg } from "./utils";
 
 const margin = { top: 10, bottom: 50, left: 50, right: 10 };
 const SVG_SELECTOR = "line-svg";
 
-const allColors = d3.scaleOrdinal(d3.schemeCategory10);
-
-export function lineChart(data, key, title) {
+export function lineChart(data, title) {
   const { svg, width, height } = getSvg({
     selector: SVG_SELECTOR,
     margin,
-    key,
     title,
   });
   const xScale = d3.scaleTime().range([0, width]);
@@ -59,6 +56,7 @@ export function lineChart(data, key, title) {
         update
           .select("path")
           .transition()
+          .attr("stroke", (d) => allColors(d[0]))
           .attr("d", (dPath) =>
             d3
               .line()

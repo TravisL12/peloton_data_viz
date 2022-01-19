@@ -1,13 +1,6 @@
 import * as d3 from "d3";
 import { graphContainer } from "./elementSelectors";
-import {
-  GROUP_SELECTOR,
-  mainHeight,
-  mainWidth,
-  BAR_CHART,
-  BAR_COUNT,
-  LINE_CHART,
-} from "./chartConstants";
+import { GROUP_SELECTOR, mainHeight, mainWidth } from "./chartConstants";
 
 const CADENCE_AVG = "cadence_avg";
 const HEARTRATE_AVG = "heartrate_avg";
@@ -28,6 +21,7 @@ const TOTAL_OUTPUT = "total_output";
 const TYPE = "type";
 const WORKOUT_DATE = "workout_date";
 
+export const allColors = d3.scaleOrdinal(d3.schemeAccent);
 export const colors = {
   [INSTRUCTOR]: "red",
   [FITNESS_DISCIPLINE]: "blue",
@@ -80,7 +74,7 @@ export const getUniq = (data) => {
   return [...new Set(data)];
 };
 
-export const getSvg = ({ selector, margin, key, title }) => {
+export const getSvg = ({ selector, margin, title }) => {
   let svg;
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
@@ -92,7 +86,6 @@ export const getSvg = ({ selector, margin, key, title }) => {
     graphContainer.innerHTML = "";
     const innerContainer = document.createElement("div");
     innerContainer.className = selector;
-    innerContainer.id = `${key}-id`;
     innerContainer.innerHTML = `<h3>${title}</h3>`;
 
     svg = d3
