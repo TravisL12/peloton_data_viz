@@ -1,15 +1,17 @@
 import * as d3 from "d3";
 
 import { attributes, chartNames } from "./utils";
-import { dataHelper } from "./parseUtilities";
+import {
+  parseItemCount,
+  parseAttributeSets,
+  parseHighlights,
+} from "./parseUtilities";
 import { buildBarChart } from "./barChart";
 import { buildLineChart } from "./lineChart";
 import { BAR_COUNT, LINE_CHART, BAR_CHART } from "./chartConstants";
 import { buildBarAllChart } from "./barAllChart";
 
 // SCENIC RIDES HAVE NO INSTRUCTOR!
-
-const helper = dataHelper();
 
 const graphLinks = (interactions) => {
   const graphEl = document.createElement("ul");
@@ -40,8 +42,8 @@ export class DataInteractions {
   constructor(originalData) {
     this.originalData = originalData;
     this.filtersEl = document.getElementById("filters");
-    this.sets = helper.parseAttributeSets(originalData);
-    this.highlights = helper.parseHighlights(originalData, this.sets);
+    this.sets = parseAttributeSets(originalData);
+    this.highlights = parseHighlights(originalData, this.sets);
     this.filterTypes = Object.keys(this.sets);
     this.filterValues = Object.values(this.sets)
       .flat()
@@ -64,7 +66,7 @@ export class DataInteractions {
     if (this.currentGraph.type === BAR_CHART) {
       buildBarAllChart(this.originalData, key);
     } else if (this.currentGraph.type === BAR_COUNT) {
-      const countData = helper.parseItemCount(filteredData, key);
+      const countData = parseItemCount(filteredData, key);
       const data = Object.entries(countData).map(([name, count]) => ({
         name,
         count,

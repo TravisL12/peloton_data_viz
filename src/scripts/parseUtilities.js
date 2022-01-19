@@ -45,48 +45,42 @@ const outputHighlights = (data, sets, key) => {
   });
 };
 
-export const dataHelper = () => {
-  const parseItemCount = (inputData, key) => {
-    const data = inputData.map((d) => d[key]).filter((x) => x);
-    const count = data.reduce((acc, name) => {
-      if (!acc[name]) {
-        acc[name] = 0;
-      }
-      acc[name] += 1;
-      return acc;
-    }, {});
-    return count;
-  };
+export const parseItemCount = (inputData, key) => {
+  const data = inputData.map((d) => d[key]).filter((x) => x);
+  const count = data.reduce((acc, name) => {
+    if (!acc[name]) {
+      acc[name] = 0;
+    }
+    acc[name] += 1;
+    return acc;
+  }, {});
+  return count;
+};
 
-  const parseAttributeSets = (data) => {
-    return [
-      "instructor",
-      "fitness_discipline",
-      "length_minutes",
-      "type",
-    ].reduce((acc, key) => {
+export const parseAttributeSets = (data) => {
+  return ["instructor", "fitness_discipline", "length_minutes", "type"].reduce(
+    (acc, key) => {
       const mappedValues = data.map((d) => d[key]).filter((x) => x);
       acc[key] = getUniq(mappedValues);
       return acc;
-    }, {});
+    },
+    {}
+  );
+};
+
+export const parseHighlights = (data, sets) => {
+  // average distance per instructor
+  // highest output per month
+  // other various rates
+  const highlights = {};
+  highlights.instructors = {
+    type: "instructor",
+    highlights: outputHighlights(data, sets, "instructor"),
+  };
+  highlights.fitnessDiscipline = {
+    type: "fitness_discipline",
+    highlights: outputHighlights(data, sets, "fitness_discipline"),
   };
 
-  const parseHighlights = (data, sets) => {
-    // average distance per instructor
-    // highest output per month
-    // other various rates
-    const highlights = {};
-    highlights.instructors = {
-      type: "instructor",
-      highlights: outputHighlights(data, sets, "instructor"),
-    };
-    highlights.fitnessDiscipline = {
-      type: "fitness_discipline",
-      highlights: outputHighlights(data, sets, "fitness_discipline"),
-    };
-
-    return highlights;
-  };
-
-  return { parseItemCount, parseAttributeSets, parseHighlights };
+  return highlights;
 };
