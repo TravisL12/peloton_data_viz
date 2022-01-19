@@ -1,75 +1,67 @@
 import * as d3 from "d3";
 import { graphContainer } from "./elementSelectors";
-import {
-  GROUP_SELECTOR,
-  mainHeight,
-  mainWidth,
-  BAR_CHART,
-  BAR_COUNT,
-  LINE_CHART,
-} from "./chartConstants";
+import { GROUP_SELECTOR, mainHeight, mainWidth } from "./chartConstants";
 
-// sample data
-// Avg. Cadence (RPM): "79"
-// Avg. Heartrate: ""
-// Avg. Incline: ""
-// Avg. Pace (min/mi): ""
-// Avg. Resistance: "41%"
-// Avg. Speed (mph): "16.92"
-// Avg. Watts: "119"
-// Calories Burned: "205"
-// Class Timestamp: "2020-03-18 07:21 (PST)"
-// Distance (mi): "5.63"
-// Fitness Discipline: "Cycling"
-// Instructor Name: "Leanne Hainsby"
-// Length (minutes): "20"
-// Live/On-Demand: "On Demand"
-// Title: "20 min Beginner Ride"
-// Total Output: "143"
-// Type: "Beginner"
-// Workout Timestamp: "2020-04-07 16
+const CADENCE_AVG = "cadence_avg";
+const HEARTRATE_AVG = "heartrate_avg";
+const INCLINE_AVG = "incline_avg";
+const PACE_AVG = "pace_avg";
+const RESISTANCE_AVG = "resistance_avg";
+const SPEED_AVG = "speed_avg";
+const WATTS_AVG = "watts_avg";
+const CALORIES = "calories";
+const CLASS_DATE = "class_date";
+const DISTANCE_MILES = "distance_miles";
+const FITNESS_DISCIPLINE = "fitness_discipline";
+const INSTRUCTOR = "instructor";
+const LENGTH_MINUTES = "length_minutes";
+const LIVE_ONDEMAND = "live_ondemand";
+const TITLE = "title";
+const TOTAL_OUTPUT = "total_output";
+const TYPE = "type";
+const WORKOUT_DATE = "workout_date";
 
+export const allColors = d3.scaleOrdinal(d3.schemeAccent);
 export const colors = {
-  instructor: "red",
-  fitness_discipline: "blue",
-  length_minutes: "lightblue",
-  total_output: "magenta",
-  distance_miles: "lime",
-  calories: "pink",
-
-  cadence_avg: "goldenrod",
-  heartrate_avg: "green",
-  // incline_avg: "goldenrod",
-  // pace_avg: "goldenrod",
-  resistance_avg: "yellow",
-  speed_avg: "orange",
-  watts_avg: "goldenrod",
-  // class_date: "goldenrod",
-  // live_ondemand: "goldenrod",
-  // title: "goldenrod",
-  type: "goldenrod",
-  // workout_date: "goldenrod",
+  [INSTRUCTOR]: "red",
+  [FITNESS_DISCIPLINE]: "blue",
+  [LENGTH_MINUTES]: "lightblue",
+  [TOTAL_OUTPUT]: "magenta",
+  [DISTANCE_MILES]: "lime",
+  [CALORIES]: "pink",
+  [CADENCE_AVG]: "goldenrod",
+  [HEARTRATE_AVG]: "green",
+  // [INCLINE_AVG]: "goldenrod",
+  // [PACE_AVG]: "goldenrod",
+  [RESISTANCE_AVG]: "yellow",
+  [SPEED_AVG]: "orange",
+  [WATTS_AVG]: "goldenrod",
+  // [CLASS_DATE]: "goldenrod",
+  // [LIVE_ONDEMAND]: "goldenrod",
+  // [TITLE]: "goldenrod",
+  [TYPE]: "goldenrod",
+  // [WORKOUT_DATE]: "goldenrod",
 };
 
 export const keys = {
-  "Avg. Cadence (RPM)": "cadence_avg",
-  "Avg. Heartrate": "heartrate_avg",
-  "Avg. Incline": "incline_avg",
-  "Avg. Pace (min/mi)": "pace_avg",
-  "Avg. Resistance": "resistance_avg",
-  "Avg. Speed (mph)": "speed_avg",
-  "Avg. Watts": "watts_avg",
-  "Calories Burned": "calories",
-  "Class Timestamp": "class_date",
-  "Distance (mi)": "distance_miles",
-  "Fitness Discipline": "fitness_discipline",
-  "Instructor Name": "instructor",
-  "Length (minutes)": "length_minutes",
-  "Live/On-Demand": "live_ondemand",
-  Title: "title",
-  "Total Output": "total_output",
-  Type: "type",
-  "Workout Timestamp": "workout_date",
+  "Avg. Cadence (RPM)": CADENCE_AVG,
+  "Avg. Heartrate": HEARTRATE_AVG,
+  "Avg. Incline": INCLINE_AVG,
+  "Avg. Pace (min/mi)": PACE_AVG,
+  "Avg. Resistance": RESISTANCE_AVG,
+  "Avg. Speed (mph)": SPEED_AVG,
+  "Avg. Watts": WATTS_AVG,
+  "Calories Burned": CALORIES,
+  "Class Timestamp": CLASS_DATE,
+  "Distance (mi)": DISTANCE_MILES,
+  "Fitness Discipline": FITNESS_DISCIPLINE,
+  "Instructor Name": INSTRUCTOR,
+  "Length (minutes)": LENGTH_MINUTES,
+  "Live/On-Demand": LIVE_ONDEMAND,
+  Title: TITLE,
+  "Total Output": TOTAL_OUTPUT,
+  Type: TYPE,
+  "Workout Timestamp": WORKOUT_DATE,
 };
 
 export const attributes = Object.keys(keys).reduce((acc, title) => {
@@ -78,29 +70,11 @@ export const attributes = Object.keys(keys).reduce((acc, title) => {
   return acc;
 }, {});
 
-export const chartNames = [
-  { ...attributes.instructor, type: BAR_COUNT },
-  { ...attributes.fitness_discipline, type: BAR_COUNT },
-  { ...attributes.length_minutes, type: BAR_COUNT },
-  { ...attributes.length_minutes, type: BAR_CHART },
-  {
-    ...attributes.speed_avg,
-    keys: ["cadence_avg", "resistance_avg", "speed_avg"],
-    type: LINE_CHART,
-  },
-  {
-    ...attributes.distance_miles,
-    keys: ["distance_miles", "calories", "total_output"],
-    type: LINE_CHART,
-  },
-  { ...attributes.calories, keys: ["calories"], type: LINE_CHART },
-];
-
 export const getUniq = (data) => {
   return [...new Set(data)];
 };
 
-export const getSvg = ({ selector, margin, key, title }) => {
+export const getSvg = ({ selector, margin, title }) => {
   let svg;
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
@@ -112,7 +86,6 @@ export const getSvg = ({ selector, margin, key, title }) => {
     graphContainer.innerHTML = "";
     const innerContainer = document.createElement("div");
     innerContainer.className = selector;
-    innerContainer.id = `${key}-id`;
     innerContainer.innerHTML = `<h3>${title}</h3>`;
 
     svg = d3

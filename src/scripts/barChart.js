@@ -1,23 +1,14 @@
 import * as d3 from "d3";
-import { attributes, colors, getSvg } from "./utils";
+import { getSvg } from "./utils";
 import { GROUP_SELECTOR } from "./chartConstants";
 
 const margin = { top: 10, bottom: 120, left: 30, right: 10 };
 const SVG_SELECTOR = "barchart-svg";
 
-export function buildBarChart(dataObject, key) {
-  const { title } = attributes[key];
-  const data = Object.entries(dataObject).map(([name, count]) => ({
-    name,
-    count,
-  }));
-
-  data.sort((a, b) => d3.descending(a.count, b.count));
-
+export function barChart(data, title, allColors) {
   const { svg, width, height } = getSvg({
     selector: SVG_SELECTOR,
     margin,
-    key,
     title,
   });
   const xScale = d3.scaleBand().range([0, width]).padding(0.3);
@@ -51,7 +42,7 @@ export function buildBarChart(dataObject, key) {
           .attr("width", xScale.bandwidth())
           .attr("stroke-width", 1)
           .attr("stroke", "black")
-          .attr("fill", colors[key]);
+          .attr("fill", (d) => allColors(d.name));
 
         return g;
       },
@@ -62,7 +53,8 @@ export function buildBarChart(dataObject, key) {
           .attr("x", (d) => xScale(d.name))
           .attr("y", (d) => yScale(d.count))
           .attr("height", (d) => height - yScale(d.count))
-          .attr("width", xScale.bandwidth());
+          .attr("width", xScale.bandwidth())
+          .attr("fill", (d) => allColors(d.name));
       },
       (exit) => {
         exit.transition().duration(100).style("opacity", 0).remove();
