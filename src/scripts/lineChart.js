@@ -76,7 +76,7 @@ export function lineChart(data, title, allColors) {
   svg
     .selectAll(`.${SVG_SELECTOR} .${GROUP_SELECTOR}`)
     .selectAll("circle")
-    .data(circleData, (d) => d.key)
+    .data(circleData, (d) => `${d.key}-${d.y}-${d.x}`)
     .join(
       (enter) => {
         enter
