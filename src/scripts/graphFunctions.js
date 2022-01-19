@@ -22,7 +22,7 @@ const buildInstructorOutputChart = (filteredData, currentGraph) => {
   const instructors = parseAttributeSets(filteredData).instructor;
   const data = instructors.map((instructor) => {
     const d = filteredData
-      .filter((d) => d.instructor === instructor && d.total_output)
+      .filter((d) => d.instructor === instructor && +d.total_output)
       .map((d) => {
         const date = d3.timeParse("%Y-%m-%d %H:%M")(
           d.workout_date.slice(0, -6)
