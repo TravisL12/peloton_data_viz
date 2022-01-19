@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 
-import { attributes, chartNames } from "./utils";
+import { attributes } from "./utils";
 import {
   parseItemCount,
   parseAttributeSets,
@@ -8,8 +8,8 @@ import {
 } from "./parseUtilities";
 import { buildBarChart } from "./barChart";
 import { buildLineChart } from "./lineChart";
-import { BAR_COUNT, LINE_CHART, BAR_CHART } from "./chartConstants";
-import { buildBarAllChart } from "./barAllChart";
+import { BAR_COUNT, LINE_CHART } from "./chartConstants";
+import { chartNames } from "./graphFunctions";
 
 // SCENIC RIDES HAVE NO INSTRUCTOR!
 
@@ -24,13 +24,10 @@ const graphLinks = (interactions) => {
     item.classList = "options-item";
     item.textContent = chart.title;
     item.addEventListener("click", (event) => {
-      // un-highlight all links
       [...document.getElementsByClassName("options-item")].forEach((li) => {
         li.classList.remove("selected");
       });
-      // highlight clicked link
       event.target.classList.add("selected");
-
       interactions.currentGraph = chart;
       interactions.updateGraph();
     });
@@ -60,33 +57,7 @@ export class DataInteractions {
     const filteredData = this.originalData.filter((d) => {
       return this.filterTypes.every((type) => this.filterValues[d[type]]);
     });
-
-    const { key, keys, title } = this.currentGraph;
-
-    if (this.currentGraph.type === BAR_CHART) {
-      buildBarAllChart(this.originalData, key);
-    } else if (this.currentGraph.type === BAR_COUNT) {
-      const countData = parseItemCount(filteredData, key);
-      const data = Object.entries(countData).map(([name, count]) => ({
-        name,
-        count,
-      }));
-      data.sort((a, b) => d3.descending(a.count, b.count));
-      buildBarChart(data, key, title);
-    } else if (this.currentGraph.type === LINE_CHART) {
-      const data = keys.map((key) => {
-        const d = filteredData
-          .filter((d) => +d[key])
-          .map((d) => {
-            const date = d3.timeParse("%Y-%m-%d %H:%M")(
-              d.workout_date.slice(0, -6)
-            );
-            return { x: date, y: +d[key] };
-          });
-        return [key, d];
-      });
-      buildLineChart(data, key, title);
-    }
+    this.currentGraph.chartFn(filteredData, this.currentGraph);
   }
 
   toggleAll(filter, isChecked = false) {

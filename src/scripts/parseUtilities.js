@@ -1,12 +1,12 @@
 import * as d3 from "d3";
 import { getUniq } from "./utils";
 
-const outputHighlights = (data, sets, key) => {
-  const filterSum = (filteredData, sumKey) =>
-    filteredData.reduce((acc, d) => {
-      return +d[sumKey] ? acc + +d[sumKey] : acc;
-    }, 0);
+const filterSum = (filteredData, sumKey) =>
+  filteredData.reduce((acc, d) => {
+    return +d[sumKey] ? acc + +d[sumKey] : acc;
+  }, 0);
 
+const outputHighlights = (data, sets, key) => {
   return sets[key].map((value) => {
     const filtered = data.filter((d) => d[key] === value);
     const highestOutput = Math.max(

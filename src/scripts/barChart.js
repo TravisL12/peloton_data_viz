@@ -1,11 +1,11 @@
 import * as d3 from "d3";
-import { attributes, colors, getSvg } from "./utils";
+import { colors, getSvg } from "./utils";
 import { GROUP_SELECTOR } from "./chartConstants";
 
 const margin = { top: 10, bottom: 120, left: 30, right: 10 };
 const SVG_SELECTOR = "barchart-svg";
 
-export function buildBarChart(data, key, title) {
+export function barChart(data, key, title) {
   const { svg, width, height } = getSvg({
     selector: SVG_SELECTOR,
     margin,

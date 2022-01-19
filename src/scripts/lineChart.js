@@ -5,7 +5,7 @@ import { attributes, colors, getSvg } from "./utils";
 const margin = { top: 10, bottom: 50, left: 50, right: 10 };
 const SVG_SELECTOR = "line-svg";
 
-export function buildLineChart(data, key, title) {
+export function lineChart(data, key, title) {
   const { svg, width, height } = getSvg({
     selector: SVG_SELECTOR,
     margin,
@@ -38,7 +38,7 @@ export function buildLineChart(data, key, title) {
         g.append("path")
           .attr("fill", "none")
           .attr("stroke-width", 2)
-          .attr("stroke", (d) => colors[d[0]])
+          .attr("stroke", (d) => colors[d[0]] || "red")
           .attr("d", (dPath) =>
             d3
               .line()
