@@ -1,8 +1,39 @@
-import { allColors, attributes } from "./utils";
+import * as d3 from "d3";
+
+import {
+  attributes,
+  INSTRUCTOR,
+  FITNESS_DISCIPLINE,
+  LENGTH_MINUTES,
+  TYPE,
+  SPEED_AVG,
+  DISTANCE_MILES,
+  CALORIES,
+  CADENCE_AVG,
+  RESISTANCE_AVG,
+  TOTAL_OUTPUT,
+} from "./utils";
 import { parseAttributeSets, parseHighlights } from "./parseUtilities";
 import { chartNames } from "./graphFunctions";
 
 // SCENIC RIDES HAVE NO INSTRUCTOR!
+
+const schemes = {
+  [INSTRUCTOR]: d3.schemeCategory10,
+  [FITNESS_DISCIPLINE]: d3.schemeDark2,
+  [LENGTH_MINUTES]: d3.schemePastel1,
+  [TYPE]: d3.schemePastel2,
+  [SPEED_AVG]: d3.schemeBlues,
+  [DISTANCE_MILES]: d3.schemeBlues,
+  [CALORIES]: d3.schemeBlues,
+  [CADENCE_AVG]: d3.schemeBuGn,
+  [RESISTANCE_AVG]: d3.schemeBuGn,
+  [TOTAL_OUTPUT]: d3.schemeBuGn,
+};
+
+const getColor = (key, domainExtent) => {
+  return d3.scaleOrdinal(schemes[key]).domain(domainExtent);
+};
 
 const graphLinks = (interactions) => {
   const graphEl = document.createElement("ul");
@@ -40,8 +71,6 @@ export class DataInteractions {
         return acc;
       }, {});
 
-    allColors.domain(Object.keys(this.filterValues));
-
     graphLinks(this);
     this.init();
   }
@@ -50,7 +79,9 @@ export class DataInteractions {
     const filteredData = this.originalData.filter((d) => {
       return this.filterTypes.every((type) => this.filterValues[d[type]]);
     });
-    this.currentGraph.chartFn(filteredData, this.currentGraph, allColors);
+    const { key, keys } = this.currentGraph;
+    const colors = getColor(key, keys || this.sets[key]);
+    this.currentGraph.chartFn(filteredData, this.currentGraph, colors);
   }
 
   toggleAll(filter, isChecked = false) {
@@ -70,14 +101,17 @@ export class DataInteractions {
       el.className = "filter-option";
       const options = this.sets[filter]
         .sort((a, b) => b - a)
-        .map(
-          (option) => `
+        .map((option) => {
+          const colors = getColor(filter, this.sets[filter]);
+          return `
       <li>
         <input type="checkbox" value="${option}" checked id="option-${option}" />
-        <label for="option-${option}">${option}</label>
+        <label for="option-${option}" style="background: ${colors(
+            option
+          )};">${option}</label>
       </li>
-    `
-        )
+    `;
+        })
         .join("");
 
       el.innerHTML = `

@@ -3,7 +3,15 @@ import { barChart } from "./barChart";
 import { lineChart } from "./lineChart";
 
 import { parseAttributeSets, parseItemCount } from "./parseUtilities";
-import { attributes } from "./utils";
+import {
+  attributes,
+  CADENCE_AVG,
+  RESISTANCE_AVG,
+  SPEED_AVG,
+  CALORIES,
+  DISTANCE_MILES,
+  TOTAL_OUTPUT,
+} from "./utils";
 
 const buildCountChart = (filteredData, currentGraph, colors) => {
   const { key, title } = currentGraph;
@@ -64,17 +72,17 @@ export const chartNames = [
   { ...attributes.length_minutes, chartFn: buildCountChart },
   {
     ...attributes.speed_avg,
-    keys: ["cadence_avg", "resistance_avg", "speed_avg"],
+    keys: [CADENCE_AVG, RESISTANCE_AVG, SPEED_AVG],
     chartFn: buildLineChart,
   },
   {
     ...attributes.distance_miles,
-    keys: ["distance_miles", "calories", "total_output"],
+    keys: [DISTANCE_MILES, CALORIES, TOTAL_OUTPUT],
     chartFn: buildLineChart,
   },
   {
     ...attributes.calories,
-    keys: ["calories"],
+    keys: [CALORIES],
     chartFn: buildLineChart,
   },
 ];
