@@ -23,12 +23,12 @@ const schemes = {
   [FITNESS_DISCIPLINE]: d3.schemeDark2,
   [LENGTH_MINUTES]: d3.schemePastel1,
   [TYPE]: d3.schemePastel2,
-  [SPEED_AVG]: d3.schemeBlues,
-  [DISTANCE_MILES]: d3.schemeBlues,
-  [CALORIES]: d3.schemeBlues,
-  [CADENCE_AVG]: d3.schemeBuGn,
-  [RESISTANCE_AVG]: d3.schemeBuGn,
-  [TOTAL_OUTPUT]: d3.schemeBuGn,
+  [SPEED_AVG]: d3.schemePastel1,
+  [DISTANCE_MILES]: d3.schemePastel1,
+  [CALORIES]: d3.schemePastel1,
+  [CADENCE_AVG]: d3.schemePastel1,
+  [RESISTANCE_AVG]: d3.schemePastel1,
+  [TOTAL_OUTPUT]: d3.schemePastel1,
 };
 
 const getColor = (key, domainExtent) => {

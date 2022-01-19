@@ -77,7 +77,7 @@ export const chartNames = [
   },
   {
     ...attributes.distance_miles,
-    keys: [DISTANCE_MILES, CALORIES, TOTAL_OUTPUT],
+    keys: [CALORIES, DISTANCE_MILES, TOTAL_OUTPUT],
     chartFn: buildLineChart,
   },
   {
