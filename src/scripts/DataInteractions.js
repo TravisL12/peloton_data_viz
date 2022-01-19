@@ -11,6 +11,31 @@ import { buildBarAllChart } from "./barAllChart";
 
 const helper = dataHelper();
 
+const graphLinks = (interactions) => {
+  const graphEl = document.createElement("ul");
+  graphEl.id = "graph-links";
+  const main = document.querySelector(".main");
+  main.insertBefore(graphEl, main.firstChild);
+
+  chartNames.forEach((chart) => {
+    const item = document.createElement("li");
+    item.classList = "options-item";
+    item.textContent = chart.title;
+    item.addEventListener("click", (event) => {
+      // un-highlight all links
+      [...document.getElementsByClassName("options-item")].forEach((li) => {
+        li.classList.remove("selected");
+      });
+      // highlight clicked link
+      event.target.classList.add("selected");
+
+      interactions.currentGraph = chart;
+      interactions.updateGraph();
+    });
+    graphEl.appendChild(item);
+  });
+};
+
 export class DataInteractions {
   constructor(originalData) {
     this.originalData = originalData;
@@ -24,11 +49,9 @@ export class DataInteractions {
         acc[set] = true;
         return acc;
       }, {});
-    this.init();
 
-    // show one graph on load
-    this.currentGraph = chartNames[0];
-    this.updateGraph();
+    graphLinks(this);
+    this.init();
   }
 
   updateGraph() {
@@ -76,7 +99,6 @@ export class DataInteractions {
   }
 
   init() {
-    this.graphLinks();
     this.filterTypes.forEach((filter) => {
       const el = document.createElement("div");
       el.className = "filter-option";
@@ -128,30 +150,8 @@ export class DataInteractions {
           this.toggleAll(filter);
         });
     });
-  }
 
-  graphLinks() {
-    const graphEl = document.createElement("ul");
-    graphEl.id = "graph-links";
-    const main = document.querySelector(".main");
-    main.insertBefore(graphEl, main.firstChild);
-
-    chartNames.forEach((chart) => {
-      const item = document.createElement("li");
-      item.classList = "options-item";
-      item.textContent = chart.title;
-      item.addEventListener("click", (event) => {
-        // un-highlight all links
-        [...document.getElementsByClassName("options-item")].forEach((li) => {
-          li.classList.remove("selected");
-        });
-        // highlight clicked link
-        event.target.classList.add("selected");
-
-        this.currentGraph = chart;
-        this.updateGraph();
-      });
-      graphEl.appendChild(item);
-    });
+    this.currentGraph = chartNames[0];
+    this.updateGraph();
   }
 }

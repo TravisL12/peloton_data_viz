@@ -1,6 +1,6 @@
 import { fileInput } from "./scripts/elementSelectors";
 import { DataInteractions } from "./scripts/DataInteractions";
-import { keys } from "./scripts/utils";
+import { chartNames, keys } from "./scripts/utils";
 
 import "./styles/styles.scss";
 
