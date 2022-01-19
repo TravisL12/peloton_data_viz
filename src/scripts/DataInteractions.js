@@ -104,11 +104,9 @@ export class DataInteractions {
         .map((option) => {
           const colors = getColor(filter, this.sets[filter]);
           return `
-      <li>
+      <li style="background: ${colors(option)};">
         <input type="checkbox" value="${option}" checked id="option-${option}" />
-        <label for="option-${option}" style="background: ${colors(
-            option
-          )};">${option}</label>
+        <label for="option-${option}">${option}</label>
       </li>
     `;
         })
