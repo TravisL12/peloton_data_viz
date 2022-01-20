@@ -41,20 +41,22 @@ const graphLinks = (interactions) => {
   const main = document.querySelector(".main");
   main.insertBefore(graphEl, main.firstChild);
 
-  chartNames.forEach((chart) => {
-    const item = document.createElement("li");
-    item.classList = "options-item";
-    item.textContent = chart.title;
-    item.addEventListener("click", (event) => {
-      [...document.getElementsByClassName("options-item")].forEach((li) => {
-        li.classList.remove("selected");
+  Object.values(chartNames)
+    .flat()
+    .forEach((chart) => {
+      const item = document.createElement("li");
+      item.classList = "options-item";
+      item.textContent = chart.title;
+      item.addEventListener("click", (event) => {
+        [...document.getElementsByClassName("options-item")].forEach((li) => {
+          li.classList.remove("selected");
+        });
+        event.target.classList.add("selected");
+        interactions.currentGraph = chart;
+        interactions.updateGraph();
       });
-      event.target.classList.add("selected");
-      interactions.currentGraph = chart;
-      interactions.updateGraph();
+      graphEl.appendChild(item);
     });
-    graphEl.appendChild(item);
-  });
 };
 
 export class DataInteractions {
@@ -149,7 +151,7 @@ export class DataInteractions {
         });
     });
 
-    this.currentGraph = chartNames[0];
+    this.currentGraph = chartNames.count[0];
     this.updateGraph();
   }
 }

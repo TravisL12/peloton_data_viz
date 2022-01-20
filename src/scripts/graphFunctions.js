@@ -24,19 +24,35 @@ const buildCountChart = (filteredData, currentGraph, colors) => {
   barChart(data, title, colors);
 };
 
-const buildInstructorOutputChart = (filteredData, currentGraph, colors) => {
-  const { title } = currentGraph;
-  const instructors = parseAttributeSets(filteredData).instructor;
-  const data = instructors.map((instructor) => {
+const instructorOutputChart = (filteredData, currentGraph, colors) => {
+  buildOutputChart(filteredData, currentGraph, colors, "total_output");
+};
+
+const instructorSpeedChart = (filteredData, currentGraph, colors) => {
+  buildOutputChart(filteredData, currentGraph, colors, "speed_avg");
+};
+
+const lengthOutputChart = (filteredData, currentGraph, colors) => {
+  buildOutputChart(filteredData, currentGraph, colors, "total_output");
+};
+
+const typeOutputChart = (filteredData, currentGraph, colors) => {
+  buildOutputChart(filteredData, currentGraph, colors, "total_output");
+};
+
+const buildOutputChart = (filteredData, currentGraph, colors, compareKey) => {
+  const { key, title } = currentGraph;
+  const attributeSet = parseAttributeSets(filteredData)[key];
+  const data = attributeSet.map((set) => {
     const d = filteredData
-      .filter((d) => d.instructor === instructor && +d.total_output)
+      .filter((d) => d[key] === set && +d[compareKey])
       .map((d) => {
         const date = d3.timeParse("%Y-%m-%d %H:%M")(
           d.workout_date.slice(0, -6)
         );
-        return { x: date, y: +d.total_output };
+        return { x: date, y: +d[compareKey] };
       });
-    return [instructor, d];
+    return [set, d];
   });
 
   lineChart(data, title, colors);
@@ -58,18 +74,56 @@ const buildLineChart = (filteredData, currentGraph, colors) => {
   lineChart(data, title, colors);
 };
 
-export const chartNames = [
+const countCharts = [
   {
     ...attributes.instructor,
-    title: "Instructors output",
-    chartFn: buildInstructorOutputChart,
-  },
-  { ...attributes.instructor, chartFn: buildCountChart },
-  {
-    ...attributes.fitness_discipline,
+    title: "Instructors (count)",
     chartFn: buildCountChart,
   },
-  { ...attributes.length_minutes, chartFn: buildCountChart },
+  {
+    ...attributes.fitness_discipline,
+    title: "Fitness Discipline (count)",
+    chartFn: buildCountChart,
+  },
+  {
+    ...attributes.length_minutes,
+    title: "Length Minutes (count)",
+    chartFn: buildCountChart,
+  },
+  {
+    ...attributes.type,
+    title: "Type (count)",
+    chartFn: buildCountChart,
+  },
+];
+
+const outputCharts = [
+  {
+    ...attributes.type,
+    title: "Type (output)",
+    chartFn: typeOutputChart,
+  },
+  {
+    ...attributes.instructor,
+    title: "Instructors (output)",
+    chartFn: instructorOutputChart,
+  },
+  {
+    ...attributes.length_minutes,
+    title: "Length (output)",
+    chartFn: lengthOutputChart,
+  },
+];
+
+const speedCharts = [
+  {
+    ...attributes.instructor,
+    title: "Instructors (speed)",
+    chartFn: instructorSpeedChart,
+  },
+];
+
+const lineCharts = [
   {
     ...attributes.speed_avg,
     keys: [CADENCE_AVG, RESISTANCE_AVG, SPEED_AVG],
@@ -86,3 +140,10 @@ export const chartNames = [
     chartFn: buildLineChart,
   },
 ];
+
+export const chartNames = {
+  count: countCharts,
+  output: outputCharts,
+  speed: speedCharts,
+  line: lineCharts,
+};

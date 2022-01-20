@@ -21,27 +21,6 @@ export const TOTAL_OUTPUT = "total_output";
 export const TYPE = "type";
 export const WORKOUT_DATE = "workout_date";
 
-export const colors = {
-  [INSTRUCTOR]: "red",
-  [FITNESS_DISCIPLINE]: "blue",
-  [LENGTH_MINUTES]: "lightblue",
-  [TOTAL_OUTPUT]: "magenta",
-  [DISTANCE_MILES]: "lime",
-  [CALORIES]: "pink",
-  [CADENCE_AVG]: "goldenrod",
-  [HEARTRATE_AVG]: "green",
-  // [INCLINE_AVG]: "goldenrod",
-  // [PACE_AVG]: "goldenrod",
-  [RESISTANCE_AVG]: "yellow",
-  [SPEED_AVG]: "orange",
-  [WATTS_AVG]: "goldenrod",
-  // [CLASS_DATE]: "goldenrod",
-  // [LIVE_ONDEMAND]: "goldenrod",
-  // [TITLE]: "goldenrod",
-  [TYPE]: "goldenrod",
-  // [WORKOUT_DATE]: "goldenrod",
-};
-
 export const keys = {
   "Avg. Cadence (RPM)": CADENCE_AVG,
   "Avg. Heartrate": HEARTRATE_AVG,
