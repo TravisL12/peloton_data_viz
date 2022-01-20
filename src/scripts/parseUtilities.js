@@ -7,7 +7,7 @@ import {
   TYPE,
 } from "./utils";
 
-const filterSum = (filteredData, sumKey) =>
+export const filterSum = (filteredData, sumKey) =>
   filteredData.reduce((acc, d) => {
     return +d[sumKey] ? acc + +d[sumKey] : acc;
   }, 0);

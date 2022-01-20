@@ -57,7 +57,7 @@ export function barChart(data, title, allColors) {
           .attr("fill", (d) => allColors(d.name));
       },
       (exit) => {
-        exit.transition().duration(100).style("opacity", 0).remove();
+        exit.transition().duration(250).style("opacity", 0).remove();
       }
     );
 }

@@ -2,7 +2,11 @@ import * as d3 from "d3";
 import { barChart } from "./barChart";
 import { lineChart } from "./lineChart";
 
-import { parseAttributeSets, parseItemCount } from "./parseUtilities";
+import {
+  filterSum,
+  parseAttributeSets,
+  parseItemCount,
+} from "./parseUtilities";
 import {
   attributes,
   CADENCE_AVG,
@@ -20,6 +24,22 @@ const buildCountChart = (filteredData, currentGraph, colors) => {
     name,
     count,
   }));
+  data.sort((a, b) => d3.descending(a.count, b.count));
+  barChart(data, title, colors);
+};
+
+const buildSumChart = (filteredData, currentGraph, colors) => {
+  const { key, title } = currentGraph;
+  const attributeSet = parseAttributeSets(filteredData)[key];
+
+  const data = attributeSet.map((instructor) => {
+    const instructorData = filteredData.filter(
+      (d) => d.instructor === instructor
+    );
+    const sumData = filterSum(instructorData, "total_output");
+    return { name: instructor, count: sumData };
+  });
+
   data.sort((a, b) => d3.descending(a.count, b.count));
   barChart(data, title, colors);
 };
@@ -115,6 +135,14 @@ const outputCharts = [
   },
 ];
 
+const sumCharts = [
+  {
+    ...attributes.instructor,
+    title: "Instructors (sum)",
+    chartFn: buildSumChart,
+  },
+];
+
 const speedCharts = [
   {
     ...attributes.instructor,
@@ -146,4 +174,5 @@ export const chartNames = {
   output: outputCharts,
   speed: speedCharts,
   line: lineCharts,
+  sum: sumCharts,
 };
