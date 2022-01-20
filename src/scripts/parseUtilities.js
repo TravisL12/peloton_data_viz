@@ -1,7 +1,13 @@
 import * as d3 from "d3";
-import { getUniq } from "./utils";
+import {
+  getUniq,
+  INSTRUCTOR,
+  FITNESS_DISCIPLINE,
+  LENGTH_MINUTES,
+  TYPE,
+} from "./utils";
 
-const filterSum = (filteredData, sumKey) =>
+export const filterSum = (filteredData, sumKey) =>
   filteredData.reduce((acc, d) => {
     return +d[sumKey] ? acc + +d[sumKey] : acc;
   }, 0);
@@ -58,7 +64,7 @@ export const parseItemCount = (inputData, key) => {
 };
 
 export const parseAttributeSets = (data) => {
-  return ["instructor", "fitness_discipline", "length_minutes", "type"].reduce(
+  return [INSTRUCTOR, FITNESS_DISCIPLINE, LENGTH_MINUTES, TYPE].reduce(
     (acc, key) => {
       const mappedValues = data.map((d) => d[key]).filter((x) => x);
       acc[key] = getUniq(mappedValues);

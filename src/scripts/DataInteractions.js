@@ -1,8 +1,39 @@
-import { allColors, attributes } from "./utils";
+import * as d3 from "d3";
+
+import {
+  attributes,
+  INSTRUCTOR,
+  FITNESS_DISCIPLINE,
+  LENGTH_MINUTES,
+  TYPE,
+  SPEED_AVG,
+  DISTANCE_MILES,
+  CALORIES,
+  CADENCE_AVG,
+  RESISTANCE_AVG,
+  TOTAL_OUTPUT,
+} from "./utils";
 import { parseAttributeSets, parseHighlights } from "./parseUtilities";
 import { chartNames } from "./graphFunctions";
 
 // SCENIC RIDES HAVE NO INSTRUCTOR!
+
+const schemes = {
+  [INSTRUCTOR]: d3.schemeCategory10,
+  [FITNESS_DISCIPLINE]: d3.schemeDark2,
+  [LENGTH_MINUTES]: d3.schemePastel1,
+  [TYPE]: d3.schemePastel2,
+  [SPEED_AVG]: d3.schemePastel1,
+  [DISTANCE_MILES]: d3.schemePastel1,
+  [CALORIES]: d3.schemePastel1,
+  [CADENCE_AVG]: d3.schemePastel1,
+  [RESISTANCE_AVG]: d3.schemePastel1,
+  [TOTAL_OUTPUT]: d3.schemePastel1,
+};
+
+const getColor = (key, domainExtent) => {
+  return d3.scaleOrdinal(schemes[key]).domain(domainExtent);
+};
 
 const graphLinks = (interactions) => {
   const graphEl = document.createElement("ul");
@@ -10,20 +41,22 @@ const graphLinks = (interactions) => {
   const main = document.querySelector(".main");
   main.insertBefore(graphEl, main.firstChild);
 
-  chartNames.forEach((chart) => {
-    const item = document.createElement("li");
-    item.classList = "options-item";
-    item.textContent = chart.title;
-    item.addEventListener("click", (event) => {
-      [...document.getElementsByClassName("options-item")].forEach((li) => {
-        li.classList.remove("selected");
+  Object.values(chartNames)
+    .flat()
+    .forEach((chart) => {
+      const item = document.createElement("li");
+      item.classList = "options-item";
+      item.textContent = chart.title;
+      item.addEventListener("click", (event) => {
+        [...document.getElementsByClassName("options-item")].forEach((li) => {
+          li.classList.remove("selected");
+        });
+        event.target.classList.add("selected");
+        interactions.currentGraph = chart;
+        interactions.updateGraph();
       });
-      event.target.classList.add("selected");
-      interactions.currentGraph = chart;
-      interactions.updateGraph();
+      graphEl.appendChild(item);
     });
-    graphEl.appendChild(item);
-  });
 };
 
 export class DataInteractions {
@@ -40,8 +73,6 @@ export class DataInteractions {
         return acc;
       }, {});
 
-    allColors.domain(Object.keys(this.filterValues));
-
     graphLinks(this);
     this.init();
   }
@@ -50,7 +81,9 @@ export class DataInteractions {
     const filteredData = this.originalData.filter((d) => {
       return this.filterTypes.every((type) => this.filterValues[d[type]]);
     });
-    this.currentGraph.chartFn(filteredData, this.currentGraph, allColors);
+    const { key, keys } = this.currentGraph;
+    const colors = getColor(key, keys || this.sets[key]);
+    this.currentGraph.chartFn(filteredData, this.currentGraph, colors);
   }
 
   toggleAll(filter, isChecked = false) {
@@ -70,14 +103,15 @@ export class DataInteractions {
       el.className = "filter-option";
       const options = this.sets[filter]
         .sort((a, b) => b - a)
-        .map(
-          (option) => `
-      <li>
+        .map((option) => {
+          const colors = getColor(filter, this.sets[filter]);
+          return `
+      <li style="background: ${colors(option)};">
         <input type="checkbox" value="${option}" checked id="option-${option}" />
         <label for="option-${option}">${option}</label>
       </li>
-    `
-        )
+    `;
+        })
         .join("");
 
       el.innerHTML = `
@@ -117,7 +151,7 @@ export class DataInteractions {
         });
     });
 
-    this.currentGraph = chartNames[0];
+    this.currentGraph = chartNames.count[0];
     this.updateGraph();
   }
 }

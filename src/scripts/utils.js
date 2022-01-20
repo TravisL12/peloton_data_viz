@@ -2,46 +2,24 @@ import * as d3 from "d3";
 import { graphContainer } from "./elementSelectors";
 import { GROUP_SELECTOR, mainHeight, mainWidth } from "./chartConstants";
 
-const CADENCE_AVG = "cadence_avg";
-const HEARTRATE_AVG = "heartrate_avg";
-const INCLINE_AVG = "incline_avg";
-const PACE_AVG = "pace_avg";
-const RESISTANCE_AVG = "resistance_avg";
-const SPEED_AVG = "speed_avg";
-const WATTS_AVG = "watts_avg";
-const CALORIES = "calories";
-const CLASS_DATE = "class_date";
-const DISTANCE_MILES = "distance_miles";
-const FITNESS_DISCIPLINE = "fitness_discipline";
-const INSTRUCTOR = "instructor";
-const LENGTH_MINUTES = "length_minutes";
-const LIVE_ONDEMAND = "live_ondemand";
-const TITLE = "title";
-const TOTAL_OUTPUT = "total_output";
-const TYPE = "type";
-const WORKOUT_DATE = "workout_date";
-
-export const allColors = d3.scaleOrdinal(d3.schemeAccent);
-export const colors = {
-  [INSTRUCTOR]: "red",
-  [FITNESS_DISCIPLINE]: "blue",
-  [LENGTH_MINUTES]: "lightblue",
-  [TOTAL_OUTPUT]: "magenta",
-  [DISTANCE_MILES]: "lime",
-  [CALORIES]: "pink",
-  [CADENCE_AVG]: "goldenrod",
-  [HEARTRATE_AVG]: "green",
-  // [INCLINE_AVG]: "goldenrod",
-  // [PACE_AVG]: "goldenrod",
-  [RESISTANCE_AVG]: "yellow",
-  [SPEED_AVG]: "orange",
-  [WATTS_AVG]: "goldenrod",
-  // [CLASS_DATE]: "goldenrod",
-  // [LIVE_ONDEMAND]: "goldenrod",
-  // [TITLE]: "goldenrod",
-  [TYPE]: "goldenrod",
-  // [WORKOUT_DATE]: "goldenrod",
-};
+export const CADENCE_AVG = "cadence_avg";
+export const HEARTRATE_AVG = "heartrate_avg";
+export const INCLINE_AVG = "incline_avg";
+export const PACE_AVG = "pace_avg";
+export const RESISTANCE_AVG = "resistance_avg";
+export const SPEED_AVG = "speed_avg";
+export const WATTS_AVG = "watts_avg";
+export const CALORIES = "calories";
+export const CLASS_DATE = "class_date";
+export const DISTANCE_MILES = "distance_miles";
+export const FITNESS_DISCIPLINE = "fitness_discipline";
+export const INSTRUCTOR = "instructor";
+export const LENGTH_MINUTES = "length_minutes";
+export const LIVE_ONDEMAND = "live_ondemand";
+export const TITLE = "title";
+export const TOTAL_OUTPUT = "total_output";
+export const TYPE = "type";
+export const WORKOUT_DATE = "workout_date";
 
 export const keys = {
   "Avg. Cadence (RPM)": CADENCE_AVG,

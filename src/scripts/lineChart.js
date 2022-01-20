@@ -68,4 +68,31 @@ export function lineChart(data, title, allColors) {
           );
       }
     );
+
+  const circleData = data
+    .map((d) => d[1].map((d1) => ({ ...d1, key: d[0] })))
+    .flat();
+
+  svg
+    .selectAll(`.${SVG_SELECTOR} .${GROUP_SELECTOR}`)
+    .selectAll("circle")
+    .data(circleData, (d) => `${d.key}-${d.y}-${d.x}`)
+    .join(
+      (enter) => {
+        enter
+          .append("circle")
+          .attr("fill", (d) => allColors(d.key))
+          .attr("cx", (d) => xScale(d.x))
+          .attr("cy", (d) => yScale(d.y))
+          .attr("r", 3);
+
+        return enter;
+      },
+      (update) => {
+        update
+          .transition()
+          .attr("cx", (d) => xScale(d.x))
+          .attr("cy", (d) => yScale(d.y));
+      }
+    );
 }
