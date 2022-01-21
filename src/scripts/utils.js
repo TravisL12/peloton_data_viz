@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import { graphContainer } from "./elementSelectors";
 import { GROUP_SELECTOR, mainHeight, mainWidth } from "./chartConstants";
+import { select } from "d3";
 
 export const CADENCE_AVG = "cadence_avg";
 export const HEARTRATE_AVG = "heartrate_avg";
@@ -52,20 +53,36 @@ export const getUniq = (data) => {
   return [...new Set(data)];
 };
 
-export const getSvg = ({ selector, margin, title }) => {
+export const getSvg = ({ selector, keys, margin, title }) => {
   let svg;
+  let selectMenu;
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
 
   if (document.querySelector(`.${selector}`)) {
     document.querySelector(`.${selector} h3`).textContent = title;
     svg = d3.select(`.${selector} .main-group`);
+    selectMenu = document.querySelector(`.${selector} #${selector}-select`);
   } else {
     graphContainer.innerHTML = "";
     const innerContainer = document.createElement("div");
     innerContainer.className = selector;
-    innerContainer.innerHTML = `<h3>${title}</h3>`;
-
+    innerContainer.innerHTML = `
+        <div>
+          <h3>${title}</h3>
+          <select name="${selector}-select" id="${selector}-select">
+          ${keys
+            .map(
+              (key, i) =>
+                `<option ${
+                  i === 0 ? "selected" : ""
+                } value="${key}">${key}</option>`
+            )
+            .join("")}
+          </select>
+        </div>
+      `;
+    selectMenu = innerContainer.querySelector(`#${selector}-select`);
     svg = d3
       .select(innerContainer)
       .append("svg")
@@ -87,5 +104,5 @@ export const getSvg = ({ selector, margin, title }) => {
     graphContainer.appendChild(innerContainer);
   }
 
-  return { svg, width, height };
+  return { svg, selectMenu, width, height };
 };
