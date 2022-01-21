@@ -5,33 +5,19 @@ import { GROUP_SELECTOR } from "./chartConstants";
 const margin = { top: 10, bottom: 120, left: 40, right: 10 };
 const SVG_SELECTOR = "barchart-svg";
 
-export function barChart(
-  data,
-  keys,
-  allColors,
-  updateDataFn,
-  title,
-  secondKeys
-) {
-  const { svg, selectMenu, secondSelectMenu, width, height } = getSvg({
+export function barChart(data, keys, colors, updateDataFn, title, secondKeys) {
+  const { svg, selectMenu, width, height } = getSvg({
     selector: SVG_SELECTOR,
     keys,
     secondKeys,
     margin,
     title,
+    buildGraph,
   });
 
-  selectMenu.addEventListener("change", (event) => {
-    buildGraph(event.target.value, secondSelectMenu?.value);
-  });
-
-  if (secondSelectMenu) {
-    secondSelectMenu.addEventListener("change", (event) => {
-      buildGraph(selectMenu?.value, event.target.value);
-    });
-  }
   buildGraph(selectMenu?.value || keys[0]);
   function buildGraph(graphKey, secondKey) {
+    const allColors = colors[graphKey];
     const graphData = updateDataFn(data, graphKey, secondKey);
     const xScale = d3.scaleBand().range([0, width]).padding(0.3);
     const yScale = d3.scaleLinear().range([height, 0]);
