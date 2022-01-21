@@ -22,16 +22,15 @@ export function barChart(
   });
 
   selectMenu.addEventListener("change", (event) => {
-    buildGraph(event.target.value, secondSelectMenu.value);
+    buildGraph(event.target.value, secondSelectMenu?.value);
   });
 
   if (secondSelectMenu) {
     secondSelectMenu.addEventListener("change", (event) => {
-      buildGraph(selectMenu.value, event.target.value);
+      buildGraph(selectMenu?.value, event.target.value);
     });
   }
-
-  buildGraph(keys[0]);
+  buildGraph(selectMenu?.value || keys[0]);
   function buildGraph(graphKey, secondKey) {
     const graphData = updateDataFn(data, graphKey, secondKey);
     const xScale = d3.scaleBand().range([0, width]).padding(0.3);

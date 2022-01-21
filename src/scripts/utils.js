@@ -69,9 +69,8 @@ export const getSvg = ({ selector, keys, secondKeys, margin, title }) => {
     );
 
     if (!secondKeys) {
-      document.querySelector(`.${selector}-select-second`).remove();
-    }
-    if (!secondSelectMenu) {
+      document.querySelector(`.${selector}-select-second`)?.remove();
+    } else if (!secondSelectMenu) {
       const secondKeysMenu = `<div class="${selector}-select-second">
       <label>Value</label>
             <select name="${selector}-select-second" id="${selector}-select-second">
