@@ -6,7 +6,7 @@ const margin = { top: 10, bottom: 120, left: 40, right: 10 };
 const SVG_SELECTOR = "barchart-svg";
 
 export function barChart(data, keys, colors, updateDataFn, title, secondKeys) {
-  const { svg, selectMenu, width, height } = getSvg({
+  const { svg, selectMenu, secondSelectMenu, width, height } = getSvg({
     selector: SVG_SELECTOR,
     keys,
     secondKeys,
@@ -15,7 +15,7 @@ export function barChart(data, keys, colors, updateDataFn, title, secondKeys) {
     buildGraph,
   });
 
-  buildGraph(selectMenu?.value || keys[0]);
+  buildGraph(selectMenu?.value || keys[0], secondSelectMenu?.value);
   function buildGraph(graphKey, secondKey) {
     const allColors = colors[graphKey];
     const graphData = updateDataFn(data, graphKey, secondKey);
