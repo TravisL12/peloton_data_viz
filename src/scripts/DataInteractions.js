@@ -151,7 +151,7 @@ export class DataInteractions {
         });
     });
 
-    this.currentGraph = chartNames.count[0];
+    this.currentGraph = chartNames.sum[0];
     this.updateGraph();
   }
 }

@@ -53,9 +53,10 @@ export const getUniq = (data) => {
   return [...new Set(data)];
 };
 
-export const getSvg = ({ selector, keys, margin, title }) => {
+export const getSvg = ({ selector, keys, secondKeys, margin, title }) => {
   let svg;
   let selectMenu;
+  let secondSelectMenu;
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
 
@@ -63,26 +64,72 @@ export const getSvg = ({ selector, keys, margin, title }) => {
     document.querySelector(`.${selector} h3`).textContent = title;
     svg = d3.select(`.${selector} .main-group`);
     selectMenu = document.querySelector(`.${selector} #${selector}-select`);
+    secondSelectMenu = document.querySelector(
+      `.${selector} #${selector}-select-second`
+    );
+
+    if (!secondKeys) {
+      document.querySelector(`.${selector}-select-second`).remove();
+    }
+    if (!secondSelectMenu) {
+      const secondKeysMenu = `<div class="${selector}-select-second">
+      <label>Value</label>
+            <select name="${selector}-select-second" id="${selector}-select-second">
+            ${secondKeys
+              ?.map(
+                (key, i) =>
+                  `<option ${
+                    i === 0 ? "selected" : ""
+                  } value="${key}">${key}</option>`
+              )
+              .join("")}
+            </select>
+            </div>`;
+
+      selectMenu.insertAdjacentHTML("afterend", secondKeysMenu);
+    }
   } else {
     graphContainer.innerHTML = "";
     const innerContainer = document.createElement("div");
     innerContainer.className = selector;
+    const secondKeysMenu = secondKeys
+      ? `<div class="${selector}-select-second">
+            <label>Value</label>
+            <select name="${selector}-select-second" id="${selector}-select-second">
+            ${secondKeys
+              ?.map(
+                (key, i) =>
+                  `<option ${
+                    i === 0 ? "selected" : ""
+                  } value="${key}">${key}</option>`
+              )
+              .join("")}
+            </select>
+            </div>`
+      : ``;
+
     innerContainer.innerHTML = `
         <div>
           <h3>${title}</h3>
-          <select name="${selector}-select" id="${selector}-select">
-          ${keys
-            .map(
-              (key, i) =>
-                `<option ${
-                  i === 0 ? "selected" : ""
-                } value="${key}">${key}</option>`
-            )
-            .join("")}
-          </select>
+          <div>
+            <div>
+              <label>Category</label>
+              <select name="${selector}-select" id="${selector}-select">
+              ${keys
+                .map(
+                  (key, i) =>
+                    `<option ${
+                      i === 0 ? "selected" : ""
+                    } value="${key}">${key}</option>`
+                )
+                .join("")}
+              </select>
+            </div>
+            ${secondKeysMenu}
+          </div>
         </div>
       `;
-    selectMenu = innerContainer.querySelector(`#${selector}-select`);
+
     svg = d3
       .select(innerContainer)
       .append("svg")
@@ -104,5 +151,8 @@ export const getSvg = ({ selector, keys, margin, title }) => {
     graphContainer.appendChild(innerContainer);
   }
 
-  return { svg, selectMenu, width, height };
+  selectMenu = document.querySelector(`#${selector}-select`);
+  secondSelectMenu = document.querySelector(`#${selector}-select-second`);
+
+  return { svg, selectMenu, secondSelectMenu, width, height };
 };

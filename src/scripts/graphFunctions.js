@@ -32,12 +32,12 @@ const buildCountChart = (filteredData, currentGraph, colors) => {
 };
 
 const buildSumChart = (filteredData, currentGraph, colors) => {
-  const sumData = (dataParam, key) => {
+  const sumData = (dataParam, key, sumKey = "total_output") => {
     const attributeSet = parseAttributeSets(dataParam)[key];
 
     const data = attributeSet.map((setValue) => {
       const setData = dataParam.filter((d) => d[key] === setValue);
-      const sumData = filterSum(setData, "total_output");
+      const sumData = filterSum(setData, sumKey);
       return { name: setValue, count: sumData };
     });
 
@@ -46,8 +46,9 @@ const buildSumChart = (filteredData, currentGraph, colors) => {
   };
 
   const keys = ["instructor", "fitness_discipline", "length_minutes", "type"];
+  const secondKeys = ["total_output", "length_minutes"];
 
-  barChart(filteredData, keys, colors, sumData, currentGraph.title);
+  barChart(filteredData, keys, colors, sumData, currentGraph.title, secondKeys);
 };
 
 const instructorOutputChart = (filteredData, currentGraph, colors) => {
