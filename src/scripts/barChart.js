@@ -15,6 +15,20 @@ export function barChart(data, keys, colors, updateDataFn, title, secondKeys) {
     buildGraph,
   });
 
+  const menuListen = (event) => {
+    buildGraph(event.target.value, secondSelectMenu?.value);
+  };
+
+  const secondMenuListen = (event) => {
+    buildGraph(selectMenu?.value, event.target.value);
+  };
+
+  selectMenu.removeEventListener("change", menuListen);
+  selectMenu.addEventListener("change", menuListen);
+
+  secondSelectMenu?.removeEventListener("change", secondMenuListen);
+  secondSelectMenu?.addEventListener("change", secondMenuListen);
+
   buildGraph(selectMenu?.value || keys[0], secondSelectMenu?.value);
   function buildGraph(graphKey, secondKey) {
     const allColors = colors[graphKey];

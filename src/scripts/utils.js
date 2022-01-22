@@ -82,9 +82,6 @@ const generateSecondSelect = (selector, secondKeys, selectMenu, buildGraph) => {
   selectMenu.insertAdjacentHTML("afterend", secondKeysMenu);
 
   const secondSelectMenu = getSecondSelect(selector);
-  secondSelectMenu.addEventListener("change", (event) => {
-    buildGraph(selectMenu?.value, event.target.value);
-  });
 
   return secondSelectMenu;
 };
@@ -160,10 +157,6 @@ export const getSvg = ({
 
     selectMenu = document.querySelector(`#${selector}-select`);
     secondSelectMenu = document.querySelector(`#${selector}-select-second`);
-
-    selectMenu.addEventListener("change", (event) => {
-      buildGraph(event.target.value, secondSelectMenu?.value);
-    });
 
     if (secondKeys) {
       secondSelectMenu = generateSecondSelect(
