@@ -25,7 +25,7 @@ const Sidebar = ({ sets, colors, filterValues, setFilterValues }) => {
 
   const handleCheckboxChange = (event) => {
     const copyValues = JSON.parse(JSON.stringify(filterValues));
-    copyValues[event.target.value] = event.target.checked;
+    copyValues[event.target.name] = event.target.checked;
     setFilterValues(copyValues);
     // updateGraph();
   };
@@ -57,8 +57,8 @@ const Sidebar = ({ sets, colors, filterValues, setFilterValues }) => {
                         <input
                           onChange={handleCheckboxChange}
                           type="checkbox"
-                          value={set}
-                          defaultChecked={filterValues[set]}
+                          name={set}
+                          checked={filterValues[set]}
                           id={`option-${set}`}
                         />
                         <label htmlFor={`option-${set}`}>{set}</label>
