@@ -1,13 +1,16 @@
+import { useEffect } from "react";
 import { attributes } from "./utils";
 
-const Sidebar = ({ sets, colors }) => {
-  const filterTypes = Object.keys(sets);
-  const filterValues = Object.values(sets)
-    .flat()
-    .reduce((acc, set) => {
-      acc[set] = true;
-      return acc;
-    }, {});
+const Sidebar = ({ sets, colors, filterValues, setFilterValues }) => {
+  useEffect(() => {
+    const values = Object.values(sets)
+      .flat()
+      .reduce((acc, set) => {
+        acc[set] = true;
+        return acc;
+      }, {});
+    setFilterValues(values);
+  }, [sets]);
 
   const toggleAll = (filter, isChecked = false) => {
     sets[filter].forEach((attr) => {
@@ -20,18 +23,17 @@ const Sidebar = ({ sets, colors }) => {
     // updateGraph();
   };
 
-  // Check/Uncheck
   const handleCheckboxChange = (event) => {
-    filterValues[event.target.value] = event.target.checked;
+    const copyValues = JSON.parse(JSON.stringify(filterValues));
+    copyValues[event.target.value] = event.target.checked;
+    setFilterValues(copyValues);
     // updateGraph();
   };
 
-  // All On
   const handleToggleOn = (filter) => {
     toggleAll(filter, true);
   };
 
-  // All Off
   const handleToggleOff = (filter) => {
     toggleAll(filter);
   };
@@ -39,24 +41,24 @@ const Sidebar = ({ sets, colors }) => {
   return (
     <div className="sidebar">
       <div id="filters">
-        {filterTypes?.map((filter) => {
+        {Object.keys(sets)?.map((filter) => {
           return (
-            <div className="filter-option">
+            <div key={filter} className="filter-option">
               <h3>{attributes[filter].title}</h3>
-              <div>
+              <div style={{ display: "flex", gap: "5px" }}>
                 <button onClick={() => handleToggleOn(filter)}>All</button>
                 <button onClick={() => handleToggleOff(filter)}>None</button>
               </div>
               <form id={`${filter}-form`}>
-                <ul class="filters-list">
+                <ul className="filters-list">
                   {sets?.[filter]?.map((set) => {
                     return (
-                      <li style={{ background: colors[filter](set) }}>
+                      <li key={set} style={{ background: colors[filter](set) }}>
                         <input
                           onChange={handleCheckboxChange}
                           type="checkbox"
                           value={set}
-                          checked
+                          defaultChecked={filterValues[set]}
                           id={`option-${set}`}
                         />
                         <label htmlFor={`option-${set}`}>{set}</label>

@@ -36,7 +36,7 @@ const Header = ({ setData }) => {
           accept=".csv"
           onChange={handleOnChange}
         />
-        <label for="data-upload">Upload Peloton data</label>
+        <label htmlFor="data-upload">Upload Peloton data</label>
         <div id="file-name"></div>
       </div>
     </div>
