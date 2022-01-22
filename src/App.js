@@ -8,6 +8,7 @@ import { buildColors } from "./utils";
 
 const App = () => {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState(null);
   const [sets, setSets] = useState({});
   const [colors, setColors] = useState(null);
   const [filterValues, setFilterValues] = useState(null);
@@ -22,10 +23,10 @@ const App = () => {
   }, [data]);
 
   useEffect(() => {
-    const filteredData = data.filter((d) => {
+    const filtered = data.filter((d) => {
       return Object.keys(sets).every((type) => filterValues[d[type]]);
     });
-    console.log("filter", filteredData);
+    setFilteredData(filtered);
   }, [filterValues, data, sets]);
 
   return (
@@ -37,7 +38,7 @@ const App = () => {
         filterValues={filterValues}
         setFilterValues={setFilterValues}
       />
-      <GraphBody />
+      <GraphBody colors={colors} data={filteredData} />
     </div>
   );
 };

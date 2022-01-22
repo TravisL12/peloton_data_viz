@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import { GROUP_SELECTOR, mainHeight, mainWidth } from "./constants";
 
 export const CADENCE_AVG = "cadence_avg";
 export const HEARTRATE_AVG = "heartrate_avg";
