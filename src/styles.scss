@@ -1,0 +1,131 @@
+:root {
+  --border-size: 4px;
+  --peloton-red: rgb(255, 51, 71);
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif; //pelotare sans is actual font used
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+ul,
+li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+@mixin flex($justify: flex-start, $align: flex-start) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+#graph {
+  @include flex;
+  flex-direction: column;
+}
+
+button {
+  padding: 0;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: gray;
+  }
+}
+
+#data-upload {
+  display: none;
+
+  & + label {
+    font-size: 16px;
+    color: white;
+    padding: 4px;
+    display: inline-block;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+      color: #999;
+    }
+  }
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: 50px 1fr;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.header {
+  grid-row: 1;
+  grid-column: 1 / 3;
+  background: var(--peloton-red);
+  color: white;
+  padding: 0 10px;
+  font-size: 24px;
+  @include flex(space-between, center);
+}
+
+.sidebar {
+  grid-row: 2;
+  grid-column: 1;
+  padding: 10px;
+  border-right: var(--border-size) solid var(--peloton-red);
+  overflow: auto;
+
+  .filter-option {
+    margin-bottom: 10px;
+    background: lightgray;
+    padding: 4px;
+  }
+
+  .filters-list {
+    max-height: 200px;
+    width: 100%;
+    overflow: auto;
+  }
+}
+
+.main {
+  grid-row: 2;
+  grid-column: 2 / 3;
+  padding: 10px;
+  overflow: auto;
+}
+
+#graph-links {
+  display: flex;
+  border-right: none;
+  position: sticky;
+  top: 0;
+
+  li {
+    padding: 5px;
+    border: 1px solid;
+    cursor: pointer;
+    background: white;
+
+    & + li {
+      border-left: none;
+    }
+
+    &.selected,
+    &:hover {
+      background: pink;
+    }
+  }
+}

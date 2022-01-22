@@ -1,7 +1,7 @@
 const GraphBody = () => {
   return (
-    <div className="GraphBody">
-      <div>body</div>
+    <div className="main">
+      <div id="graph"></div>
     </div>
   );
 };

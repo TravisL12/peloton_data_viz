@@ -11,26 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-:root {
-  --border-size: 4px;
-  --peloton-red: rgb(255, 51, 71);
-}
-
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-h1,
-h2,
-h3 {
-  margin: 0;
-}
-
-ul,
-li {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
