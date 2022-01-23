@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import SelectMenu from "./SelectMenu";
 
 const GROUP_SELECTOR = "g-collection";
@@ -9,68 +9,84 @@ const margin = { top: 10, bottom: 120, left: 40, right: 10 };
 
 const GraphBody = ({ data, colors, currentGraph }) => {
   const svgRef = useRef(null);
+  const [select, setSelect] = useState({
+    graphKey: currentGraph?.keys?.[0],
+    secondKey: currentGraph?.secondKeys?.[0],
+  });
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
 
+  useEffect(() => {
+    setSelect({
+      graphKey: currentGraph?.keys?.[0],
+      secondKey: currentGraph?.secondKeys?.[0],
+    });
+  }, [currentGraph]);
+
+  const handleSelectChange = (value, key) => {
+    setSelect({ ...select, [key]: value });
+  };
+
   // graphKey/secondKey come from select menus
-  const drawGraph = useCallback(
-    (graphKey = "instructor", secondKey) => {
-      const svg = d3.select(svgRef.current);
+  const drawGraph = useCallback(() => {
+    const svg = d3.select(svgRef.current);
 
-      const allColors = colors[graphKey];
-      const graphData = currentGraph.chartFn(data, graphKey, secondKey);
-      const xScale = d3.scaleBand().range([0, width]).padding(0.3);
-      const yScale = d3.scaleLinear().range([height, 0]);
+    const allColors = colors[select.graphKey];
+    const graphData = currentGraph.chartFn(
+      data,
+      select.graphKey,
+      select.secondKey
+    );
+    const xScale = d3.scaleBand().range([0, width]).padding(0.3);
+    const yScale = d3.scaleLinear().range([height, 0]);
 
-      xScale.domain(graphData.map(({ name }) => name));
-      d3.select(`.x-axis`)
-        .call(d3.axisBottom(xScale))
-        .selectAll("text")
-        .text((d) => {
-          return d;
-        })
-        .style("text-anchor", "end")
-        .attr("transform", "rotate(-70) translate(-10,-10)");
+    xScale.domain(graphData.map(({ name }) => name));
+    d3.select(`.x-axis`)
+      .call(d3.axisBottom(xScale))
+      .selectAll("text")
+      .text((d) => {
+        return d;
+      })
+      .style("text-anchor", "end")
+      .attr("transform", "rotate(-70) translate(-10,-10)");
 
-      yScale.domain([0, d3.max(graphData.map(({ count }) => count)) * 1.1]);
-      d3.select(`.y-axis`).transition().call(d3.axisLeft(yScale));
+    yScale.domain([0, d3.max(graphData.map(({ count }) => count)) * 1.1]);
+    d3.select(`.y-axis`).transition().call(d3.axisLeft(yScale));
 
-      svg
-        .selectAll(`.${GROUP_SELECTOR}`)
-        .selectAll(".bar")
-        .data(graphData, (d) => d.name)
-        .join(
-          (enter) => {
-            const g = enter.append("g").attr("class", "bar");
+    svg
+      .selectAll(`.${GROUP_SELECTOR}`)
+      .selectAll(".bar")
+      .data(graphData, (d) => d.name)
+      .join(
+        (enter) => {
+          const g = enter.append("g").attr("class", "bar");
 
-            g.append("rect")
-              .attr("x", (d) => xScale(d.name))
-              .attr("y", (d) => yScale(d.count))
-              .attr("height", (d) => height - yScale(d.count))
-              .attr("width", xScale.bandwidth())
-              .attr("stroke-width", 1)
-              .attr("stroke", "black")
-              .attr("fill", (d) => allColors(d.name));
+          g.append("rect")
+            .attr("x", (d) => xScale(d.name))
+            .attr("y", (d) => yScale(d.count))
+            .attr("height", (d) => height - yScale(d.count))
+            .attr("width", xScale.bandwidth())
+            .attr("stroke-width", 1)
+            .attr("stroke", "black")
+            .attr("fill", (d) => allColors(d.name));
 
-            return g;
-          },
-          (update) => {
-            update
-              .select("rect")
-              .transition()
-              .attr("x", (d) => xScale(d.name))
-              .attr("y", (d) => yScale(d.count))
-              .attr("height", (d) => height - yScale(d.count))
-              .attr("width", xScale.bandwidth())
-              .attr("fill", (d) => allColors(d.name));
-          },
-          (exit) => {
-            exit.transition().duration(250).style("opacity", 0).remove();
-          }
-        );
-    },
-    [colors, data, height, width, currentGraph]
-  );
+          return g;
+        },
+        (update) => {
+          update
+            .select("rect")
+            .transition()
+            .attr("x", (d) => xScale(d.name))
+            .attr("y", (d) => yScale(d.count))
+            .attr("height", (d) => height - yScale(d.count))
+            .attr("width", xScale.bandwidth())
+            .attr("fill", (d) => allColors(d.name));
+        },
+        (exit) => {
+          exit.transition().duration(250).style("opacity", 0).remove();
+        }
+      );
+  }, [colors, data, height, width, currentGraph, select]);
 
   useEffect(() => {
     const svg = d3
@@ -96,7 +112,7 @@ const GraphBody = ({ data, colors, currentGraph }) => {
     if (data?.length) {
       drawGraph();
     }
-  }, [data, colors, drawGraph]);
+  }, [data, colors, drawGraph, select]);
 
   return (
     <div id="graph">
@@ -105,15 +121,17 @@ const GraphBody = ({ data, colors, currentGraph }) => {
           <h3>{currentGraph?.title}</h3>
           <div>
             <SelectMenu
-              tagAttr={"first"}
+              selectKey={"graphKey"}
               label={"Category"}
               keys={currentGraph?.keys}
+              handleSelectChange={handleSelectChange}
             />
             {currentGraph?.secondKeys && (
               <SelectMenu
-                tagAttr={"second"}
+                selectKey={"secondKey"}
                 label={"Value"}
                 keys={currentGraph?.secondKeys}
+                handleSelectChange={handleSelectChange}
               />
             )}
           </div>

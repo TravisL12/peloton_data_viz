@@ -1,10 +1,15 @@
-const SelectMenu = ({ tagAttr, label, keys }) => {
-  // SETUP ONCHANGE EVENTS!!!!!!!!!!!!!!!!!!
+const SelectMenu = ({ selectKey, label, keys, handleSelectChange }) => {
   return (
-    <div className={tagAttr}>
+    <div className={selectKey}>
       <label>{label}</label>
-      <select name={tagAttr} id={tagAttr}>
-        {keys?.map((key, i) => (
+      <select
+        name={selectKey}
+        id={selectKey}
+        onChange={(event) => {
+          handleSelectChange(event.target.value, selectKey);
+        }}
+      >
+        {keys?.map((key) => (
           <option key={key} value={key}>
             {key}
           </option>
