@@ -10,24 +10,20 @@ const Sidebar = ({ sets, colors, filterValues, setFilterValues }) => {
         return acc;
       }, {});
     setFilterValues(values);
-  }, [sets]);
-
-  const toggleAll = (filter, isChecked = false) => {
-    sets[filter].forEach((attr) => {
-      filterValues[attr] = isChecked;
-      const optionEl = document.getElementById(`option-${attr}`);
-      if (optionEl) {
-        optionEl.checked = isChecked;
-      }
-    });
-    // updateGraph();
-  };
+  }, [sets, setFilterValues]);
 
   const handleCheckboxChange = (event) => {
     const copyValues = JSON.parse(JSON.stringify(filterValues));
     copyValues[event.target.name] = event.target.checked;
     setFilterValues(copyValues);
-    // updateGraph();
+  };
+
+  const toggleAll = (filter, isChecked = false) => {
+    const copyValues = JSON.parse(JSON.stringify(filterValues));
+    sets[filter].forEach((attr) => {
+      copyValues[attr] = isChecked;
+    });
+    setFilterValues(copyValues);
   };
 
   const handleToggleOn = (filter) => {

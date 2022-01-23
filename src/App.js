@@ -5,27 +5,31 @@ import Sidebar from "./Sidebar";
 import GraphBody from "./GraphBody";
 import { parseAttributeSets } from "./parseUtils";
 import { buildColors } from "./utils";
+import { graphLinks, lineKeys } from "./graphLinks";
 
 const App = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
+  const [filteredData, setFilteredData] = useState(null);
   const [sets, setSets] = useState({});
   const [colors, setColors] = useState(null);
   const [filterValues, setFilterValues] = useState(null);
+  const [currentGraph, setCurrentGraph] = useState(null);
 
   useEffect(() => {
-    if (data.length) {
+    if (data?.length) {
       const parseSets = parseAttributeSets(data);
-      const colors = buildColors(parseSets);
+      const colors = buildColors({ ...parseSets, lines: lineKeys });
       setSets(parseSets);
       setColors(colors);
+      setCurrentGraph(graphLinks[0]);
     }
   }, [data]);
 
   useEffect(() => {
-    const filteredData = data.filter((d) => {
+    const filtered = data?.filter((d) => {
       return Object.keys(sets).every((type) => filterValues[d[type]]);
     });
-    console.log("filter", filteredData);
+    setFilteredData(filtered);
   }, [filterValues, data, sets]);
 
   return (
@@ -37,7 +41,30 @@ const App = () => {
         filterValues={filterValues}
         setFilterValues={setFilterValues}
       />
-      <GraphBody />
+      <div className="main">
+        {!!data?.length && (
+          <>
+            <ul id="graph-links">
+              {graphLinks.map((link) => {
+                return (
+                  <li
+                    key={link.title}
+                    className="options-item"
+                    onClick={() => setCurrentGraph(link)}
+                  >
+                    {link.title}
+                  </li>
+                );
+              })}
+            </ul>
+            <GraphBody
+              currentGraph={currentGraph}
+              colors={colors}
+              data={filteredData}
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 };
