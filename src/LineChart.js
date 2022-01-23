@@ -7,7 +7,7 @@ import {
   barChartMargin,
 } from "./constants";
 
-const LineChart = ({ data, colors, currentGraph, select }) => {
+const LineChart = ({ data, colors, currentGraph, select, keys }) => {
   const svgRef = useRef(null);
 
   const width = mainWidth - barChartMargin.left - barChartMargin.right;
@@ -17,7 +17,7 @@ const LineChart = ({ data, colors, currentGraph, select }) => {
     const svg = d3.select(svgRef.current);
 
     const allColors = colors[select.graphKey];
-    const graphData = currentGraph.dataTransform(data, currentGraph.keys);
+    const graphData = currentGraph.dataTransform(data, keys);
     const xScale = d3.scaleTime().range([0, width]);
     const yScale = d3.scaleLinear().rangeRound([height, 0]);
 
@@ -103,7 +103,7 @@ const LineChart = ({ data, colors, currentGraph, select }) => {
             .attr("cy", (d) => yScale(d.y));
         }
       );
-  }, [colors, data, height, width, currentGraph, select]);
+  }, [colors, data, height, width, currentGraph, select, keys]);
 
   useEffect(() => {
     const svg = d3

@@ -8,6 +8,7 @@ const GraphBody = ({ data, colors, currentGraph }) => {
     graphKey: currentGraph?.keys?.[0],
     secondKey: currentGraph?.secondKeys?.[0],
   });
+  const [checkboxes, setCheckboxes] = useState(null);
 
   useEffect(() => {
     if (!select.graphKey) {
@@ -16,10 +17,23 @@ const GraphBody = ({ data, colors, currentGraph }) => {
         secondKey: currentGraph?.secondKeys?.[0],
       });
     }
-  }, [currentGraph]);
 
+    if (currentGraph?.type === "line") {
+      const checkboxKeys = currentGraph?.keys.reduce((acc, key) => {
+        acc[key] = true;
+        return acc;
+      }, {});
+      setCheckboxes(checkboxKeys);
+    }
+  }, [currentGraph]);
   const handleSelectChange = (value, key) => {
     setSelect({ ...select, [key]: value });
+  };
+
+  const handleCheckboxChange = (event) => {
+    const copyValues = JSON.parse(JSON.stringify(checkboxes));
+    copyValues[event.target.name] = event.target.checked;
+    setCheckboxes(copyValues);
   };
 
   const buildCheckboxes = () => {
@@ -27,10 +41,10 @@ const GraphBody = ({ data, colors, currentGraph }) => {
       return (
         <div>
           <input
-            // onChange={handleCheckboxChange}
+            onChange={handleCheckboxChange}
             type="checkbox"
             name={key}
-            // checked={filterValues[key]}
+            checked={checkboxes?.[key]}
             id={`compare-${key}`}
           />
           <label htmlFor={`compare-${key}`}>{key}</label>
@@ -38,6 +52,10 @@ const GraphBody = ({ data, colors, currentGraph }) => {
       );
     });
   };
+
+  const lineKeys = checkboxes
+    ? Object.keys(checkboxes).filter((key) => checkboxes[key])
+    : [];
 
   return (
     <div id="graph">
@@ -76,6 +94,7 @@ const GraphBody = ({ data, colors, currentGraph }) => {
           data={data}
           colors={colors}
           currentGraph={currentGraph}
+          keys={lineKeys}
           select={select}
         />
       )}
