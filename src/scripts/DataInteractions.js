@@ -31,8 +31,15 @@ const schemes = {
   [TOTAL_OUTPUT]: d3.schemePastel1,
 };
 
-const getColor = (key, domainExtent) => {
+export const getColor = (key, domainExtent) => {
   return d3.scaleOrdinal(schemes[key]).domain(domainExtent);
+};
+
+const buildColors = (sets) => {
+  return Object.keys(sets).reduce((acc, setKey) => {
+    acc[setKey] = getColor(setKey, sets[setKey]);
+    return acc;
+  }, {});
 };
 
 const graphLinks = (interactions) => {
@@ -64,6 +71,7 @@ export class DataInteractions {
     this.originalData = originalData;
     this.filtersEl = document.getElementById("filters");
     this.sets = parseAttributeSets(originalData);
+    this.colors = buildColors(this.sets);
     this.highlights = parseHighlights(originalData, this.sets);
     this.filterTypes = Object.keys(this.sets);
     this.filterValues = Object.values(this.sets)
@@ -81,9 +89,7 @@ export class DataInteractions {
     const filteredData = this.originalData.filter((d) => {
       return this.filterTypes.every((type) => this.filterValues[d[type]]);
     });
-    const { key, keys } = this.currentGraph;
-    const colors = getColor(key, keys || this.sets[key]);
-    this.currentGraph.chartFn(filteredData, this.currentGraph, colors);
+    this.currentGraph.chartFn(filteredData, this.currentGraph, this.colors);
   }
 
   toggleAll(filter, isChecked = false) {
@@ -104,7 +110,7 @@ export class DataInteractions {
       const options = this.sets[filter]
         .sort((a, b) => b - a)
         .map((option) => {
-          const colors = getColor(filter, this.sets[filter]);
+          const colors = this.colors[filter];
           return `
       <li style="background: ${colors(option)};">
         <input type="checkbox" value="${option}" checked id="option-${option}" />
@@ -151,7 +157,7 @@ export class DataInteractions {
         });
     });
 
-    this.currentGraph = chartNames.count[0];
+    this.currentGraph = chartNames.sum[0];
     this.updateGraph();
   }
 }

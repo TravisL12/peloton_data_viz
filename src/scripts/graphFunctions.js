@@ -18,30 +18,37 @@ import {
 } from "./utils";
 
 const buildCountChart = (filteredData, currentGraph, colors) => {
-  const { key, title } = currentGraph;
-  const countData = parseItemCount(filteredData, key);
-  const data = Object.entries(countData).map(([name, count]) => ({
-    name,
-    count,
-  }));
-  data.sort((a, b) => d3.descending(a.count, b.count));
-  barChart(data, title, colors);
+  const countData = (dataParam, key) => {
+    const countData = parseItemCount(dataParam, key);
+    const data = Object.entries(countData).map(([name, count]) => ({
+      name,
+      count,
+    }));
+    data.sort((a, b) => d3.descending(a.count, b.count));
+    return data;
+  };
+  const keys = ["instructor", "fitness_discipline", "length_minutes", "type"];
+  barChart(filteredData, keys, colors, countData, currentGraph.title);
 };
 
 const buildSumChart = (filteredData, currentGraph, colors) => {
-  const { key, title } = currentGraph;
-  const attributeSet = parseAttributeSets(filteredData)[key];
+  const sumData = (dataParam, key, sumKey = "total_output") => {
+    const attributeSet = parseAttributeSets(dataParam)[key];
 
-  const data = attributeSet.map((instructor) => {
-    const instructorData = filteredData.filter(
-      (d) => d.instructor === instructor
-    );
-    const sumData = filterSum(instructorData, "total_output");
-    return { name: instructor, count: sumData };
-  });
+    const data = attributeSet.map((setValue) => {
+      const setData = dataParam.filter((d) => d[key] === setValue);
+      const sumData = filterSum(setData, sumKey);
+      return { name: setValue, count: sumData };
+    });
 
-  data.sort((a, b) => d3.descending(a.count, b.count));
-  barChart(data, title, colors);
+    data.sort((a, b) => d3.descending(a.count, b.count));
+    return data;
+  };
+
+  const keys = ["instructor", "fitness_discipline", "length_minutes", "type"];
+  const secondKeys = ["total_output", "length_minutes"];
+
+  barChart(filteredData, keys, colors, sumData, currentGraph.title, secondKeys);
 };
 
 const instructorOutputChart = (filteredData, currentGraph, colors) => {
@@ -97,23 +104,16 @@ const buildLineChart = (filteredData, currentGraph, colors) => {
 const countCharts = [
   {
     ...attributes.instructor,
-    title: "Instructors (count)",
+    title: "Count",
     chartFn: buildCountChart,
   },
+];
+
+const sumCharts = [
   {
-    ...attributes.fitness_discipline,
-    title: "Fitness Discipline (count)",
-    chartFn: buildCountChart,
-  },
-  {
-    ...attributes.length_minutes,
-    title: "Length Minutes (count)",
-    chartFn: buildCountChart,
-  },
-  {
-    ...attributes.type,
-    title: "Type (count)",
-    chartFn: buildCountChart,
+    ...attributes.instructor,
+    title: "Sum",
+    chartFn: buildSumChart,
   },
 ];
 
@@ -132,14 +132,6 @@ const outputCharts = [
     ...attributes.length_minutes,
     title: "Length (output)",
     chartFn: lengthOutputChart,
-  },
-];
-
-const sumCharts = [
-  {
-    ...attributes.instructor,
-    title: "Instructors (sum)",
-    chartFn: buildSumChart,
   },
 ];
 
@@ -171,8 +163,8 @@ const lineCharts = [
 
 export const chartNames = {
   count: countCharts,
+  sum: sumCharts,
   output: outputCharts,
   speed: speedCharts,
   line: lineCharts,
-  sum: sumCharts,
 };
