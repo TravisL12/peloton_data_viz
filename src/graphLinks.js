@@ -11,7 +11,9 @@ import {
   SPEED_AVG,
   DISTANCE_MILES,
   CALORIES,
-} from "./utils";
+  WATTS_AVG,
+  PACE_AVG,
+} from "./constants";
 
 const lineOutputData = (data, key, compareKey) => {
   const attributeSet = parseAttributeSets(data)[key];
@@ -66,8 +68,23 @@ const sumData = (data, key, sumKey = "total_output") => {
 };
 
 const keys = [INSTRUCTOR, FITNESS_DISCIPLINE, LENGTH_MINUTES, TYPE];
-const secondKeys = [TOTAL_OUTPUT, LENGTH_MINUTES];
-
+const secondKeys = [
+  TOTAL_OUTPUT,
+  LENGTH_MINUTES,
+  CALORIES,
+  WATTS_AVG,
+  DISTANCE_MILES,
+];
+export const lineKeys = [
+  CADENCE_AVG,
+  CALORIES,
+  DISTANCE_MILES,
+  PACE_AVG,
+  RESISTANCE_AVG,
+  SPEED_AVG,
+  TOTAL_OUTPUT,
+  WATTS_AVG,
+];
 export const graphLinks = [
   {
     title: "Count",
@@ -85,14 +102,7 @@ export const graphLinks = [
   //line
   {
     title: "Compare",
-    keys: [
-      CADENCE_AVG,
-      RESISTANCE_AVG,
-      SPEED_AVG,
-      CALORIES,
-      DISTANCE_MILES,
-      TOTAL_OUTPUT,
-    ],
+    keys: lineKeys,
     dataTransform: lineData,
     type: "line",
   },

@@ -1,3 +1,4 @@
+import { RESISTANCE_AVG } from "./constants";
 import { keys } from "./utils";
 
 const Header = ({ setData }) => {
@@ -15,8 +16,11 @@ const Header = ({ setData }) => {
         const splitLine = line.split(",");
         return header.reduce((acc, h, idx) => {
           if (!h || !keys[h]) return acc;
-
-          acc[keys[h]] = splitLine[idx];
+          const value =
+            keys[h] === RESISTANCE_AVG
+              ? splitLine[idx]?.slice(0, -1)
+              : splitLine[idx];
+          acc[keys[h]] = isNaN(value) ? value : +value;
           return acc;
         }, {});
       });

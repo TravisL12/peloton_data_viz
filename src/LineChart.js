@@ -1,22 +1,17 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useCallback } from "react";
-import {
-  mainWidth,
-  mainHeight,
-  GROUP_SELECTOR,
-  barChartMargin,
-} from "./constants";
+import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "./constants";
 
-const LineChart = ({ data, colors, currentGraph, select, keys }) => {
+const LineChart = ({ data, colors, currentGraph, keys }) => {
   const svgRef = useRef(null);
 
-  const width = mainWidth - barChartMargin.left - barChartMargin.right;
-  const height = mainHeight - barChartMargin.top - barChartMargin.bottom;
+  const width = mainWidth - margin.left - margin.right;
+  const height = mainHeight - margin.top - margin.bottom;
 
   const drawGraph = useCallback(() => {
     const svg = d3.select(svgRef.current);
 
-    const allColors = colors[select.graphKey];
+    const allColors = colors.lines;
     const graphData = currentGraph.dataTransform(data, keys);
     const xScale = d3.scaleTime().range([0, width]);
     const yScale = d3.scaleLinear().rangeRound([height, 0]);
@@ -103,7 +98,7 @@ const LineChart = ({ data, colors, currentGraph, select, keys }) => {
             .attr("cy", (d) => yScale(d.y));
         }
       );
-  }, [colors, data, height, width, currentGraph, select, keys]);
+  }, [colors, data, height, width, currentGraph, keys]);
 
   useEffect(() => {
     const svg = d3
@@ -112,10 +107,7 @@ const LineChart = ({ data, colors, currentGraph, select, keys }) => {
       .attr("height", mainHeight)
       .append("g")
       .attr("class", "main-group")
-      .attr(
-        "transform",
-        `translate(${barChartMargin.left}, ${barChartMargin.top})`
-      );
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     svg.append("g").attr("class", GROUP_SELECTOR);
 
@@ -129,10 +121,10 @@ const LineChart = ({ data, colors, currentGraph, select, keys }) => {
   }, []);
 
   useEffect(() => {
-    if (data?.length) {
+    if (data) {
       drawGraph();
     }
-  }, [data, colors, drawGraph, select]);
+  }, [data, colors, drawGraph]);
 
   return <svg ref={svgRef} />;
 };

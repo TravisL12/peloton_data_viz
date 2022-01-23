@@ -1,23 +1,24 @@
 import * as d3 from "d3";
-
-export const CADENCE_AVG = "cadence_avg";
-export const HEARTRATE_AVG = "heartrate_avg";
-export const INCLINE_AVG = "incline_avg";
-export const PACE_AVG = "pace_avg";
-export const RESISTANCE_AVG = "resistance_avg";
-export const SPEED_AVG = "speed_avg";
-export const WATTS_AVG = "watts_avg";
-export const CALORIES = "calories";
-export const CLASS_DATE = "class_date";
-export const DISTANCE_MILES = "distance_miles";
-export const FITNESS_DISCIPLINE = "fitness_discipline";
-export const INSTRUCTOR = "instructor";
-export const LENGTH_MINUTES = "length_minutes";
-export const LIVE_ONDEMAND = "live_ondemand";
-export const TITLE = "title";
-export const TOTAL_OUTPUT = "total_output";
-export const TYPE = "type";
-export const WORKOUT_DATE = "workout_date";
+import {
+  CADENCE_AVG,
+  HEARTRATE_AVG,
+  INCLINE_AVG,
+  PACE_AVG,
+  RESISTANCE_AVG,
+  SPEED_AVG,
+  WATTS_AVG,
+  CALORIES,
+  CLASS_DATE,
+  DISTANCE_MILES,
+  FITNESS_DISCIPLINE,
+  INSTRUCTOR,
+  LENGTH_MINUTES,
+  LIVE_ONDEMAND,
+  TITLE,
+  TOTAL_OUTPUT,
+  TYPE,
+  WORKOUT_DATE,
+} from "./constants";
 
 export const keys = {
   "Avg. Cadence (RPM)": CADENCE_AVG,
@@ -42,15 +43,16 @@ export const keys = {
 
 const schemes = {
   [INSTRUCTOR]: d3.schemeCategory10,
-  [FITNESS_DISCIPLINE]: d3.schemeDark2,
-  [LENGTH_MINUTES]: d3.schemePastel1,
-  [TYPE]: d3.schemePastel2,
-  [SPEED_AVG]: d3.schemePastel1,
+  [FITNESS_DISCIPLINE]: d3.schemeTableau10,
+  [LENGTH_MINUTES]: d3.schemeDark2,
+  [TYPE]: d3.schemeSet1,
+  [SPEED_AVG]: d3.schemeSet1,
   [DISTANCE_MILES]: d3.schemePastel1,
   [CALORIES]: d3.schemePastel1,
   [CADENCE_AVG]: d3.schemePastel1,
   [RESISTANCE_AVG]: d3.schemePastel1,
   [TOTAL_OUTPUT]: d3.schemePastel1,
+  lines: d3.schemeSet2,
 };
 
 export const getColor = (key, domainExtent) => {
@@ -73,122 +75,3 @@ export const attributes = Object.keys(keys).reduce((acc, title) => {
 export const getUniq = (data) => {
   return [...new Set(data)];
 };
-
-// const buildSelectMenu = (tagAttr, keys, label) => {
-//   return `<div class="${tagAttr}">
-//             <label>${label}</label>
-//             <select name="${tagAttr}" id="${tagAttr}">
-//             ${keys
-//               ?.map(
-//                 (key, i) =>
-//                   `<option ${
-//                     i === 0 ? "selected" : ""
-//                   } value="${key}">${key}</option>`
-//               )
-//               .join("")}
-//             </select>
-//           </div>`;
-// };
-
-// const getSecondSelect = (selector) => {
-//   return document.querySelector(`#${selector}-select-second`);
-// };
-
-// const generateSecondSelect = (selector, secondKeys, selectMenu, buildGraph) => {
-//   const secondKeysMenu = buildSelectMenu(
-//     `${selector}-select-second`,
-//     secondKeys,
-//     "Value"
-//   );
-
-//   selectMenu.insertAdjacentHTML("afterend", secondKeysMenu);
-
-//   const secondSelectMenu = getSecondSelect(selector);
-
-//   return secondSelectMenu;
-// };
-
-// export const getSvg = ({
-//   selector,
-//   keys,
-//   secondKeys,
-//   margin,
-//   title,
-//   buildGraph,
-// }) => {
-//   let svg;
-//   let selectMenu;
-//   let secondSelectMenu;
-//   const width = mainWidth - margin.left - margin.right;
-//   const height = mainHeight - margin.top - margin.bottom;
-
-//   if (document.querySelector(`.${selector}`)) {
-//     document.querySelector(`.${selector} h3`).textContent = title;
-//     svg = d3.select(`.${selector} .main-group`);
-
-//     selectMenu = document.querySelector(`.${selector} #${selector}-select`);
-//     secondSelectMenu = getSecondSelect(selector);
-
-//     if (!secondKeys) {
-//       document.querySelector(`.${selector}-select-second`)?.remove();
-//     } else if (!secondSelectMenu) {
-//       secondSelectMenu = generateSecondSelect(
-//         selector,
-//         secondKeys,
-//         selectMenu,
-//         buildGraph
-//       );
-//     }
-//   } else {
-//     graphContainer.innerHTML = "";
-//     const innerContainer = document.createElement("div");
-//     innerContainer.className = selector;
-
-//     innerContainer.innerHTML = `
-//         <div>
-//           <h3>${title}</h3>
-//           <div>
-//             <div>${buildSelectMenu(
-//               `${selector}-select`,
-//               keys,
-//               "Category"
-//             )}</div>
-//           </div>
-//         </div>
-//       `;
-
-//     svg = d3
-//       .select(innerContainer)
-//       .append("svg")
-//       .attr("width", mainWidth)
-//       .attr("height", mainHeight)
-//       .append("g")
-//       .attr("class", "main-group")
-//       .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-//     svg.append("g").attr("class", GROUP_SELECTOR);
-
-//     svg
-//       .append("g")
-//       .attr("class", "x-axis")
-//       .attr("transform", `translate(0, ${height})`);
-
-//     // create y-axis
-//     svg.append("g").attr("class", "y-axis");
-//     graphContainer.appendChild(innerContainer);
-
-//     selectMenu = document.querySelector(`#${selector}-select`);
-//     secondSelectMenu = document.querySelector(`#${selector}-select-second`);
-
-//     if (secondKeys) {
-//       secondSelectMenu = generateSecondSelect(
-//         selector,
-//         secondKeys,
-//         selectMenu,
-//         buildGraph
-//       );
-//     }
-//   }
-
-//   return { svg, selectMenu, secondSelectMenu, width, height };
-// };

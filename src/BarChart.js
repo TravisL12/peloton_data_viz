@@ -1,17 +1,12 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useCallback } from "react";
-import {
-  mainWidth,
-  mainHeight,
-  GROUP_SELECTOR,
-  barChartMargin,
-} from "./constants";
+import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "./constants";
 
 const BarChart = ({ data, colors, currentGraph, select }) => {
   const svgRef = useRef(null);
 
-  const width = mainWidth - barChartMargin.left - barChartMargin.right;
-  const height = mainHeight - barChartMargin.top - barChartMargin.bottom;
+  const width = mainWidth - margin.left - margin.right;
+  const height = mainHeight - margin.top - margin.bottom;
 
   const drawGraph = useCallback(() => {
     const svg = d3.select(svgRef.current);
@@ -80,10 +75,7 @@ const BarChart = ({ data, colors, currentGraph, select }) => {
       .attr("height", mainHeight)
       .append("g")
       .attr("class", "main-group")
-      .attr(
-        "transform",
-        `translate(${barChartMargin.left}, ${barChartMargin.top})`
-      );
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     svg.append("g").attr("class", GROUP_SELECTOR);
 

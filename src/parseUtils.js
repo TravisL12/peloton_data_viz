@@ -1,11 +1,11 @@
 import * as d3 from "d3";
+import { getUniq } from "./utils";
 import {
-  getUniq,
   INSTRUCTOR,
   FITNESS_DISCIPLINE,
   LENGTH_MINUTES,
   TYPE,
-} from "./utils";
+} from "./constants";
 
 export const filterSum = (filteredData, sumKey) =>
   filteredData.reduce((acc, d) => {

@@ -39,7 +39,7 @@ const GraphBody = ({ data, colors, currentGraph }) => {
   const buildCheckboxes = () => {
     return currentGraph?.keys.map((key) => {
       return (
-        <div>
+        <div key={key} style={{ background: colors.lines(key) }}>
           <input
             onChange={handleCheckboxChange}
             type="checkbox"
@@ -95,7 +95,6 @@ const GraphBody = ({ data, colors, currentGraph }) => {
           colors={colors}
           currentGraph={currentGraph}
           keys={lineKeys}
-          select={select}
         />
       )}
     </div>

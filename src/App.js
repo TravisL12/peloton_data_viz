@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 import GraphBody from "./GraphBody";
 import { parseAttributeSets } from "./parseUtils";
 import { buildColors } from "./utils";
-import { graphLinks } from "./graphLinks";
+import { graphLinks, lineKeys } from "./graphLinks";
 
 const App = () => {
   const [data, setData] = useState(null);
@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     if (data?.length) {
       const parseSets = parseAttributeSets(data);
-      const colors = buildColors(parseSets);
+      const colors = buildColors({ ...parseSets, lines: lineKeys });
       setSets(parseSets);
       setColors(colors);
       setCurrentGraph(graphLinks[0]);
