@@ -22,11 +22,28 @@ const GraphBody = ({ data, colors, currentGraph }) => {
     setSelect({ ...select, [key]: value });
   };
 
+  const buildCheckboxes = () => {
+    return currentGraph?.keys.map((key) => {
+      return (
+        <div>
+          <input
+            // onChange={handleCheckboxChange}
+            type="checkbox"
+            name={key}
+            // checked={filterValues[key]}
+            id={`compare-${key}`}
+          />
+          <label htmlFor={`compare-${key}`}>{key}</label>
+        </div>
+      );
+    });
+  };
+
   return (
     <div id="graph">
       <div className="chart-title">
         <h3>{currentGraph?.title}</h3>
-        {currentGraph?.type === "bar" && (
+        {currentGraph?.type === "bar" ? (
           <div style={{ display: "flex", gap: "10px" }}>
             <SelectMenu
               selectKey={"graphKey"}
@@ -43,6 +60,8 @@ const GraphBody = ({ data, colors, currentGraph }) => {
               />
             )}
           </div>
+        ) : (
+          buildCheckboxes()
         )}
       </div>
       {currentGraph && currentGraph?.type === "bar" ? (

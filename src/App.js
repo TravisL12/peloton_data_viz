@@ -8,7 +8,7 @@ import { buildColors } from "./utils";
 import { graphLinks } from "./graphLinks";
 
 const App = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [filteredData, setFilteredData] = useState(null);
   const [sets, setSets] = useState({});
   const [colors, setColors] = useState(null);
@@ -16,7 +16,7 @@ const App = () => {
   const [currentGraph, setCurrentGraph] = useState(null);
 
   useEffect(() => {
-    if (data.length) {
+    if (data?.length) {
       const parseSets = parseAttributeSets(data);
       const colors = buildColors(parseSets);
       setSets(parseSets);
@@ -26,7 +26,7 @@ const App = () => {
   }, [data]);
 
   useEffect(() => {
-    const filtered = data.filter((d) => {
+    const filtered = data?.filter((d) => {
       return Object.keys(sets).every((type) => filterValues[d[type]]);
     });
     setFilteredData(filtered);
@@ -42,7 +42,7 @@ const App = () => {
         setFilterValues={setFilterValues}
       />
       <div className="main">
-        {!!data.length && (
+        {!!data?.length && (
           <>
             <ul id="graph-links">
               {graphLinks.map((link) => {

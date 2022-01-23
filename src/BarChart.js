@@ -97,7 +97,7 @@ const BarChart = ({ data, colors, currentGraph, select }) => {
   }, []);
 
   useEffect(() => {
-    if (data?.length) {
+    if (data) {
       drawGraph();
     }
   }, [data, colors, drawGraph, select]);

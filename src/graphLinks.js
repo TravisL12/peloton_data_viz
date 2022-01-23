@@ -1,7 +1,6 @@
 import * as d3 from "d3";
 import { filterSum, parseAttributeSets, parseItemCount } from "./parseUtils";
 import {
-  attributes,
   INSTRUCTOR,
   TYPE,
   FITNESS_DISCIPLINE,
@@ -85,14 +84,15 @@ export const graphLinks = [
   },
   //line
   {
-    title: "Cadence, Resistance, Speed",
-    keys: [CADENCE_AVG, RESISTANCE_AVG, SPEED_AVG],
-    dataTransform: lineData,
-    type: "line",
-  },
-  {
-    title: "Calories, Distance, Output",
-    keys: [CALORIES, DISTANCE_MILES, TOTAL_OUTPUT],
+    title: "Compare",
+    keys: [
+      CADENCE_AVG,
+      RESISTANCE_AVG,
+      SPEED_AVG,
+      CALORIES,
+      DISTANCE_MILES,
+      TOTAL_OUTPUT,
+    ],
     dataTransform: lineData,
     type: "line",
   },
