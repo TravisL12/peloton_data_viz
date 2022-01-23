@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useCallback } from "react";
+import SelectMenu from "./SelectMenu";
 
 const GROUP_SELECTOR = "g-collection";
 const mainWidth = 1000;
@@ -103,7 +104,18 @@ const GraphBody = ({ data, colors, currentGraph }) => {
         <div className="chart-title">
           <h3>{currentGraph?.title}</h3>
           <div>
-            {/* ${buildSelectMenu(`${selector}-select`, keys, "Category")}s */}
+            <SelectMenu
+              tagAttr={"first"}
+              label={"Category"}
+              keys={currentGraph?.keys}
+            />
+            {currentGraph?.secondKeys && (
+              <SelectMenu
+                tagAttr={"second"}
+                label={"Value"}
+                keys={currentGraph?.secondKeys}
+              />
+            )}
           </div>
         </div>
         <svg ref={svgRef} />

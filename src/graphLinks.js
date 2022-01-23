@@ -11,7 +11,6 @@ const countData = (dataParam, key) => {
   data.sort((a, b) => d3.descending(a.count, b.count));
   return data;
 };
-// const keys = ["instructor", "fitness_discipline", "length_minutes", "type"];
 
 const sumData = (dataParam, key, sumKey = "total_output") => {
   const attributeSet = parseAttributeSets(dataParam)[key];
@@ -26,15 +25,21 @@ const sumData = (dataParam, key, sumKey = "total_output") => {
   return data;
 };
 
+const keys = ["instructor", "fitness_discipline", "length_minutes", "type"];
+const secondKeys = ["total_output", "length_minutes"];
+
 export const graphLinks = [
   {
     ...attributes.instructor,
     title: "Count",
+    keys,
     chartFn: countData,
   },
   {
     ...attributes.instructor,
     title: "Sum",
+    keys,
+    secondKeys,
     chartFn: sumData,
   },
 ];
