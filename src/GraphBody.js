@@ -26,22 +26,24 @@ const GraphBody = ({ data, colors, currentGraph }) => {
     <div id="graph">
       <div className="chart-title">
         <h3>{currentGraph?.title}</h3>
-        <div style={{ display: "flex", gap: "10px" }}>
-          <SelectMenu
-            selectKey={"graphKey"}
-            label={"Category"}
-            keys={currentGraph?.keys}
-            handleSelectChange={handleSelectChange}
-          />
-          {currentGraph?.secondKeys && (
+        {currentGraph?.type === "bar" && (
+          <div style={{ display: "flex", gap: "10px" }}>
             <SelectMenu
-              selectKey={"secondKey"}
-              label={"Value"}
-              keys={currentGraph?.secondKeys}
+              selectKey={"graphKey"}
+              label={"Category"}
+              keys={currentGraph?.keys}
               handleSelectChange={handleSelectChange}
             />
-          )}
-        </div>
+            {currentGraph?.secondKeys && (
+              <SelectMenu
+                selectKey={"secondKey"}
+                label={"Value"}
+                keys={currentGraph?.secondKeys}
+                handleSelectChange={handleSelectChange}
+              />
+            )}
+          </div>
+        )}
       </div>
       {currentGraph && currentGraph?.type === "bar" ? (
         <BarChart

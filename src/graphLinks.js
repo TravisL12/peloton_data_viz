@@ -71,14 +71,12 @@ const secondKeys = [TOTAL_OUTPUT, LENGTH_MINUTES];
 
 export const graphLinks = [
   {
-    ...attributes.instructor,
     title: "Count",
     keys,
     dataTransform: countData,
     type: "bar",
   },
   {
-    ...attributes.instructor,
     title: "Sum",
     keys,
     secondKeys,
@@ -87,20 +85,14 @@ export const graphLinks = [
   },
   //line
   {
-    ...attributes.speed_avg,
+    title: "Cadence, Resistance, Speed",
     keys: [CADENCE_AVG, RESISTANCE_AVG, SPEED_AVG],
     dataTransform: lineData,
     type: "line",
   },
   {
-    ...attributes.distance_miles,
+    title: "Calories, Distance, Output",
     keys: [CALORIES, DISTANCE_MILES, TOTAL_OUTPUT],
-    dataTransform: lineData,
-    type: "line",
-  },
-  {
-    ...attributes.calories,
-    keys: [CALORIES],
     dataTransform: lineData,
     type: "line",
   },

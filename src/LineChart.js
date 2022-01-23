@@ -88,10 +88,11 @@ const LineChart = ({ data, colors, currentGraph, select }) => {
         (enter) => {
           enter
             .append("circle")
-            .attr("fill", (d) => allColors(d.key))
+            .attr("fill", "white")
+            .attr("stroke", (d) => allColors(d.key))
             .attr("cx", (d) => xScale(d.x))
             .attr("cy", (d) => yScale(d.y))
-            .attr("r", 3);
+            .attr("r", 2);
 
           return enter;
         },
