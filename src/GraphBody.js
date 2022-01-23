@@ -1,34 +1,23 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useCallback } from "react";
-import { parseItemCount } from "./parseUtils";
 
 const GROUP_SELECTOR = "g-collection";
 const mainWidth = 1000;
 const mainHeight = 500;
 const margin = { top: 10, bottom: 120, left: 40, right: 10 };
 
-const countData = (dataParam, key) => {
-  const count = parseItemCount(dataParam, key);
-  const data = Object.entries(count).map(([name, count]) => ({
-    name,
-    count,
-  }));
-  data.sort((a, b) => d3.descending(a.count, b.count));
-  return data;
-};
-
-const GraphBody = ({ data, colors }) => {
+const GraphBody = ({ data, colors, currentGraph }) => {
   const svgRef = useRef(null);
-  const title = "Graph";
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
 
+  // graphKey/secondKey come from select menus
   const drawGraph = useCallback(
-    (graphKey = "instructor") => {
+    (graphKey = "instructor", secondKey) => {
       const svg = d3.select(svgRef.current);
 
       const allColors = colors[graphKey];
-      const graphData = countData(data, graphKey);
+      const graphData = currentGraph.chartFn(data, graphKey, secondKey);
       const xScale = d3.scaleBand().range([0, width]).padding(0.3);
       const yScale = d3.scaleLinear().range([height, 0]);
 
@@ -79,7 +68,7 @@ const GraphBody = ({ data, colors }) => {
           }
         );
     },
-    [colors, data, height, width]
+    [colors, data, height, width, currentGraph]
   );
 
   useEffect(() => {
@@ -109,19 +98,15 @@ const GraphBody = ({ data, colors }) => {
   }, [data, colors, drawGraph]);
 
   return (
-    <div className="main">
-      <div id="graph">
-        <div className="barchart-svg">
+    <div id="graph">
+      <div className="barchart-svg">
+        <div className="chart-title">
+          <h3>{currentGraph?.title}</h3>
           <div>
-            <h3>{title}</h3>
-            <div>
-              <div>
-                {/* ${buildSelectMenu(`${selector}-select`, keys, "Category")}s */}
-              </div>
-            </div>
+            {/* ${buildSelectMenu(`${selector}-select`, keys, "Category")}s */}
           </div>
-          <svg ref={svgRef} />
         </div>
+        <svg ref={svgRef} />
       </div>
     </div>
   );
