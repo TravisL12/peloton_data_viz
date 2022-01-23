@@ -2,27 +2,27 @@ import * as d3 from "d3";
 import { filterSum, parseAttributeSets, parseItemCount } from "./parseUtils";
 import { attributes } from "./utils";
 
-const countData = (dataParam, key) => {
-  const count = parseItemCount(dataParam, key);
-  const data = Object.entries(count).map(([name, count]) => ({
+const countData = (data, key) => {
+  const count = parseItemCount(data, key);
+  const output = Object.entries(count).map(([name, count]) => ({
     name,
     count,
   }));
-  data.sort((a, b) => d3.descending(a.count, b.count));
-  return data;
+  output.sort((a, b) => d3.descending(a.count, b.count));
+  return output;
 };
 
-const sumData = (dataParam, key, sumKey = "total_output") => {
-  const attributeSet = parseAttributeSets(dataParam)[key];
+const sumData = (data, key, sumKey = "total_output") => {
+  const attributeSet = parseAttributeSets(data)[key];
 
-  const data = attributeSet.map((setValue) => {
-    const setData = dataParam.filter((d) => d[key] === setValue);
+  const output = attributeSet.map((setValue) => {
+    const setData = data.filter((d) => d[key] === setValue);
     const sumData = filterSum(setData, sumKey);
     return { name: setValue, count: sumData };
   });
 
-  data.sort((a, b) => d3.descending(a.count, b.count));
-  return data;
+  output.sort((a, b) => d3.descending(a.count, b.count));
+  return output;
 };
 
 const keys = ["instructor", "fitness_discipline", "length_minutes", "type"];
@@ -33,13 +33,13 @@ export const graphLinks = [
     ...attributes.instructor,
     title: "Count",
     keys,
-    chartFn: countData,
+    dataTransform: countData,
   },
   {
     ...attributes.instructor,
     title: "Sum",
     keys,
     secondKeys,
-    chartFn: sumData,
+    dataTransform: sumData,
   },
 ];

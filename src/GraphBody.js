@@ -27,12 +27,11 @@ const GraphBody = ({ data, colors, currentGraph }) => {
     setSelect({ ...select, [key]: value });
   };
 
-  // graphKey/secondKey come from select menus
   const drawGraph = useCallback(() => {
     const svg = d3.select(svgRef.current);
 
     const allColors = colors[select.graphKey];
-    const graphData = currentGraph.chartFn(
+    const graphData = currentGraph.dataTransform(
       data,
       select.graphKey,
       select.secondKey
@@ -119,7 +118,7 @@ const GraphBody = ({ data, colors, currentGraph }) => {
       <div className="barchart-svg">
         <div className="chart-title">
           <h3>{currentGraph?.title}</h3>
-          <div>
+          <div style={{ display: "flex", gap: "10px" }}>
             <SelectMenu
               selectKey={"graphKey"}
               label={"Category"}
