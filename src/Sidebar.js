@@ -12,17 +12,17 @@ const Sidebar = ({ sets, colors, filterValues, setFilterValues }) => {
     setFilterValues(values);
   }, [sets, setFilterValues]);
 
+  const handleCheckboxChange = (event) => {
+    const copyValues = JSON.parse(JSON.stringify(filterValues));
+    copyValues[event.target.name] = event.target.checked;
+    setFilterValues(copyValues);
+  };
+
   const toggleAll = (filter, isChecked = false) => {
     const copyValues = JSON.parse(JSON.stringify(filterValues));
     sets[filter].forEach((attr) => {
       copyValues[attr] = isChecked;
     });
-    setFilterValues(copyValues);
-  };
-
-  const handleCheckboxChange = (event) => {
-    const copyValues = JSON.parse(JSON.stringify(filterValues));
-    copyValues[event.target.name] = event.target.checked;
     setFilterValues(copyValues);
   };
 

@@ -1,6 +1,47 @@
 import * as d3 from "d3";
 import { filterSum, parseAttributeSets, parseItemCount } from "./parseUtils";
-import { attributes } from "./utils";
+import {
+  attributes,
+  INSTRUCTOR,
+  TYPE,
+  FITNESS_DISCIPLINE,
+  LENGTH_MINUTES,
+  TOTAL_OUTPUT,
+  CADENCE_AVG,
+  RESISTANCE_AVG,
+  SPEED_AVG,
+  DISTANCE_MILES,
+  CALORIES,
+} from "./utils";
+
+const lineOutputData = (data, key, compareKey) => {
+  const attributeSet = parseAttributeSets(data)[key];
+  return attributeSet.map((set) => {
+    const d = data
+      .filter((d) => d[key] === set && +d[compareKey])
+      .map((d) => {
+        const date = d3.timeParse("%Y-%m-%d %H:%M")(
+          d.workout_date.slice(0, -6)
+        );
+        return { x: date, y: +d[compareKey] };
+      });
+    return [set, d];
+  });
+};
+
+const lineData = (data, keys) => {
+  return keys.map((key) => {
+    const d = data
+      .filter((d) => +d[key])
+      .map((d) => {
+        const date = d3.timeParse("%Y-%m-%d %H:%M")(
+          d.workout_date.slice(0, -6)
+        );
+        return { x: date, y: +d[key] };
+      });
+    return [key, d];
+  });
+};
 
 const countData = (data, key) => {
   const count = parseItemCount(data, key);
@@ -25,8 +66,8 @@ const sumData = (data, key, sumKey = "total_output") => {
   return output;
 };
 
-const keys = ["instructor", "fitness_discipline", "length_minutes", "type"];
-const secondKeys = ["total_output", "length_minutes"];
+const keys = [INSTRUCTOR, FITNESS_DISCIPLINE, LENGTH_MINUTES, TYPE];
+const secondKeys = [TOTAL_OUTPUT, LENGTH_MINUTES];
 
 export const graphLinks = [
   {
@@ -34,6 +75,7 @@ export const graphLinks = [
     title: "Count",
     keys,
     dataTransform: countData,
+    type: "bar",
   },
   {
     ...attributes.instructor,
@@ -41,5 +83,25 @@ export const graphLinks = [
     keys,
     secondKeys,
     dataTransform: sumData,
+    type: "bar",
+  },
+  //line
+  {
+    ...attributes.speed_avg,
+    keys: [CADENCE_AVG, RESISTANCE_AVG, SPEED_AVG],
+    dataTransform: lineData,
+    type: "line",
+  },
+  {
+    ...attributes.distance_miles,
+    keys: [CALORIES, DISTANCE_MILES, TOTAL_OUTPUT],
+    dataTransform: lineData,
+    type: "line",
+  },
+  {
+    ...attributes.calories,
+    keys: [CALORIES],
+    dataTransform: lineData,
+    type: "line",
   },
 ];
