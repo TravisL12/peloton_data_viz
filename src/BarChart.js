@@ -38,7 +38,7 @@ const BarChart = ({
       .style("text-anchor", "end")
       .attr("transform", "rotate(-70) translate(-10,-10)");
 
-    yScale.domain([0, d3.max(graphData.map(({ count }) => count)) * 1.1]);
+    yScale.domain([0, d3.max(graphData.map(({ value }) => value)) * 1.1]);
     d3.select(`.y-axis`).transition().call(d3.axisLeft(yScale));
 
     svg
@@ -51,8 +51,8 @@ const BarChart = ({
 
           g.append("rect")
             .attr("x", (d) => xScale(d[select.graphKey]))
-            .attr("y", (d) => yScale(d.count))
-            .attr("height", (d) => height - yScale(d.count))
+            .attr("y", (d) => yScale(d.value))
+            .attr("height", (d) => height - yScale(d.value))
             .attr("width", xScale.bandwidth())
             .attr("stroke-width", 1)
             .attr("stroke", "black")
@@ -65,8 +65,8 @@ const BarChart = ({
             .select("rect")
             .transition()
             .attr("x", (d) => xScale(d[select.graphKey]))
-            .attr("y", (d) => yScale(d.count))
-            .attr("height", (d) => height - yScale(d.count))
+            .attr("y", (d) => yScale(d.value))
+            .attr("height", (d) => height - yScale(d.value))
             .attr("width", xScale.bandwidth())
             .attr("fill", (d) => allColors(d[select.graphKey]));
         },

@@ -19,11 +19,7 @@ const OverviewBarChart = ({
     const svg = d3.select(svgRef.current);
 
     const allColors = colors[select.graphKey];
-    const graphData = currentGraph.dataTransform(
-      data,
-      select.graphKey,
-      select.secondKey
-    );
+    const graphData = currentGraph.dataTransform(data, select.graphKey);
 
     const xScale = d3.scaleBand().range([0, width]).padding(0.3);
     const yScale = d3.scaleLinear().range([height, 0]);
@@ -38,7 +34,7 @@ const OverviewBarChart = ({
       .style("text-anchor", "end")
       .attr("transform", "rotate(-70) translate(-10,-10)");
 
-    yScale.domain([0, d3.max(graphData.map(({ count }) => count)) * 1.1]);
+    yScale.domain([0, d3.max(graphData.map(({ value }) => value)) * 1.1]);
     d3.select(`.y-axis`).transition().call(d3.axisLeft(yScale));
 
     svg
@@ -51,8 +47,8 @@ const OverviewBarChart = ({
 
           g.append("rect")
             .attr("x", (d) => xScale(d.date))
-            .attr("y", (d) => yScale(d.count))
-            .attr("height", (d) => height - yScale(d.count))
+            .attr("y", (d) => yScale(d.value))
+            .attr("height", (d) => height - yScale(d.value))
             .attr("width", xScale.bandwidth())
             .attr("stroke-width", 1)
             .attr("stroke", "black")
@@ -65,8 +61,8 @@ const OverviewBarChart = ({
             .select("rect")
             .transition()
             .attr("x", (d) => xScale(d.date))
-            .attr("y", (d) => yScale(d.count))
-            .attr("height", (d) => height - yScale(d.count))
+            .attr("y", (d) => yScale(d.value))
+            .attr("height", (d) => height - yScale(d.value))
             .attr("width", xScale.bandwidth())
             .attr("fill", (d) => allColors(d[select.graphKey]));
         },
@@ -96,15 +92,6 @@ const OverviewBarChart = ({
           value={select.graphKey}
           handleSelectChange={handleSelectChange}
         />
-        {currentGraph?.secondKeys && (
-          <RadioInput
-            selectKey={"secondKey"}
-            label={"Value"}
-            keys={currentGraph?.secondKeys}
-            value={select.secondKey}
-            handleSelectChange={handleSelectChange}
-          />
-        )}
       </div>
       <svg ref={svgRef} />
     </>
