@@ -28,9 +28,6 @@ const OverviewBarChart = ({
     d3.select(`.x-axis`)
       .call(d3.axisBottom(xScale))
       .selectAll("text")
-      .text((d) => {
-        return d;
-      })
       .style("text-anchor", "end")
       .attr("transform", "rotate(-70) translate(-10,-10)");
 

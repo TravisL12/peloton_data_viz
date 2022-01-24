@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useCallback } from "react";
 import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "./constants";
+import { dateFormat } from "./graphLinks";
 import { generateSvg } from "./utils";
 
 const LineChart = ({
@@ -28,9 +29,12 @@ const LineChart = ({
     const min = d3.min(graphData, (d) => d3.min(d[1], (d) => d.x));
     const max = d3.max(graphData, (d) => d3.max(d[1], (d) => d.x));
     xScale.domain([min, max]);
-    d3.select(`.x-axis`).call(
-      d3.axisBottom(xScale).tickFormat(d3.timeFormat("%m/%d")).ticks(20)
-    );
+
+    d3.select(`.x-axis`)
+      .call(d3.axisBottom(xScale).tickFormat(dateFormat).ticks(20))
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("transform", "rotate(-70) translate(-10,-10)");
 
     // update y-axis
     yScale.domain(d3.extent(graphData.map(([_, d]) => d).flat(), (d) => d.y));
@@ -76,6 +80,10 @@ const LineChart = ({
                   return yScale(d.y);
                 })(dPath[1])
             );
+        },
+        (exit) => {
+          exit.select("path").transition().attr("stroke", "gray").remove();
+          exit.transition().remove();
         }
       );
 
@@ -91,11 +99,10 @@ const LineChart = ({
         (enter) => {
           enter
             .append("circle")
-            .attr("fill", "white")
-            .attr("stroke", (d) => allColors(d.key))
+            .attr("fill", (d) => allColors(d.key))
             .attr("cx", (d) => xScale(d.x))
             .attr("cy", (d) => yScale(d.y))
-            .attr("r", 2);
+            .attr("r", 3);
 
           return enter;
         },
@@ -104,6 +111,9 @@ const LineChart = ({
             .transition()
             .attr("cx", (d) => xScale(d.x))
             .attr("cy", (d) => yScale(d.y));
+        },
+        (exit) => {
+          exit.transition().attr("fill", "gray").remove();
         }
       );
   }, [colors, data, height, width, currentGraph, keys]);

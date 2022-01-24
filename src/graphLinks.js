@@ -15,6 +15,8 @@ import {
   PACE_AVG,
 } from "./constants";
 
+export const dateFormat = d3.timeFormat("%m/%d %H:%M");
+
 const parseDate = (date) => {
   return d3.timeParse("%Y-%m-%d %H:%M")(date.slice(0, -6));
 };
@@ -25,7 +27,7 @@ const lineData = (data, keys) => {
       .filter((d) => +d[key])
       .map((d) => {
         const date = parseDate(d.workout_date);
-        return { x: date, y: +d[key] };
+        return { ...d, x: date, y: +d[key] };
       });
     return [key, d];
   });
@@ -34,13 +36,13 @@ const lineData = (data, keys) => {
 const overviewData = (data) => {
   return data.map((d) => {
     const date = parseDate(d.workout_date);
-    return { ...d, date: d3.timeFormat("%m/%d")(date), value: 50 };
+    return { ...d, date: dateFormat(date), value: 50 };
   });
 };
 
 const countData = (data, key) => {
-  const count = parseItemCount(data, key);
-  const output = Object.entries(count).map(([name, count]) => ({
+  const parsedCount = parseItemCount(data, key);
+  const output = Object.entries(parsedCount).map(([name, count]) => ({
     [key]: name,
     value: count,
   }));
@@ -73,11 +75,9 @@ export const lineKeys = [
   CADENCE_AVG,
   CALORIES,
   DISTANCE_MILES,
-  PACE_AVG,
   RESISTANCE_AVG,
   SPEED_AVG,
   TOTAL_OUTPUT,
-  WATTS_AVG,
 ];
 export const graphLinks = [
   {
