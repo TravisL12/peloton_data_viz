@@ -44,6 +44,15 @@ const lineData = (data, keys) => {
   });
 };
 
+const overviewData = (data, key) => {
+  console.log("data", data, key);
+  return data.map((d) => ({
+    ...d,
+    name: key,
+    count: d[key],
+  }));
+};
+
 const countData = (data, key) => {
   const count = parseItemCount(data, key);
   const output = Object.entries(count).map(([name, count]) => ({
@@ -86,6 +95,12 @@ export const lineKeys = [
   WATTS_AVG,
 ];
 export const graphLinks = [
+  {
+    title: "Overview",
+    keys,
+    dataTransform: overviewData,
+    type: "bar",
+  },
   {
     title: "Count",
     keys,
