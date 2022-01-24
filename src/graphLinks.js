@@ -15,19 +15,10 @@ import {
   PACE_AVG,
 } from "./constants";
 
-const lineOutputData = (data, key, compareKey) => {
-  const attributeSet = parseAttributeSets(data)[key];
-  return attributeSet.map((set) => {
-    const d = data
-      .filter((d) => d[key] === set && +d[compareKey])
-      .map((d) => {
-        const date = d3.timeParse("%Y-%m-%d %H:%M")(
-          d.workout_date.slice(0, -6)
-        );
-        return { x: date, y: +d[compareKey] };
-      });
-    return [set, d];
-  });
+export const dateFormat = d3.timeFormat("%m/%d %H:%M");
+
+const parseDate = (date) => {
+  return d3.timeParse("%Y-%m-%d %H:%M")(date.slice(0, -6));
 };
 
 const lineData = (data, keys) => {
@@ -35,22 +26,27 @@ const lineData = (data, keys) => {
     const d = data
       .filter((d) => +d[key])
       .map((d) => {
-        const date = d3.timeParse("%Y-%m-%d %H:%M")(
-          d.workout_date.slice(0, -6)
-        );
-        return { x: date, y: +d[key] };
+        const date = parseDate(d.workout_date);
+        return { ...d, x: date, y: +d[key] };
       });
     return [key, d];
   });
 };
 
+const overviewData = (data) => {
+  return data.map((d) => {
+    const date = parseDate(d.workout_date);
+    return { ...d, date: dateFormat(date), value: 50 };
+  });
+};
+
 const countData = (data, key) => {
-  const count = parseItemCount(data, key);
-  const output = Object.entries(count).map(([name, count]) => ({
-    name,
-    count,
+  const parsedCount = parseItemCount(data, key);
+  const output = Object.entries(parsedCount).map(([name, count]) => ({
+    [key]: name,
+    value: count,
   }));
-  output.sort((a, b) => d3.descending(a.count, b.count));
+  output.sort((a, b) => d3.descending(a.value, b.value));
   return output;
 };
 
@@ -60,10 +56,10 @@ const sumData = (data, key, sumKey = "total_output") => {
   const output = attributeSet.map((setValue) => {
     const setData = data.filter((d) => d[key] === setValue);
     const sumData = filterSum(setData, sumKey);
-    return { name: setValue, count: sumData };
+    return { [key]: setValue, value: sumData };
   });
 
-  output.sort((a, b) => d3.descending(a.count, b.count));
+  output.sort((a, b) => d3.descending(a.value, b.value));
   return output;
 };
 
@@ -79,11 +75,9 @@ export const lineKeys = [
   CADENCE_AVG,
   CALORIES,
   DISTANCE_MILES,
-  PACE_AVG,
   RESISTANCE_AVG,
   SPEED_AVG,
   TOTAL_OUTPUT,
-  WATTS_AVG,
 ];
 export const graphLinks = [
   {
@@ -98,6 +92,12 @@ export const graphLinks = [
     secondKeys,
     dataTransform: sumData,
     type: "bar",
+  },
+  {
+    title: "Overview",
+    keys,
+    dataTransform: overviewData,
+    type: "overview",
   },
   //line
   {

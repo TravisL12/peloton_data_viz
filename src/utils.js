@@ -1,5 +1,10 @@
 import * as d3 from "d3";
+
 import {
+  mainWidth,
+  mainHeight,
+  GROUP_SELECTOR,
+  margin,
   CADENCE_AVG,
   HEARTRATE_AVG,
   INCLINE_AVG,
@@ -74,4 +79,25 @@ export const attributes = Object.keys(keys).reduce((acc, title) => {
 
 export const getUniq = (data) => {
   return [...new Set(data)];
+};
+
+export const generateSvg = (ref, height) => {
+  const svg = d3
+    .select(ref)
+    .attr("width", mainWidth)
+    .attr("height", mainHeight)
+    .append("g")
+    .attr("class", "main-group")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+  svg.append("g").attr("class", GROUP_SELECTOR);
+
+  svg
+    .append("g")
+    .attr("class", "x-axis")
+    .attr("transform", `translate(0, ${height})`);
+
+  // create y-axis
+  svg.append("g").attr("class", "y-axis");
+  return svg;
 };

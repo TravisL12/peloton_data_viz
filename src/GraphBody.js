@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import BarChart from "./BarChart";
+import OverviewBarChart from "./OverviewBarChart";
 import LineChart from "./LineChart";
 
 const GraphBody = ({ data, colors, currentGraph }) => {
@@ -42,7 +43,7 @@ const GraphBody = ({ data, colors, currentGraph }) => {
       <div className="chart-title">
         <h3>{currentGraph?.title}</h3>
       </div>
-      {currentGraph?.type === "bar" ? (
+      {currentGraph?.type === "bar" && (
         <BarChart
           data={data}
           colors={colors}
@@ -50,7 +51,17 @@ const GraphBody = ({ data, colors, currentGraph }) => {
           select={select}
           handleSelectChange={handleSelectChange}
         />
-      ) : (
+      )}
+      {currentGraph?.type === "overview" && (
+        <OverviewBarChart
+          data={data}
+          colors={colors}
+          currentGraph={currentGraph}
+          select={select}
+          handleSelectChange={handleSelectChange}
+        />
+      )}
+      {currentGraph?.type === "line" && (
         <LineChart
           data={data}
           colors={colors}
