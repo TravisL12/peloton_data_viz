@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useCallback } from "react";
 import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "./constants";
+import { generateSvg } from "./utils";
 
 const LineChart = ({
   data,
@@ -108,23 +109,7 @@ const LineChart = ({
   }, [colors, data, height, width, currentGraph, keys]);
 
   useEffect(() => {
-    const svg = d3
-      .select(svgRef.current)
-      .attr("width", mainWidth)
-      .attr("height", mainHeight)
-      .append("g")
-      .attr("class", "main-group")
-      .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-    svg.append("g").attr("class", GROUP_SELECTOR);
-
-    svg
-      .append("g")
-      .attr("class", "x-axis")
-      .attr("transform", `translate(0, ${height})`);
-
-    // create y-axis
-    svg.append("g").attr("class", "y-axis");
+    generateSvg(svgRef.current, height);
   }, []);
 
   useEffect(() => {

@@ -47,7 +47,7 @@ const lineData = (data, keys) => {
 const overviewData = (data) => {
   return data.map((d) => {
     const date = parseDate(d.workout_date);
-    return { ...d, date, count: 50 };
+    return { ...d, date: d3.timeFormat("%m/%d")(date), count: 50 };
   });
 };
 
@@ -100,17 +100,17 @@ export const graphLinks = [
     type: "bar",
   },
   {
-    title: "Overview",
-    keys,
-    dataTransform: overviewData,
-    type: "overview",
-  },
-  {
     title: "Sum",
     keys,
     secondKeys,
     dataTransform: sumData,
     type: "bar",
+  },
+  {
+    title: "Overview",
+    keys,
+    dataTransform: overviewData,
+    type: "overview",
   },
   //line
   {
