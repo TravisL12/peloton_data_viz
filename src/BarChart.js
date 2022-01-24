@@ -1,10 +1,16 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useCallback } from "react";
 import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "./constants";
+import RadioInput from "./RadioInput";
 
-const BarChart = ({ data, colors, currentGraph, select }) => {
+const BarChart = ({
+  data,
+  colors,
+  currentGraph,
+  select,
+  handleSelectChange,
+}) => {
   const svgRef = useRef(null);
-
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
 
@@ -94,7 +100,29 @@ const BarChart = ({ data, colors, currentGraph, select }) => {
     }
   }, [data, colors, drawGraph, select]);
 
-  return <svg ref={svgRef} />;
+  return (
+    <>
+      <div style={{ display: "flex", gap: "10px" }}>
+        <RadioInput
+          selectKey={"graphKey"}
+          label={"Category"}
+          keys={currentGraph?.keys}
+          value={select.graphKey}
+          handleSelectChange={handleSelectChange}
+        />
+        {currentGraph?.secondKeys && (
+          <RadioInput
+            selectKey={"secondKey"}
+            label={"Value"}
+            keys={currentGraph?.secondKeys}
+            value={select.secondKey}
+            handleSelectChange={handleSelectChange}
+          />
+        )}
+      </div>
+      <svg ref={svgRef} />
+    </>
+  );
 };
 
 export default BarChart;

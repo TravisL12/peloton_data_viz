@@ -2,7 +2,14 @@ import * as d3 from "d3";
 import { useEffect, useRef, useCallback } from "react";
 import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "./constants";
 
-const LineChart = ({ data, colors, currentGraph, keys }) => {
+const LineChart = ({
+  data,
+  colors,
+  currentGraph,
+  keys,
+  checkboxes,
+  handleCheckboxChange,
+}) => {
   const svgRef = useRef(null);
 
   const width = mainWidth - margin.left - margin.right;
@@ -126,7 +133,27 @@ const LineChart = ({ data, colors, currentGraph, keys }) => {
     }
   }, [data, colors, drawGraph]);
 
-  return <svg ref={svgRef} />;
+  return (
+    <>
+      <div>
+        {currentGraph?.keys.map((key) => {
+          return (
+            <div key={key} style={{ background: colors.lines(key) }}>
+              <input
+                onChange={handleCheckboxChange}
+                type="checkbox"
+                name={key}
+                checked={checkboxes?.[key]}
+                id={`compare-${key}`}
+              />
+              <label htmlFor={`compare-${key}`}>{key}</label>
+            </div>
+          );
+        })}
+      </div>
+      <svg ref={svgRef} />;
+    </>
+  );
 };
 
 export default LineChart;
