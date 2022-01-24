@@ -3,7 +3,7 @@ import { useEffect, useRef, useCallback } from "react";
 import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "./constants";
 import RadioInput from "./RadioInput";
 
-const BarChart = ({
+const OverviewBarChart = ({
   data,
   colors,
   currentGraph,
@@ -27,7 +27,7 @@ const BarChart = ({
     const xScale = d3.scaleBand().range([0, width]).padding(0.3);
     const yScale = d3.scaleLinear().range([height, 0]);
 
-    xScale.domain(graphData.map((d) => d[select.graphKey]));
+    xScale.domain(graphData.map((d) => d.date));
     d3.select(`.x-axis`)
       .call(d3.axisBottom(xScale))
       .selectAll("text")
@@ -43,13 +43,13 @@ const BarChart = ({
     svg
       .selectAll(`.${GROUP_SELECTOR}`)
       .selectAll(".bar")
-      .data(graphData, (d) => d[select.graphKey])
+      .data(graphData, (d) => d.date)
       .join(
         (enter) => {
           const g = enter.append("g").attr("class", "bar");
 
           g.append("rect")
-            .attr("x", (d) => xScale(d[select.graphKey]))
+            .attr("x", (d) => xScale(d.date))
             .attr("y", (d) => yScale(d.count))
             .attr("height", (d) => height - yScale(d.count))
             .attr("width", xScale.bandwidth())
@@ -63,7 +63,7 @@ const BarChart = ({
           update
             .select("rect")
             .transition()
-            .attr("x", (d) => xScale(d[select.graphKey]))
+            .attr("x", (d) => xScale(d.date))
             .attr("y", (d) => yScale(d.count))
             .attr("height", (d) => height - yScale(d.count))
             .attr("width", xScale.bandwidth())
@@ -126,4 +126,4 @@ const BarChart = ({
   );
 };
 
-export default BarChart;
+export default OverviewBarChart;

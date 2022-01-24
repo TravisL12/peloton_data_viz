@@ -15,15 +15,17 @@ import {
   PACE_AVG,
 } from "./constants";
 
+const parseDate = (date) => {
+  return d3.timeParse("%Y-%m-%d %H:%M")(date.slice(0, -6));
+};
+
 const lineOutputData = (data, key, compareKey) => {
   const attributeSet = parseAttributeSets(data)[key];
   return attributeSet.map((set) => {
     const d = data
       .filter((d) => d[key] === set && +d[compareKey])
       .map((d) => {
-        const date = d3.timeParse("%Y-%m-%d %H:%M")(
-          d.workout_date.slice(0, -6)
-        );
+        const date = parseDate(d.workout_date);
         return { x: date, y: +d[compareKey] };
       });
     return [set, d];
@@ -35,28 +37,24 @@ const lineData = (data, keys) => {
     const d = data
       .filter((d) => +d[key])
       .map((d) => {
-        const date = d3.timeParse("%Y-%m-%d %H:%M")(
-          d.workout_date.slice(0, -6)
-        );
+        const date = parseDate(d.workout_date);
         return { x: date, y: +d[key] };
       });
     return [key, d];
   });
 };
 
-const overviewData = (data, key) => {
-  console.log("data", data, key);
-  return data.map((d) => ({
-    ...d,
-    name: key,
-    count: d[key],
-  }));
+const overviewData = (data) => {
+  return data.map((d) => {
+    const date = parseDate(d.workout_date);
+    return { ...d, date, count: 50 };
+  });
 };
 
 const countData = (data, key) => {
   const count = parseItemCount(data, key);
   const output = Object.entries(count).map(([name, count]) => ({
-    name,
+    [key]: name,
     count,
   }));
   output.sort((a, b) => d3.descending(a.count, b.count));
@@ -69,7 +67,7 @@ const sumData = (data, key, sumKey = "total_output") => {
   const output = attributeSet.map((setValue) => {
     const setData = data.filter((d) => d[key] === setValue);
     const sumData = filterSum(setData, sumKey);
-    return { name: setValue, count: sumData };
+    return { [key]: setValue, count: sumData };
   });
 
   output.sort((a, b) => d3.descending(a.count, b.count));
@@ -96,16 +94,16 @@ export const lineKeys = [
 ];
 export const graphLinks = [
   {
-    title: "Overview",
-    keys,
-    dataTransform: overviewData,
-    type: "bar",
-  },
-  {
     title: "Count",
     keys,
     dataTransform: countData,
     type: "bar",
+  },
+  {
+    title: "Overview",
+    keys,
+    dataTransform: overviewData,
+    type: "overview",
   },
   {
     title: "Sum",
