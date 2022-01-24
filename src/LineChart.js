@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useCallback } from "react";
 import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "./constants";
+import { attributes } from "./utils";
 
 const LineChart = ({
   data,
@@ -146,7 +147,7 @@ const LineChart = ({
                 checked={checkboxes?.[key]}
                 id={`compare-${key}`}
               />
-              <label htmlFor={`compare-${key}`}>{key}</label>
+              <label htmlFor={`compare-${key}`}>{attributes[key].title}</label>
             </div>
           );
         })}

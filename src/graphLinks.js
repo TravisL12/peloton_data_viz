@@ -12,7 +12,6 @@ import {
   DISTANCE_MILES,
   CALORIES,
   WATTS_AVG,
-  PACE_AVG,
 } from "./constants";
 
 const lineOutputData = (data, key, compareKey) => {
@@ -79,7 +78,6 @@ export const lineKeys = [
   CADENCE_AVG,
   CALORIES,
   DISTANCE_MILES,
-  PACE_AVG,
   RESISTANCE_AVG,
   SPEED_AVG,
   TOTAL_OUTPUT,

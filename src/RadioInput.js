@@ -1,3 +1,5 @@
+import { attributes } from "./utils";
+
 const RadioInput = ({ value, selectKey, label, keys, handleSelectChange }) => (
   <div className={selectKey}>
     <label>{label}</label>
@@ -14,7 +16,7 @@ const RadioInput = ({ value, selectKey, label, keys, handleSelectChange }) => (
               handleSelectChange(event.target.value, selectKey);
             }}
           />
-          <label htmlFor={`${key}-${label}`}>{key}</label>
+          <label htmlFor={`${key}-${label}`}>{attributes[key].title}</label>
         </div>
       ))}
     </div>
