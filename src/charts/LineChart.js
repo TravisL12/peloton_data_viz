@@ -99,10 +99,13 @@ const LineChart = ({
         (enter) => {
           enter
             .append("circle")
-            .attr("fill", (d) => allColors(d.key))
+            .attr("fill", (d) => colors.instructor(d.instructor))
             .attr("cx", (d) => xScale(d.x))
             .attr("cy", (d) => yScale(d.y))
-            .attr("r", 3);
+            .attr("r", 3)
+            .on("mouseover", (event) => {
+              console.log(d3.select(event.target).datum());
+            });
 
           return enter;
         },
