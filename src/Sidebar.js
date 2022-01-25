@@ -47,25 +47,20 @@ const Sidebar = ({ sets, colors, filterValues, setFilterValues }) => {
               </div>
               <form id={`${filter}-form`}>
                 <ul className="filters-list">
-                  {sets?.[filter]
-                    ?.sort((a, b) => (isNaN(a) ? (a > b ? 1 : -1) : b - a))
-                    .map((set) => {
-                      return (
-                        <li
-                          key={set}
-                          style={{ background: colors[filter](set) }}
-                        >
-                          <input
-                            onChange={handleCheckboxChange}
-                            type="checkbox"
-                            name={set}
-                            checked={filterValues[set]}
-                            id={`option-${set}`}
-                          />
-                          <label htmlFor={`option-${set}`}>{set}</label>
-                        </li>
-                      );
-                    })}
+                  {sets?.[filter].map((set) => {
+                    return (
+                      <li key={set} style={{ background: colors[filter](set) }}>
+                        <input
+                          onChange={handleCheckboxChange}
+                          type="checkbox"
+                          name={set}
+                          checked={filterValues[set]}
+                          id={`option-${set}`}
+                        />
+                        <label htmlFor={`option-${set}`}>{set}</label>
+                      </li>
+                    );
+                  })}
                 </ul>
               </form>
             </div>
