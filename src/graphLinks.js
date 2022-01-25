@@ -63,6 +63,24 @@ const sumData = (data, key, sumKey = "total_output") => {
   return output;
 };
 
+const AVERAGE_MIN = 5;
+const averageData = (data, key, sumKey = "total_output") => {
+  const attributeSet = parseAttributeSets(data)[key];
+
+  const output = attributeSet
+    .map((setValue) => {
+      const setData = data.filter((d) => d[key] === setValue);
+      const averageData = filterSum(setData, sumKey) / setData.length;
+      return setData.length > AVERAGE_MIN
+        ? { [key]: setValue, value: averageData }
+        : null;
+    })
+    .filter((x) => x);
+
+  output.sort((a, b) => d3.descending(a.value, b.value));
+  return output;
+};
+
 const keys = [INSTRUCTOR, FITNESS_DISCIPLINE, LENGTH_MINUTES, TYPE];
 const secondKeys = [
   TOTAL_OUTPUT,
@@ -91,6 +109,13 @@ export const graphLinks = [
     keys,
     secondKeys,
     dataTransform: sumData,
+    type: "bar",
+  },
+  {
+    title: "Average",
+    keys,
+    secondKeys,
+    dataTransform: averageData,
     type: "bar",
   },
   {
