@@ -1,4 +1,4 @@
-import { RESISTANCE_AVG } from "./constants";
+import { RESISTANCE_AVG, typeTransform } from "./constants";
 import { keys } from "./utils";
 
 const Header = ({ setData }) => {
@@ -16,11 +16,11 @@ const Header = ({ setData }) => {
         const splitLine = line.split(",");
         return header.reduce((acc, h, idx) => {
           if (!h || !keys[h]) return acc;
-          const value =
-            keys[h] === RESISTANCE_AVG
-              ? splitLine[idx]?.slice(0, -1)
-              : splitLine[idx];
-          acc[keys[h]] = isNaN(value) ? value : +value;
+
+          acc[keys[h]] = typeTransform[keys[h]]
+            ? typeTransform[keys[h]](splitLine[idx])
+            : splitLine[idx];
+
           return acc;
         }, {});
       });

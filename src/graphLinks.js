@@ -25,7 +25,7 @@ const lineData = (data, keys) => {
     const d = data
       .filter((d) => +d[key])
       .map((d) => {
-        const date = parseDate(d.workout_date);
+        const date = d.workout_date;
         return { ...d, x: date, y: +d[key] };
       });
     return [key, d];
@@ -34,7 +34,7 @@ const lineData = (data, keys) => {
 
 const overviewData = (data) => {
   return data.map((d) => {
-    const date = parseDate(d.workout_date);
+    const date = d.workout_date;
     return { ...d, date: dateFormat(date), value: 50 };
   });
 };
@@ -62,7 +62,7 @@ const sumData = (data, key, sumKey = "total_output") => {
   return output;
 };
 
-const AVERAGE_MIN = 5;
+const AVERAGE_MIN = 0;
 const averageData = (data, key, sumKey = "total_output") => {
   const attributeSet = parseAttributeSets(data)[key];
 
@@ -70,7 +70,7 @@ const averageData = (data, key, sumKey = "total_output") => {
     .map((setValue) => {
       const setData = data.filter((d) => d[key] === setValue);
       const averageData = filterSum(setData, sumKey) / setData.length;
-      return setData.length > AVERAGE_MIN
+      return setData.length > AVERAGE_MIN && averageData > 0
         ? { [key]: setValue, value: averageData }
         : null;
     })
