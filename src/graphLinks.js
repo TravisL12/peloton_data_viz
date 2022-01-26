@@ -81,13 +81,7 @@ const averageData = (data, key, sumKey = "total_output") => {
 };
 
 const keys = [INSTRUCTOR, FITNESS_DISCIPLINE, LENGTH_MINUTES, TYPE];
-const secondKeys = [
-  TOTAL_OUTPUT,
-  LENGTH_MINUTES,
-  CALORIES,
-  WATTS_AVG,
-  DISTANCE_MILES,
-];
+const secondKeys = [TOTAL_OUTPUT, LENGTH_MINUTES, CALORIES, DISTANCE_MILES];
 export const lineKeys = [
   CADENCE_AVG,
   CALORIES,
