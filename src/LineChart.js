@@ -147,7 +147,7 @@ const LineChart = ({
           );
         })}
       </div>
-      <svg ref={svgRef} />;
+      <svg ref={svgRef} />
     </>
   );
 };
