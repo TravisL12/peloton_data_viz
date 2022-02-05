@@ -8,6 +8,27 @@ import { parseAttributeSets } from "./parseUtils";
 import { buildColors } from "./utils";
 import { graphLinks, lineKeys } from "./graphLinks";
 
+import demoData from "./demo_workout.csv";
+
+const importData = (input) => {
+  const dataLines = input.split("\n");
+  const header = dataLines[0].split(",");
+  const lines = dataLines.slice(1);
+
+  return lines.map((line) => {
+    const splitLine = line.split(",");
+    return header.reduce((acc, h, idx) => {
+      if (!h || !keys[h]) return acc;
+
+      acc[keys[h]] = typeTransform[keys[h]]
+        ? typeTransform[keys[h]](splitLine[idx])
+        : splitLine[idx];
+
+      return acc;
+    }, {});
+  });
+};
+
 const App = () => {
   const [data, setData] = useState(null);
   const [filteredData, setFilteredData] = useState(null);
@@ -16,29 +37,22 @@ const App = () => {
   const [filterValues, setFilterValues] = useState(null);
   const [currentGraph, setCurrentGraph] = useState(null);
 
+  const handleDemoData = (path) => {
+    fetch(path)
+      .then((d) => d.text())
+      .then((d) => {
+        const data = importData(d);
+        setData(data);
+      });
+  };
+
   const handleOnChange = (event) => {
     const reader = new FileReader();
     const file = event.currentTarget.files[0];
 
     reader.readAsBinaryString(file);
     reader.onload = () => {
-      const dataLines = reader.result.split("\n");
-      const header = dataLines[0].split(",");
-      const lines = dataLines.slice(1);
-
-      const data = lines.map((line) => {
-        const splitLine = line.split(",");
-        return header.reduce((acc, h, idx) => {
-          if (!h || !keys[h]) return acc;
-
-          acc[keys[h]] = typeTransform[keys[h]]
-            ? typeTransform[keys[h]](splitLine[idx])
-            : splitLine[idx];
-
-          return acc;
-        }, {});
-      });
-
+      const data = importData(reader.result);
       setData(data);
     };
   };
@@ -107,7 +121,7 @@ const App = () => {
             </p>
             <p>
               Then{" "}
-              <div style={{ display: "inline-block" }}>
+              <span style={{ display: "inline-block" }}>
                 <input
                   id="data-upload"
                   type="file"
@@ -116,8 +130,19 @@ const App = () => {
                   onChange={handleOnChange}
                 />
                 <label htmlFor="data-upload">click here</label>
-              </div>{" "}
+              </span>{" "}
               to add your data and view your stats
+            </p>
+            <p>
+              Or use{" "}
+              <strong
+                className="demo-link"
+                onClick={() => {
+                  handleDemoData(demoData);
+                }}
+              >
+                this demo data
+              </strong>
             </p>
           </div>
         )}

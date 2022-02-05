@@ -62,6 +62,10 @@ a {
   @extend %link;
 }
 
+.demo-link {
+  @extend %link;
+}
+
 #data-upload {
   display: none;
 
