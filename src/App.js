@@ -62,9 +62,7 @@ const App = () => {
 
   return (
     <div className="container">
-      <div className="header">
-        <span>Peloton</span>
-      </div>
+      <div className="header">Peloton Data Viewer</div>
       <Sidebar
         colors={colors}
         sets={sets}
@@ -103,7 +101,7 @@ const App = () => {
                 rel="noreferrer"
                 href="https://members.onepeloton.com/profile/workouts"
               >
-                Peloton workouts page
+                <strong>Peloton workouts page</strong>
               </a>{" "}
               and download your workout data.
             </p>
@@ -119,7 +117,7 @@ const App = () => {
                 />
                 <label htmlFor="data-upload">click here</label>
               </div>{" "}
-              to get view your stats
+              to add your data and view your stats
             </p>
           </div>
         )}

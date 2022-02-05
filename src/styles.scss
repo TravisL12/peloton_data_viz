@@ -44,20 +44,23 @@ button {
   }
 }
 
+a,
+label {
+  font-size: 16px;
+  padding: 4px;
+  color: black;
+  display: inline-block;
+  text-decoration: underline;
+  font-weight: bolder;
+  cursor: pointer;
+
+  &:hover {
+    color: #999;
+  }
+}
+
 #data-upload {
   display: none;
-
-  & + label {
-    font-size: 16px;
-    padding: 4px;
-    display: inline-block;
-    text-decoration: underline;
-    cursor: pointer;
-
-    &:hover {
-      color: #999;
-    }
-  }
 }
 
 .container {
