@@ -44,8 +44,7 @@ button {
   }
 }
 
-a,
-label {
+%link {
   font-size: 16px;
   padding: 4px;
   color: black;
@@ -59,8 +58,16 @@ label {
   }
 }
 
+a {
+  @extend %link;
+}
+
 #data-upload {
   display: none;
+
+  & + label {
+    @extend %link;
+  }
 }
 
 .container {
