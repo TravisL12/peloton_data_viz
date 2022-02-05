@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-import Header from "./Header";
+import { typeTransform } from "./constants";
+import { keys } from "./utils";
 import Sidebar from "./Sidebar";
 import GraphBody from "./GraphBody";
 import { parseAttributeSets } from "./parseUtils";
@@ -14,6 +15,33 @@ const App = () => {
   const [colors, setColors] = useState(null);
   const [filterValues, setFilterValues] = useState(null);
   const [currentGraph, setCurrentGraph] = useState(null);
+
+  const handleOnChange = (event) => {
+    const reader = new FileReader();
+    const file = event.currentTarget.files[0];
+
+    reader.readAsBinaryString(file);
+    reader.onload = () => {
+      const dataLines = reader.result.split("\n");
+      const header = dataLines[0].split(",");
+      const lines = dataLines.slice(1);
+
+      const data = lines.map((line) => {
+        const splitLine = line.split(",");
+        return header.reduce((acc, h, idx) => {
+          if (!h || !keys[h]) return acc;
+
+          acc[keys[h]] = typeTransform[keys[h]]
+            ? typeTransform[keys[h]](splitLine[idx])
+            : splitLine[idx];
+
+          return acc;
+        }, {});
+      });
+
+      setData(data);
+    };
+  };
 
   useEffect(() => {
     if (data?.length) {
@@ -34,7 +62,9 @@ const App = () => {
 
   return (
     <div className="container">
-      <Header setData={setData} />
+      <div className="header">
+        <span>Peloton</span>
+      </div>
       <Sidebar
         colors={colors}
         sets={sets}
@@ -42,7 +72,7 @@ const App = () => {
         setFilterValues={setFilterValues}
       />
       <div className="main">
-        {!!data?.length && (
+        {!!data?.length ? (
           <>
             <ul id="graph-links">
               {graphLinks.map((link) => {
@@ -63,6 +93,35 @@ const App = () => {
               data={filteredData}
             />
           </>
+        ) : (
+          <div className="instructions">
+            <h4>Get Started!</h4>
+            <p>
+              Visit your{" "}
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href="https://members.onepeloton.com/profile/workouts"
+              >
+                Peloton workouts page
+              </a>{" "}
+              and download your workout data.
+            </p>
+            <p>
+              Then{" "}
+              <div style={{ display: "inline-block" }}>
+                <input
+                  id="data-upload"
+                  type="file"
+                  name="data-csv"
+                  accept=".csv"
+                  onChange={handleOnChange}
+                />
+                <label htmlFor="data-upload">click here</label>
+              </div>{" "}
+              to get view your stats
+            </p>
+          </div>
         )}
       </div>
     </div>
