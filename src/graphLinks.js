@@ -11,14 +11,9 @@ import {
   SPEED_AVG,
   DISTANCE_MILES,
   CALORIES,
-  WATTS_AVG,
 } from "./constants";
 
 export const dateFormat = d3.timeFormat("%m/%d %H:%M");
-
-const parseDate = (date) => {
-  return d3.timeParse("%Y-%m-%d %H:%M")(date.slice(0, -6));
-};
 
 const lineData = (data, keys) => {
   return keys.map((key) => {
@@ -33,10 +28,17 @@ const lineData = (data, keys) => {
 };
 
 const overviewData = (data) => {
-  return data.map((d) => {
-    const date = d.workout_date;
-    return { ...d, date: dateFormat(date), value: 50 };
-  });
+  return data
+    .filter((d) => d[CALORIES] > 0)
+    .map((d) => {
+      const date = d.workout_date;
+      console.log(d);
+      return {
+        ...d,
+        date: dateFormat(date),
+        value: d[CALORIES] / d[LENGTH_MINUTES],
+      };
+    });
 };
 
 const countData = (data, key) => {
@@ -112,7 +114,7 @@ export const graphLinks = [
     type: "bar",
   },
   {
-    title: "Overview",
+    title: "Output Rate (cal/min)",
     keys,
     dataTransform: overviewData,
     type: "overview",
