@@ -10,6 +10,7 @@ import { graphLinks, lineKeys } from "./graphLinks";
 
 import demoData from "./demo_workout.csv";
 import Instructions from "./Instructions";
+import LogoWhite from "./peloton_logo_white.svg";
 
 const importData = (input) => {
   const dataLines = input.split("\n");
@@ -77,7 +78,11 @@ const App = () => {
 
   return (
     <div className="container">
-      <div className="header">Peloton Data Viewer</div>
+      <div className="header">
+        <div className="logo-container">
+          <img src={LogoWhite} />
+        </div>
+      </div>
       <Sidebar
         colors={colors}
         sets={sets}
