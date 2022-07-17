@@ -1,9 +1,8 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useCallback } from "react";
-import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "./constants";
-import { attributes } from "./utils";
-import { dateFormat } from "./graphLinks";
-import { generateSvg } from "./utils";
+import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "../constants";
+import { attributes, generateSvg } from "../utils/utils";
+import { dateFormat } from "../utils/graphLinks";
 
 const LineChart = ({
   data,

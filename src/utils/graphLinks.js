@@ -11,7 +11,7 @@ import {
   SPEED_AVG,
   DISTANCE_MILES,
   CALORIES,
-} from "./constants";
+} from "../constants";
 
 export const dateFormat = d3.timeFormat("%m/%d %H:%M");
 

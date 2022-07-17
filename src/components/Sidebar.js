@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { attributes } from "./utils";
+import { attributes } from "../utils/utils";
 
 const Sidebar = ({ sets, colors, filterValues, setFilterValues }) => {
   useEffect(() => {

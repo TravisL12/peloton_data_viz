@@ -5,7 +5,7 @@ import {
   FITNESS_DISCIPLINE,
   LENGTH_MINUTES,
   TYPE,
-} from "./constants";
+} from "../constants";
 
 export const filterSum = (filteredData, sumKey) =>
   filteredData.reduce((acc, d) => {

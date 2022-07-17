@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 
-import { typeTransform } from "./constants";
-import { keys } from "./utils";
-import Sidebar from "./Sidebar";
-import GraphBody from "./GraphBody";
-import { parseAttributeSets } from "./parseUtils";
-import { buildColors } from "./utils";
-import { graphLinks, lineKeys } from "./graphLinks";
+import { typeTransform } from "../constants";
 
-import demoData from "./demo_workout.csv";
-import Instructions from "./Instructions";
-import LogoWhite from "./peloton_logo_white.svg";
+import Sidebar from "../components/Sidebar";
+import GraphBody from "../components/GraphBody";
+import Instructions from "../components/Instructions";
+
+import { keys, buildColors } from "../utils/utils";
+import { parseAttributeSets } from "../utils/parseUtils";
+import { graphLinks, lineKeys } from "../utils/graphLinks";
+
+import demoData from "../demo_workout.csv";
+import LogoWhite from "../peloton_logo_white.svg";
 
 const importData = (input) => {
   const dataLines = input.split("\n");

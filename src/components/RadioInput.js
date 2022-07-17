@@ -1,4 +1,4 @@
-import { attributes } from "./utils";
+import { attributes } from "../utils/utils";
 
 const RadioInput = ({ value, selectKey, label, keys, handleSelectChange }) => (
   <div className={selectKey}>

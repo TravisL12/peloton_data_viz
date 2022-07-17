@@ -1,8 +1,8 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useCallback } from "react";
-import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "./constants";
-import RadioInput from "./RadioInput";
-import { generateSvg } from "./utils";
+import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "../constants";
+import RadioInput from "../components/RadioInput";
+import { generateSvg } from "../utils/utils";
 
 const BarChart = ({
   data,

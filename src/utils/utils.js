@@ -23,7 +23,7 @@ import {
   TOTAL_OUTPUT,
   TYPE,
   WORKOUT_DATE,
-} from "./constants";
+} from "../constants";
 
 export const keys = {
   "Avg. Cadence (RPM)": CADENCE_AVG,

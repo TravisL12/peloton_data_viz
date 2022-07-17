@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import BarChart from "./BarChart";
-import OverviewBarChart from "./OverviewBarChart";
-import LineChart from "./LineChart";
+import BarChart from "../charts/BarChart";
+import OverviewBarChart from "../charts/OverviewBarChart";
+import LineChart from "../charts/LineChart";
 
 const GraphBody = ({ data, colors, currentGraph }) => {
   const [select, setSelect] = useState({
