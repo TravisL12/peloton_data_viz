@@ -32,7 +32,6 @@ const overviewData = (data) => {
     .filter((d) => d[CALORIES] > 0)
     .map((d) => {
       const date = d.workout_date;
-      console.log(d);
       return {
         ...d,
         date: dateFormat(date),

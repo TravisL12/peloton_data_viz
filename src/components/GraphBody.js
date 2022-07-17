@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import BarChart from "../charts/BarChart";
 import OverviewBarChart from "../charts/OverviewBarChart";
 import LineChart from "../charts/LineChart";
+import DataTable from "./DataTable";
 
 const GraphBody = ({ data, colors, currentGraph }) => {
   const [select, setSelect] = useState({
@@ -43,34 +44,37 @@ const GraphBody = ({ data, colors, currentGraph }) => {
       <div className="chart-title">
         <h3>{currentGraph?.title}</h3>
       </div>
-      {currentGraph?.type === "bar" && (
-        <BarChart
-          data={data}
-          colors={colors}
-          currentGraph={currentGraph}
-          select={select}
-          handleSelectChange={handleSelectChange}
-        />
-      )}
-      {currentGraph?.type === "overview" && (
-        <OverviewBarChart
-          data={data}
-          colors={colors}
-          currentGraph={currentGraph}
-          select={select}
-          handleSelectChange={handleSelectChange}
-        />
-      )}
-      {currentGraph?.type === "line" && (
-        <LineChart
-          data={data}
-          colors={colors}
-          currentGraph={currentGraph}
-          keys={lineKeys}
-          checkboxes={checkboxes}
-          handleCheckboxChange={handleCheckboxChange}
-        />
-      )}
+      <div>
+        {currentGraph?.type === "bar" && (
+          <BarChart
+            data={data}
+            colors={colors}
+            currentGraph={currentGraph}
+            select={select}
+            handleSelectChange={handleSelectChange}
+          />
+        )}
+        {currentGraph?.type === "overview" && (
+          <OverviewBarChart
+            data={data}
+            colors={colors}
+            currentGraph={currentGraph}
+            select={select}
+            handleSelectChange={handleSelectChange}
+          />
+        )}
+        {currentGraph?.type === "line" && (
+          <LineChart
+            data={data}
+            colors={colors}
+            currentGraph={currentGraph}
+            keys={lineKeys}
+            checkboxes={checkboxes}
+            handleCheckboxChange={handleCheckboxChange}
+          />
+        )}
+      </div>
+      <DataTable data={data} />
     </div>
   );
 };

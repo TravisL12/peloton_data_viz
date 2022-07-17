@@ -1,6 +1,7 @@
 :root {
   --border-size: 4px;
   --peloton-red: rgb(255, 51, 71);
+  --sidebar-width: 300px;
 }
 
 body {
@@ -30,6 +31,7 @@ li {
 #graph {
   @include flex;
   flex-direction: column;
+  height: 100%;
 }
 
 button {
@@ -76,7 +78,7 @@ a {
 
 .container {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: var(--sidebar-width) 1fr;
   grid-template-rows: 60px 1fr;
   width: 100vw;
   height: 100vh;
@@ -95,7 +97,7 @@ a {
 
 .logo-container {
   height: 100%;
-  width: 200px;
+  width: var(--sidebar-width);
   @include flex(flex-start, center);
 
   img {
@@ -145,22 +147,30 @@ a {
 #graph-links {
   display: flex;
   border-right: none;
-  position: sticky;
-  top: 0;
 
   li {
     padding: 5px;
-    border: 1px solid;
+    border: 1px solid white;
     cursor: pointer;
-    background: white;
+    color: white;
 
     & + li {
       border-left: none;
     }
 
-    &.selected,
+    &.active-link {
+      color: var(--peloton-red);
+      background: white;
+    }
+
     &:hover {
+      color: var(--peloton-red);
       background: pink;
     }
   }
+}
+
+.data-table-container {
+  flex: 1;
+  overflow: auto;
 }

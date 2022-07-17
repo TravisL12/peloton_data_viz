@@ -25,6 +25,7 @@ import {
   WORKOUT_DATE,
 } from "../constants";
 
+// these keys are from the CSV raw data
 export const keys = {
   "Avg. Cadence (RPM)": CADENCE_AVG,
   "Avg. Heartrate": HEARTRATE_AVG,
@@ -100,4 +101,12 @@ export const generateSvg = (ref, height) => {
   // create y-axis
   svg.append("g").attr("class", "y-axis");
   return svg;
+};
+
+export const prettyDateFormat = (date) => {
+  return date.toLocaleDateString("en", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 };

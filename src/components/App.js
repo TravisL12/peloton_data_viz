@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { typeTransform } from "../constants";
+import { CLASS_DATE, INSTRUCTOR, typeTransform } from "../constants";
 
 import Sidebar from "../components/Sidebar";
 import GraphBody from "../components/GraphBody";
@@ -23,10 +23,9 @@ const importData = (input) => {
     return header.reduce((acc, h, idx) => {
       if (!h || !keys[h]) return acc;
 
-      acc[keys[h]] = typeTransform[keys[h]]
-        ? typeTransform[keys[h]](splitLine[idx])
-        : splitLine[idx];
-
+      const transformFn = typeTransform[keys[h]];
+      const output = transformFn ? transformFn(splitLine[idx]) : splitLine[idx];
+      acc[keys[h]] = output;
       return acc;
     }, {});
   });
@@ -83,6 +82,22 @@ const App = () => {
         <div className="logo-container">
           <img src={LogoWhite} />
         </div>
+        {!!data?.length && (
+          <ul id="graph-links">
+            {graphLinks.map((link) => {
+              const isActive = currentGraph?.title === link.title;
+              return (
+                <li
+                  key={link.title}
+                  className={isActive ? "active-link" : ""}
+                  onClick={() => setCurrentGraph(link)}
+                >
+                  {link.title}
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
       <Sidebar
         colors={colors}
@@ -92,26 +107,11 @@ const App = () => {
       />
       <div className="main">
         {!!data?.length ? (
-          <>
-            <ul id="graph-links">
-              {graphLinks.map((link) => {
-                return (
-                  <li
-                    key={link.title}
-                    className="options-item"
-                    onClick={() => setCurrentGraph(link)}
-                  >
-                    {link.title}
-                  </li>
-                );
-              })}
-            </ul>
-            <GraphBody
-              currentGraph={currentGraph}
-              colors={colors}
-              data={filteredData}
-            />
-          </>
+          <GraphBody
+            currentGraph={currentGraph}
+            colors={colors}
+            data={filteredData}
+          />
         ) : (
           <Instructions
             handleOnChange={handleOnChange}
