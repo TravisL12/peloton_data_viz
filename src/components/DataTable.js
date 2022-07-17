@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  CLASS_DATE,
+  WORKOUT_DATE,
   INSTRUCTOR,
   FITNESS_DISCIPLINE,
   LENGTH_MINUTES,
@@ -14,7 +14,7 @@ import {
 } from "../constants";
 import { prettyDateFormat, attributes } from "../utils/utils";
 const tableHeaders = [
-  CLASS_DATE,
+  WORKOUT_DATE,
   INSTRUCTOR,
   FITNESS_DISCIPLINE,
   LENGTH_MINUTES,
@@ -32,6 +32,11 @@ const DataTable = ({ data }) => {
     return null;
   }
 
+  const rowKey = (d) => {
+    const sum = d[LENGTH_MINUTES] + d[TOTAL_OUTPUT];
+    return `${d[WORKOUT_DATE]}-${d[INSTRUCTOR]}-${sum}`;
+  };
+
   return (
     <div className="data-table-container">
       <table>
@@ -45,14 +50,14 @@ const DataTable = ({ data }) => {
         <tbody>
           {data.map((d) => {
             return (
-              <tr>
+              <tr key={rowKey(d)}>
                 {tableHeaders.map((header) => {
                   let value = d[header];
                   if (!value) {
                     return null;
                   }
 
-                  if (header === CLASS_DATE) {
+                  if (header === WORKOUT_DATE) {
                     value = prettyDateFormat(value);
                   }
                   return <td key={`value-${header}`}>{value}</td>;
