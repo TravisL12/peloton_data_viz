@@ -80,7 +80,7 @@ const App = () => {
     <div className="container">
       <div className="header">
         <div className="logo-container">
-          <img src={LogoWhite} />
+          <img src={LogoWhite} alt="Logo in white" />
         </div>
         {!!data?.length && (
           <ul id="graph-links">

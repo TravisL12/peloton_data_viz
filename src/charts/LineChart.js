@@ -113,7 +113,7 @@ const LineChart = ({ data, colors, currentGraph, keys }) => {
 
   useEffect(() => {
     generateSvg(svgRef.current, height);
-  }, []);
+  }, [height]);
 
   useEffect(() => {
     if (data) {

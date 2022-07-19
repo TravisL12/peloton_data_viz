@@ -64,7 +64,7 @@ const OverviewBarChart = ({ data, colors, currentGraph, select }) => {
 
   useEffect(() => {
     generateSvg(svgRef.current, height);
-  }, []);
+  }, [height]);
 
   useEffect(() => {
     if (data) {
