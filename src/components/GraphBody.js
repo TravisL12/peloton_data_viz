@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
+
+import RadioInput from "../components/RadioInput";
+
 import BarChart from "../charts/BarChart";
 import OverviewBarChart from "../charts/OverviewBarChart";
 import LineChart from "../charts/LineChart";
+
 import DataTable from "./DataTable";
+import CheckboxInput from "./CheckboxInput";
 
 const GraphBody = ({ data, colors, currentGraph }) => {
   const [select, setSelect] = useState({
@@ -45,13 +50,41 @@ const GraphBody = ({ data, colors, currentGraph }) => {
         <h3>{currentGraph?.title}</h3>
       </div>
       <div>
+        <div style={{ display: "flex", gap: "10px" }}>
+          {currentGraph?.type === "line" ? (
+            <CheckboxInput
+              currentGraph={currentGraph}
+              checkboxes={checkboxes}
+              colors={colors}
+              handleCheckboxChange={handleCheckboxChange}
+            />
+          ) : (
+            <>
+              <RadioInput
+                selectKey={"graphKey"}
+                label={"Category"}
+                keys={currentGraph?.keys}
+                value={select.graphKey}
+                handleSelectChange={handleSelectChange}
+              />
+              {currentGraph?.secondKeys && (
+                <RadioInput
+                  selectKey={"secondKey"}
+                  label={"Value"}
+                  keys={currentGraph?.secondKeys}
+                  value={select.secondKey}
+                  handleSelectChange={handleSelectChange}
+                />
+              )}
+            </>
+          )}
+        </div>
         {currentGraph?.type === "bar" && (
           <BarChart
             data={data}
             colors={colors}
             currentGraph={currentGraph}
             select={select}
-            handleSelectChange={handleSelectChange}
           />
         )}
         {currentGraph?.type === "overview" && (
@@ -69,8 +102,6 @@ const GraphBody = ({ data, colors, currentGraph }) => {
             colors={colors}
             currentGraph={currentGraph}
             keys={lineKeys}
-            checkboxes={checkboxes}
-            handleCheckboxChange={handleCheckboxChange}
           />
         )}
       </div>

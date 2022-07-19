@@ -45,10 +45,10 @@ const Sidebar = ({ sets, colors, filterValues, setFilterValues }) => {
                 <button onClick={() => handleToggleOn(filter)}>All</button>
                 <button onClick={() => handleToggleOff(filter)}>None</button>
               </div>
-              <form id={`${filter}-form`}>
-                <ul className="filters-list">
-                  {sets?.[filter].map((set) => {
-                    return (
+              <ul className="filters-list">
+                {sets?.[filter].map((set) => {
+                  return (
+                    filterValues[set] !== undefined && (
                       <li key={set} style={{ background: colors[filter](set) }}>
                         <input
                           onChange={handleCheckboxChange}
@@ -59,10 +59,10 @@ const Sidebar = ({ sets, colors, filterValues, setFilterValues }) => {
                         />
                         <label htmlFor={`option-${set}`}>{set}</label>
                       </li>
-                    );
-                  })}
-                </ul>
-              </form>
+                    )
+                  );
+                })}
+              </ul>
             </div>
           );
         })}

@@ -1,7 +1,7 @@
 import { attributes } from "../utils/utils";
 
 const RadioInput = ({ value, selectKey, label, keys, handleSelectChange }) => (
-  <div className={selectKey}>
+  <div>
     <label>{label}</label>
     <div>
       {keys?.map((key) => (

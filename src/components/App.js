@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { CLASS_DATE, INSTRUCTOR, typeTransform } from "../constants";
+import { typeTransform } from "../constants";
 
 import Sidebar from "../components/Sidebar";
 import GraphBody from "../components/GraphBody";
