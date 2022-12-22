@@ -51,6 +51,7 @@ const OverviewBarChart = ({ data, colors, currentGraph, select }) => {
         (enter) => {
           const g = enter.append("g").attr("class", "bar");
 
+          // need to add another .join for each stacked bar
           g.append("rect")
             .attr("x", (d) => {
               console.log(d, "XXXXX");
