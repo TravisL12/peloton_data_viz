@@ -55,7 +55,7 @@ const App = () => {
     reader.readAsBinaryString(file);
     reader.onload = () => {
       const data = importData(reader.result);
-      setData(data);
+      setData(data.slice(-100));
     };
   };
 
