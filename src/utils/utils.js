@@ -106,7 +106,7 @@ export const generateSvg = (ref, height) => {
 export const prettyDateFormat = (date) => {
   return date.toLocaleDateString("en", {
     year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
   });
 };
