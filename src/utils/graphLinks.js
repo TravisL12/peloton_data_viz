@@ -13,7 +13,7 @@ import {
   CALORIES,
 } from "../constants";
 
-export const dateFormat = d3.timeFormat("%m/%d %H:%M");
+export const dateFormat = d3.timeFormat("%m/%d/%Y");
 
 const lineData = (data, keys) => {
   return keys.map((key) => {

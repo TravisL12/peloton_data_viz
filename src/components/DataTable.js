@@ -27,11 +27,10 @@ const tableHeaders = [
   PACE_AVG,
 ];
 
-const DataTable = ({ data }) => {
+const DataTable = ({ data, colors }) => {
   if (!data || data.length === 0) {
     return null;
   }
-
   const rowKey = (d) => {
     const sum = d[LENGTH_MINUTES] + d[TOTAL_OUTPUT];
     return `${d[WORKOUT_DATE]}-${d[INSTRUCTOR]}-${sum}`;
@@ -52,6 +51,7 @@ const DataTable = ({ data }) => {
             return (
               <tr key={rowKey(d)}>
                 {tableHeaders.map((header) => {
+                  const color = colors[header];
                   let value = d[header];
                   if (!value) {
                     return null;
@@ -60,7 +60,14 @@ const DataTable = ({ data }) => {
                   if (header === WORKOUT_DATE) {
                     value = prettyDateFormat(value);
                   }
-                  return <td key={`value-${header}`}>{value}</td>;
+                  return (
+                    <td
+                      key={`value-${header}`}
+                      style={{ background: color ? color(value) : "white" }}
+                    >
+                      {value}
+                    </td>
+                  );
                 })}
               </tr>
             );

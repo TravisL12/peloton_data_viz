@@ -13,6 +13,8 @@ import { graphLinks, lineKeys } from "../utils/graphLinks";
 import demoData from "../demo_workout.csv";
 import LogoWhite from "../peloton_logo_white.svg";
 
+const SLICE_AMOUNT = 200;
+
 const importData = (input) => {
   const dataLines = input.split("\n");
   const header = dataLines[0].split(",");
@@ -55,7 +57,7 @@ const App = () => {
     reader.readAsBinaryString(file);
     reader.onload = () => {
       const data = importData(reader.result);
-      setData(data);
+      setData(data.slice(-SLICE_AMOUNT));
     };
   };
 

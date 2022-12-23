@@ -105,7 +105,7 @@ const GraphBody = ({ data, colors, currentGraph }) => {
           />
         )}
       </div>
-      <DataTable data={data} />
+      <DataTable data={data} colors={colors} />
     </div>
   );
 };
