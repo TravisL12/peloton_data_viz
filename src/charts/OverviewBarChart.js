@@ -8,10 +8,36 @@ const OverviewBarChart = ({ data, colors, currentGraph, select }) => {
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
 
+  const updateBars = (selection) => {
+    return selection
+      .selectAll("rect")
+      .data((d) => d)
+      .join(
+        (enter) =>
+          enter
+            .append("rect")
+            .attr("x", (d) => xScale(d.data.date))
+            .attr("y", (d) => yScale(d[1]))
+            .attr("height", (d) => yScale(d[0]) - yScale(d[1]))
+            .attr("width", xScale.bandwidth()),
+        (update) => {
+          update
+            .transition()
+            .attr("x", (d) => xScale(d.data.date))
+            .attr("y", (d) => yScale(d[1]))
+            .attr("height", (d) => yScale(d[0]) - yScale(d[1]))
+            .attr("width", xScale.bandwidth());
+        }
+      );
+  };
+
+  const allColors = colors[select.graphKey];
+  const xScale = d3.scaleBand().range([0, width]).padding(0.3);
+  const yScale = d3.scaleLinear().range([height, 0]);
+
   const drawGraph = useCallback(() => {
     const svg = d3.select(svgRef.current);
 
-    const allColors = colors[select.graphKey];
     const graphData = currentGraph.dataTransform(data, select.graphKey);
 
     // need object of each instructor with value associated
@@ -30,8 +56,6 @@ const OverviewBarChart = ({ data, colors, currentGraph, select }) => {
       return output;
     });
     const stackedGen = d3.stack().keys(stackGroup)(changedData);
-    const xScale = d3.scaleBand().range([0, width]).padding(0.3);
-    const yScale = d3.scaleLinear().range([height, 0]);
 
     xScale.domain(groups);
     d3.select(`.x-axis`)
@@ -51,30 +75,17 @@ const OverviewBarChart = ({ data, colors, currentGraph, select }) => {
         (enter) => {
           const g = enter.append("g").attr("class", "bar");
 
-          // need to add another .join for each stacked bar
-          g.append("rect")
-            .attr("x", (d) => {
-              console.log(d, "XXXXX");
-              return xScale(d.data.date);
-            })
-            .attr("y", (d) => yScale(d[1]))
-            .attr("height", (d) => yScale(d[0]) - yScale(d[1]))
-            .attr("width", xScale.bandwidth())
+          g.append("g")
+            .attr("class", "bars")
+            .attr("fill", (d) => allColors(d.key))
             .attr("stroke-width", 1)
-            .attr("stroke", "black")
-            .attr("fill", (d) => allColors(d[select.graphKey]));
+            .attr("stroke", "black");
 
+          updateBars(g.select(".bars"));
           return g;
         },
         (update) => {
-          update
-            .select("rect")
-            .transition()
-            .attr("x", (d) => xScale(d.data.date))
-            .attr("y", (d) => yScale(d[1]))
-            .attr("height", (d) => yScale(d[0]) - yScale(d[1]))
-            .attr("width", xScale.bandwidth())
-            .attr("fill", (d) => allColors(d[select.graphKey]));
+          updateBars(update.select(".bars"));
         },
         (exit) => {
           exit.transition().duration(250).style("opacity", 0).remove();
