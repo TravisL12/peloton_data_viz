@@ -3,17 +3,18 @@ import { useEffect, useState } from "react";
 import { typeTransform } from "../constants";
 
 import Sidebar from "../components/Sidebar";
-import GraphBody from "../components/GraphBody";
+import DataView from "./DataView";
 import Instructions from "../components/Instructions";
 
 import { keys, buildColors } from "../utils/utils";
 import { parseAttributeSets } from "../utils/parseUtils";
-import { graphLinks, lineKeys } from "../utils/graphLinks";
+import { graphLinks, lineKeys } from "../utils/graphUtils";
 
 import demoData from "../demo_workout.csv";
 import LogoWhite from "../peloton_logo_white.svg";
+import GraphLinks from "./GraphLinks";
 
-const SLICE_AMOUNT = 200;
+const SLICE_AMOUNT = 300;
 
 const importData = (input) => {
   const dataLines = input.split("\n");
@@ -85,20 +86,11 @@ const App = () => {
           <img src={LogoWhite} alt="Logo in white" />
         </div>
         {!!data?.length && (
-          <ul id="graph-links">
-            {graphLinks.map((link) => {
-              const isActive = currentGraph?.title === link.title;
-              return (
-                <li
-                  key={link.title}
-                  className={isActive ? "active-link" : ""}
-                  onClick={() => setCurrentGraph(link)}
-                >
-                  {link.title}
-                </li>
-              );
-            })}
-          </ul>
+          <GraphLinks
+            graphLinks={graphLinks}
+            currentGraph={currentGraph}
+            setCurrentGraph={setCurrentGraph}
+          />
         )}
       </div>
       <Sidebar
@@ -109,7 +101,7 @@ const App = () => {
       />
       <div className="main">
         {!!data?.length ? (
-          <GraphBody
+          <DataView
             currentGraph={currentGraph}
             colors={colors}
             data={filteredData}

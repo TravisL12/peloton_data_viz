@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import { useEffect, useRef, useCallback } from "react";
 import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "../constants";
 import { generateSvg } from "../utils/utils";
-import { dateFormat } from "../utils/graphLinks";
+import { dateFormat } from "../utils/graphUtils";
 
 const LineChart = ({ data, colors, currentGraph, keys }) => {
   const svgRef = useRef(null);

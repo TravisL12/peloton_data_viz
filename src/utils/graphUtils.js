@@ -27,15 +27,21 @@ const lineData = (data, keys) => {
   });
 };
 
-const overviewData = (data) => {
+const overviewData = (data, otherkey, third) => {
+  console.log(otherkey, "otherkey");
+  console.log(third, "third");
   return data
-    .filter((d) => d[CALORIES] > 0)
+    .filter((d) => d[TOTAL_OUTPUT] > 0)
     .map((d) => {
       const date = d.workout_date;
+      const value =
+        third === "perMinute"
+          ? d[CALORIES] / d[LENGTH_MINUTES]
+          : d[TOTAL_OUTPUT];
       return {
         ...d,
         date: dateFormat(date),
-        value: d[CALORIES] / d[LENGTH_MINUTES],
+        value,
       };
     });
 };
@@ -50,7 +56,7 @@ const countData = (data, key) => {
   return output;
 };
 
-const sumData = (data, key, sumKey = "total_output") => {
+const sumData = (data, key, sumKey = TOTAL_OUTPUT) => {
   const attributeSet = parseAttributeSets(data)[key];
 
   const output = attributeSet.map((setValue) => {
@@ -64,7 +70,7 @@ const sumData = (data, key, sumKey = "total_output") => {
 };
 
 const AVERAGE_MIN = 0;
-const averageData = (data, key, sumKey = "total_output") => {
+const averageData = (data, key, sumKey = TOTAL_OUTPUT) => {
   const attributeSet = parseAttributeSets(data)[key];
 
   const output = attributeSet
@@ -113,8 +119,9 @@ export const graphLinks = [
     type: "bar",
   },
   {
-    title: "Output Rate (cal/min)",
+    title: "Output Rate",
     keys,
+    secondKeys: [TOTAL_OUTPUT, "perMinute"],
     dataTransform: overviewData,
     type: "overview",
   },

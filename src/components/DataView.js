@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 
-import RadioInput from "../components/RadioInput";
-
 import BarChart from "../charts/BarChart";
 import OverviewBarChart from "../charts/OverviewBarChart";
 import LineChart from "../charts/LineChart";
 
 import DataTable from "./DataTable";
-import CheckboxInput from "./CheckboxInput";
+import InputControls from "./InputControls";
 
-const GraphBody = ({ data, colors, currentGraph }) => {
+const DataView = ({ data, colors, currentGraph }) => {
   const [select, setSelect] = useState({
     graphKey: currentGraph?.keys?.[0],
     secondKey: currentGraph?.secondKeys?.[0],
@@ -50,35 +48,14 @@ const GraphBody = ({ data, colors, currentGraph }) => {
         <h3>{currentGraph?.title}</h3>
       </div>
       <div>
-        <div style={{ display: "flex", gap: "10px" }}>
-          {currentGraph?.type === "line" ? (
-            <CheckboxInput
-              currentGraph={currentGraph}
-              checkboxes={checkboxes}
-              colors={colors}
-              handleCheckboxChange={handleCheckboxChange}
-            />
-          ) : (
-            <>
-              <RadioInput
-                selectKey={"graphKey"}
-                label={"Category"}
-                keys={currentGraph?.keys}
-                value={select.graphKey}
-                handleSelectChange={handleSelectChange}
-              />
-              {currentGraph?.secondKeys && (
-                <RadioInput
-                  selectKey={"secondKey"}
-                  label={"Value"}
-                  keys={currentGraph?.secondKeys}
-                  value={select.secondKey}
-                  handleSelectChange={handleSelectChange}
-                />
-              )}
-            </>
-          )}
-        </div>
+        <InputControls
+          currentGraph={currentGraph}
+          checkboxes={checkboxes}
+          colors={colors}
+          handleCheckboxChange={handleCheckboxChange}
+          handleSelectChange={handleSelectChange}
+          select={select}
+        />
         {currentGraph?.type === "bar" && (
           <BarChart
             data={data}
@@ -110,4 +87,4 @@ const GraphBody = ({ data, colors, currentGraph }) => {
   );
 };
 
-export default GraphBody;
+export default DataView;

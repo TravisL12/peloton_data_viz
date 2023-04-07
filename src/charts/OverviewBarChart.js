@@ -12,7 +12,11 @@ const OverviewBarChart = ({ data, colors, currentGraph, select }) => {
   const xScale = d3.scaleBand().range([0, width]).padding(0.3);
   const yScale = d3.scaleLinear().range([height, 0]);
 
-  const graphData = currentGraph.dataTransform(data, select.graphKey);
+  const graphData = currentGraph.dataTransform(
+    data,
+    select.graphKey,
+    select.secondKey
+  );
   const groups = graphData.map((d) => d.date);
   const stackGroup = getUniq(graphData.map((d) => d[select.graphKey]));
   const changedData = graphData.map((d) => {

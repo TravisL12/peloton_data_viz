@@ -45,6 +45,8 @@ export const keys = {
   "Total Output": TOTAL_OUTPUT,
   Type: TYPE,
   "Workout Timestamp": WORKOUT_DATE,
+  // extra
+  "Cal/minute": "perMinute",
 };
 
 const schemes = {
