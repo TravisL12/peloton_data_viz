@@ -3,7 +3,7 @@ import { useEffect, useRef, useCallback } from "react";
 import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "../constants";
 import { generateSvg } from "../utils/utils";
 
-const BarChart = ({ data, colors, currentGraph, select }) => {
+const BarChart = ({ data, allColors, currentGraph, select }) => {
   const svgRef = useRef(null);
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
@@ -11,7 +11,6 @@ const BarChart = ({ data, colors, currentGraph, select }) => {
   const drawGraph = useCallback(() => {
     const svg = d3.select(svgRef.current);
 
-    const allColors = colors[select.graphKey];
     const graphData = currentGraph.dataTransform(
       data,
       select.graphKey,
@@ -67,7 +66,7 @@ const BarChart = ({ data, colors, currentGraph, select }) => {
           exit.transition().duration(250).style("opacity", 0).remove();
         }
       );
-  }, [colors, data, height, width, currentGraph, select]);
+  }, [allColors, data, height, width, currentGraph, select]);
 
   useEffect(() => {
     generateSvg(svgRef.current, height);
@@ -77,7 +76,7 @@ const BarChart = ({ data, colors, currentGraph, select }) => {
     if (data) {
       drawGraph();
     }
-  }, [data, colors, drawGraph, select]);
+  }, [data, allColors, drawGraph, select]);
 
   return <svg ref={svgRef} />;
 };

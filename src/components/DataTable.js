@@ -27,8 +27,13 @@ const tableHeaders = [
   PACE_AVG,
 ];
 
-const DataTable = ({ sortData, data, colors }) => {
-  const [sortDirection, setSortDirection] = useState("asc");
+const DataTable = ({
+  sortData,
+  data,
+  colors,
+  sortDirection,
+  setSortDirection,
+}) => {
   if (!data || data.length === 0) {
     return null;
   }

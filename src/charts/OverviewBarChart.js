@@ -3,15 +3,13 @@ import { useEffect, useRef, useCallback } from "react";
 import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "../constants";
 import { generateSvg, getUniq } from "../utils/utils";
 
-const OverviewBarChart = ({ data, colors, currentGraph, select }) => {
+const OverviewBarChart = ({ data, allColors, currentGraph, select }) => {
   const svgRef = useRef(null);
   const width = mainWidth - margin.left - margin.right;
   const height = mainHeight - margin.top - margin.bottom;
 
-  const allColors = colors[select.graphKey];
   const xScale = d3.scaleBand().range([0, width]).padding(0.3);
   const yScale = d3.scaleLinear().range([height, 0]);
-
   const graphData = currentGraph.dataTransform(
     data,
     select.graphKey,
@@ -74,7 +72,7 @@ const OverviewBarChart = ({ data, colors, currentGraph, select }) => {
     svg
       .selectAll(`.${GROUP_SELECTOR}`)
       .selectAll(".bar")
-      .data(stackedGen, (d) => d.date)
+      .data(stackedGen, (d) => d.key)
       .join(
         (enter) => {
           const g = enter.append("g").attr("class", "bar");
@@ -105,7 +103,7 @@ const OverviewBarChart = ({ data, colors, currentGraph, select }) => {
     if (data) {
       drawGraph();
     }
-  }, [data, colors, drawGraph, select]);
+  }, [data, allColors, drawGraph, select]);
 
   return <svg ref={svgRef} />;
 };

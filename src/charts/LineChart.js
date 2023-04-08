@@ -4,7 +4,7 @@ import { mainWidth, mainHeight, GROUP_SELECTOR, margin } from "../constants";
 import { generateSvg } from "../utils/utils";
 import { dateFormat } from "../utils/graphUtils";
 
-const LineChart = ({ data, colors, currentGraph, keys }) => {
+const LineChart = ({ data, allColors, currentGraph, keys }) => {
   const svgRef = useRef(null);
 
   const width = mainWidth - margin.left - margin.right;
@@ -13,7 +13,6 @@ const LineChart = ({ data, colors, currentGraph, keys }) => {
   const drawGraph = useCallback(() => {
     const svg = d3.select(svgRef.current);
 
-    const allColors = colors.lines;
     const graphData = currentGraph.dataTransform(data, keys);
     const xScale = d3.scaleTime().range([0, width]);
     const yScale = d3.scaleLinear().rangeRound([height, 0]);
@@ -109,7 +108,7 @@ const LineChart = ({ data, colors, currentGraph, keys }) => {
           exit.transition().attr("fill", "gray").remove();
         }
       );
-  }, [colors, data, height, width, currentGraph, keys]);
+  }, [allColors, data, height, width, currentGraph, keys]);
 
   useEffect(() => {
     generateSvg(svgRef.current, height);
@@ -119,7 +118,7 @@ const LineChart = ({ data, colors, currentGraph, keys }) => {
     if (data) {
       drawGraph();
     }
-  }, [data, colors, drawGraph]);
+  }, [data, allColors, drawGraph]);
 
   return <svg ref={svgRef} />;
 };

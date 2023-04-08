@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { typeTransform } from "../constants";
 
@@ -43,6 +43,7 @@ const App = () => {
   const [colors, setColors] = useState(null);
   const [filterValues, setFilterValues] = useState(null);
   const [currentGraph, setCurrentGraph] = useState(null);
+  const [sortDirection, setSortDirection] = useState("asc");
 
   const handleDemoData = (path) => {
     fetch(path)
@@ -64,14 +65,27 @@ const App = () => {
     };
   };
 
-  const sortData = (key, direction) => {
-    const sortedData = data?.sort((a, b) => {
-      return direction === "asc"
-        ? d3.ascending(a[key], b[key])
-        : d3.descending(a[key], b[key]);
-    });
-    setFilteredData(sortedData);
-  };
+  const filterData = useCallback(
+    (newData) => {
+      const filtered = newData?.filter((d) => {
+        return Object.keys(sets).every((type) => filterValues[d[type]]);
+      });
+      setFilteredData(filtered);
+    },
+    [filterValues, sets]
+  );
+
+  const sortData = useCallback(
+    (key, direction) => {
+      const sortedData = data?.sort((a, b) => {
+        return direction === "asc"
+          ? d3.ascending(a[key], b[key])
+          : d3.descending(a[key], b[key]);
+      });
+      filterData(sortedData);
+    },
+    [data, filterData]
+  );
 
   useEffect(() => {
     if (data?.length) {
@@ -84,11 +98,8 @@ const App = () => {
   }, [data]);
 
   useEffect(() => {
-    const filtered = data?.filter((d) => {
-      return Object.keys(sets).every((type) => filterValues[d[type]]);
-    });
-    setFilteredData(filtered);
-  }, [filterValues, data, sets]);
+    filterData(data);
+  }, [filterData, data]);
 
   return (
     <div className="container">
@@ -122,9 +133,11 @@ const App = () => {
               data={filteredData}
             />
             <DataTable
-              sortData={sortData}
-              data={filteredData}
               colors={colors}
+              data={filteredData}
+              sortData={sortData}
+              sortDirection={sortDirection}
+              setSortDirection={setSortDirection}
             />
           </div>
         ) : (

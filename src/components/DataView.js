@@ -55,26 +55,26 @@ const DataView = ({ data, colors, currentGraph }) => {
         {currentGraph?.type === "bar" && (
           <BarChart
             data={data}
-            colors={colors}
             currentGraph={currentGraph}
             select={select}
+            allColors={colors[select.graphKey]}
           />
         )}
         {currentGraph?.type === "overview" && (
           <OverviewBarChart
             data={data}
-            colors={colors}
             currentGraph={currentGraph}
             select={select}
             handleSelectChange={handleSelectChange}
+            allColors={colors[select.graphKey]}
           />
         )}
         {currentGraph?.type === "line" && (
           <LineChart
             data={data}
-            colors={colors}
             currentGraph={currentGraph}
             keys={lineKeys}
+            allColors={colors.lines}
           />
         )}
       </div>
