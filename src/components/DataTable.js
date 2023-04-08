@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   WORKOUT_DATE,
   INSTRUCTOR,
@@ -27,7 +27,8 @@ const tableHeaders = [
   PACE_AVG,
 ];
 
-const DataTable = ({ data, colors }) => {
+const DataTable = ({ sortData, data, colors }) => {
+  const [sortDirection, setSortDirection] = useState("asc");
   if (!data || data.length === 0) {
     return null;
   }
@@ -42,7 +43,16 @@ const DataTable = ({ data, colors }) => {
         <thead>
           <tr>
             {tableHeaders.map((header) => (
-              <th key={header}>{attributes[header].title}</th>
+              <th
+                key={header}
+                onClick={() => {
+                  const direction = sortDirection === "asc" ? "desc" : "asc";
+                  sortData(header, direction);
+                  setSortDirection(direction);
+                }}
+              >
+                {attributes[header].title}
+              </th>
             ))}
           </tr>
         </thead>

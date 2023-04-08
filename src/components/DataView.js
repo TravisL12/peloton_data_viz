@@ -4,7 +4,6 @@ import BarChart from "../charts/BarChart";
 import OverviewBarChart from "../charts/OverviewBarChart";
 import LineChart from "../charts/LineChart";
 
-import DataTable from "./DataTable";
 import InputControls from "./InputControls";
 
 const DataView = ({ data, colors, currentGraph }) => {
@@ -43,19 +42,16 @@ const DataView = ({ data, colors, currentGraph }) => {
     : [];
 
   return (
-    <div id="graph">
-      <div className="chart-title">
-        <h3>{currentGraph?.title}</h3>
-      </div>
+    <>
+      <InputControls
+        currentGraph={currentGraph}
+        checkboxes={checkboxes}
+        colors={colors}
+        handleCheckboxChange={handleCheckboxChange}
+        handleSelectChange={handleSelectChange}
+        select={select}
+      />
       <div>
-        <InputControls
-          currentGraph={currentGraph}
-          checkboxes={checkboxes}
-          colors={colors}
-          handleCheckboxChange={handleCheckboxChange}
-          handleSelectChange={handleSelectChange}
-          select={select}
-        />
         {currentGraph?.type === "bar" && (
           <BarChart
             data={data}
@@ -82,8 +78,7 @@ const DataView = ({ data, colors, currentGraph }) => {
           />
         )}
       </div>
-      <DataTable data={data} colors={colors} />
-    </div>
+    </>
   );
 };
 

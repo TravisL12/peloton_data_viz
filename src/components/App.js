@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import { useEffect, useState } from "react";
 
 import { typeTransform } from "../constants";
@@ -13,6 +14,7 @@ import { graphLinks, lineKeys } from "../utils/graphUtils";
 import demoData from "../demo_workout.csv";
 import LogoWhite from "../peloton_logo_white.svg";
 import GraphLinks from "./GraphLinks";
+import DataTable from "./DataTable";
 
 const SLICE_AMOUNT = 300;
 
@@ -62,6 +64,15 @@ const App = () => {
     };
   };
 
+  const sortData = (key, direction) => {
+    const sortedData = data?.sort((a, b) => {
+      return direction === "asc"
+        ? d3.ascending(a[key], b[key])
+        : d3.descending(a[key], b[key]);
+    });
+    setFilteredData(sortedData);
+  };
+
   useEffect(() => {
     if (data?.length) {
       const parseSets = parseAttributeSets(data);
@@ -101,11 +112,21 @@ const App = () => {
       />
       <div className="main">
         {!!data?.length ? (
-          <DataView
-            currentGraph={currentGraph}
-            colors={colors}
-            data={filteredData}
-          />
+          <div id="graph">
+            <div className="chart-title">
+              <h3>{currentGraph?.title}</h3>
+            </div>
+            <DataView
+              currentGraph={currentGraph}
+              colors={colors}
+              data={filteredData}
+            />
+            <DataTable
+              sortData={sortData}
+              data={filteredData}
+              colors={colors}
+            />
+          </div>
         ) : (
           <Instructions
             handleOnChange={handleOnChange}

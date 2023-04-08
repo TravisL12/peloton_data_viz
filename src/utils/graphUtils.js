@@ -28,8 +28,6 @@ const lineData = (data, keys) => {
 };
 
 const overviewData = (data, otherkey, third) => {
-  console.log(otherkey, "otherkey");
-  console.log(third, "third");
   return data
     .filter((d) => d[TOTAL_OUTPUT] > 0)
     .map((d) => {
