@@ -70,7 +70,9 @@ const App = () => {
       const filtered = newData?.filter((d) => {
         return Object.keys(sets).every((type) => filterValues[d[type]]);
       });
-      setFilteredData(filtered.slice(-SLICE_AMOUNT));
+      if (filtered) {
+        setFilteredData(filtered.slice(-SLICE_AMOUNT));
+      }
     },
     [filterValues, sets]
   );
