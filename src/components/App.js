@@ -61,7 +61,7 @@ const App = () => {
     reader.readAsBinaryString(file);
     reader.onload = () => {
       const data = importData(reader.result);
-      setData(data);
+      setData(data.slice(-SLICE_AMOUNT));
     };
   };
 
@@ -71,7 +71,7 @@ const App = () => {
         return Object.keys(sets).every((type) => filterValues[d[type]]);
       });
       if (filtered) {
-        setFilteredData(filtered.slice(-SLICE_AMOUNT));
+        setFilteredData(filtered);
       }
     },
     [filterValues, sets]

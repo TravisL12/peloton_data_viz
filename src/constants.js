@@ -22,9 +22,15 @@ export const TYPE = "type";
 export const WATTS_AVG = "watts_avg";
 export const WORKOUT_DATE = "workout_date";
 
-const toNumber = (val) => +val;
-const toPercent = (val) => val?.slice(0, -1);
-const toDate = (val) => new Date(val);
+const toNumber = (val) => {
+  return val ? +val : 0;
+};
+const toPercent = (val) => {
+  return val ? +val?.slice(0, -1) : 0;
+};
+const toDate = (val) => {
+  return val ? new Date(val) : null;
+};
 
 export const typeTransform = {
   [CADENCE_AVG]: toNumber,
